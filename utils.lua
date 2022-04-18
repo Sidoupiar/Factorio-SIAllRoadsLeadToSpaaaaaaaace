@@ -107,6 +107,11 @@ end
 -- ---------- 基础数据 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+local packageList =
+{
+	"1_resource"
+}
+
 SIUtils =
 {
 	StateDefine =
@@ -118,7 +123,22 @@ SIUtils =
 		Control = 4
 	} ,
 	State = nil ,
+	PackageName = nil ,
+	AutoLoadDataList = {} ,
 	AutoLoad = function( registerData )
-		
+		if registerData then
+			SIUtils.AutoLoadDataList[SIUtils.packageName] = registerData
+		else
+			for index , name in pairs( packageList ) do
+				SIUtils.packageName = name
+				need( "package/"..name.."/0_auto_load" )
+			end
+			for name , data in pairs( SIUtils.AutoLoadDataList ) do
+				SIUtils.packageName = name
+				for index , fileName in pairs( data[SIUtils.State] ) do
+					need( "package/"..name.."/"..fileName )
+				end
+			end
+		end
 	end
 }
