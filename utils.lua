@@ -135,10 +135,17 @@ SIUtils =
 			end
 			for name , data in pairs( SIUtils.AutoLoadDataList ) do
 				SIUtils.packageName = name
+				if SIUtils.State == SIUtils.StateDefine.Settings or SIUtils.State == SIUtils.StateDefine.Data or SIUtils.State == SIUtils.StateDefine.Control then
+					local constantsData = need( "package/"..name.."/1_constants" )
+					SIUtils.Init( constantsData )
+				end
 				for index , fileName in pairs( data[SIUtils.State] ) do
 					need( "package/"..name.."/"..fileName )
 				end
 			end
 		end
+	end ,
+	Init = function( constantsData )
+		
 	end
 }
