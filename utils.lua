@@ -109,6 +109,7 @@ end
 
 local packageList =
 {
+	"0_special" ,
 	"1_resource"
 }
 
