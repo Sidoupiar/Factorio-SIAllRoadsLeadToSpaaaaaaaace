@@ -1,4 +1,4 @@
-SIUtils.AutoLoad
+return
 {
 	{ "2_data" } ,
 	{ "3_data-updates" } ,

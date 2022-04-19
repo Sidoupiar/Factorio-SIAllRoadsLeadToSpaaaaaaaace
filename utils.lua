@@ -125,23 +125,20 @@ SIUtils =
 	State = nil ,
 	PackageName = nil ,
 	AutoLoadDataList = {} ,
-	AutoLoad = function( registerData )
-		if registerData then
+	AutoLoad = function()
+		for index , name in pairs( packageList ) do
+			SIUtils.packageName = name
+			local registerData = need( "package/"..name.."/0_auto_load" )
 			SIUtils.AutoLoadDataList[SIUtils.packageName] = registerData
-		else
-			for index , name in pairs( packageList ) do
-				SIUtils.packageName = name
-				need( "package/"..name.."/0_auto_load" )
+		end
+		for name , data in pairs( SIUtils.AutoLoadDataList ) do
+			SIUtils.packageName = name
+			if SIUtils.State == SIUtils.StateDefine.Settings or SIUtils.State == SIUtils.StateDefine.Data or SIUtils.State == SIUtils.StateDefine.Control then
+				local constantsData = need( "package/"..name.."/1_constants" )
+				SIUtils.Init( constantsData )
 			end
-			for name , data in pairs( SIUtils.AutoLoadDataList ) do
-				SIUtils.packageName = name
-				if SIUtils.State == SIUtils.StateDefine.Settings or SIUtils.State == SIUtils.StateDefine.Data or SIUtils.State == SIUtils.StateDefine.Control then
-					local constantsData = need( "package/"..name.."/1_constants" )
-					SIUtils.Init( constantsData )
-				end
-				for index , fileName in pairs( data[SIUtils.State] ) do
-					need( "package/"..name.."/"..fileName )
-				end
+			for index , fileName in pairs( data[SIUtils.State] ) do
+				need( "package/"..name.."/"..fileName )
 			end
 		end
 	end ,
