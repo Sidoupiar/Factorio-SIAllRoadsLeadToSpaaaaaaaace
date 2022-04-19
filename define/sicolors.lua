@@ -1,4 +1,4 @@
-SIColors =
+return
 {
 	baseColor =
 	{

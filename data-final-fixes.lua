@@ -1,2 +1,1 @@
-SIUtils.State = SIUtils.StateDefine.DataFinalFixes
-SIUtils.AutoLoad()
+SIInit.AutoLoad( SIInit.StateDefine.DataFinalFixes )

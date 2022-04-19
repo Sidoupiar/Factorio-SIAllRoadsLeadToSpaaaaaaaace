@@ -1,3 +1,2 @@
 require( "utils" )
-SIUtils.State = SIUtils.StateDefine.Data
-SIUtils.AutoLoad()
+SIInit.AutoLoad( SIInit.StateDefine.Data )

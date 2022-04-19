@@ -1,3 +1,2 @@
 require( "utils" )
-SIUtils.State = SIUtils.StateDefine.Control
-SIUtils.AutoLoad()
+SIInit.AutoLoad( SIInit.StateDefine.Control )

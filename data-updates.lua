@@ -1,2 +1,1 @@
-SIUtils.State = SIUtils.StateDefine.DataUpdates
-SIUtils.AutoLoad()
+SIInit.AutoLoad( SIInit.StateDefine.DataUpdates )

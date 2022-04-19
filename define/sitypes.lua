@@ -1,4 +1,4 @@
-SITypes =
+return
 {
 	group            = "item-group" ,
 	subgroup         = "item-subgroup" ,

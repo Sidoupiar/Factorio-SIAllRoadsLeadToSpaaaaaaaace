@@ -1,4 +1,4 @@
-SIFlags =
+return
 {
 	itemFlags =
 	{
