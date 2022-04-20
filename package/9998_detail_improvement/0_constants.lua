@@ -1,5 +1,5 @@
 local constants =
 {
-	name = "特殊"
+	name = "细节改进"
 }
 return constants

@@ -18,6 +18,7 @@ local packageList =
 {
 	"0_special" ,
 	"1_resource" ,
+	"9998_detail_improvement" ,
 	"9999_debug"
 }
 
