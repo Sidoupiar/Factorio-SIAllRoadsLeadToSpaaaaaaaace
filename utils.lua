@@ -206,7 +206,7 @@ end
 -- ---------- 引用方法 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-SINeedlist = {}
+local SINeedListData = {}
 
 function need( name , notself )
 	local source = debug.getinfo( 2 , "S" ).source
@@ -224,15 +224,15 @@ function need( name , notself )
 	end
 	local isBase = name:find( "__" )
 	source = isBase and source:sub( source:find( "__" , 3 )+3 , -1 ) or source:sub( 2 , -1 )
-	local path = SINeedlist[source]
+	local path = SINeedListData[source]
 	if not path then
 		path = isBase and "" or source:match( "^.*/" ) or ""
-		SINeedlist[source] = path
+		SINeedListData[source] = path
 	end
 	return require( path..name )
 end
 
-function needlist( basePath , ... )
+function needList( basePath , ... )
 	local results = {}
 	for i , path in pairs{ ... } do if path then results[path] = need( basePath.."/"..path , true ) end end
 	return results
@@ -268,8 +268,10 @@ SIInit =
 	State = nil ,
 	PackageName = nil ,
 	OrderCode = 10000 ,
+	CurrentConstants = {}
 	CoreName = CoreName ,
-	AutoLoadDataList = {}
+	AutoLoadDataList = {} ,
+	ConstantsData = {}
 }
 
 function SIInit.AutoLoad( stateCode )
@@ -315,6 +317,8 @@ function SIInit.AutoLoad( stateCode )
 			SIInit.OrderCode = SIInit.OrderCode + 1000
 			local class = constantsData.name:upper()
 			_G[class] = constantsData
+			SIInit.ConstantsData[name] = constantsData
+			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
 			local realName = constantsData.name:gsub( "_" , "-" ) .. "-"
 			constantsData.class = class
@@ -436,6 +440,7 @@ function SIInit.AutoLoad( stateCode )
 	end
 	for name , data in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
+		SIInit.CurrentConstants = SIInit.ConstantsData[name]
 		for index , fileName in pairs( data[SIInit.State] ) do
 			need( "package/"..name.."/"..fileName )
 		end
