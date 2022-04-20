@@ -281,13 +281,33 @@ function SIInit.AutoLoad( stateCode )
 	for index , name in pairs( packageList ) do
 		SIInit.packageName = name
 		local registerData = need( "package/"..name.."/0_auto_load" )
+		if not registerData or type( registerData ) ~= "table" then registerData = {} end
+		for index = 1 , 4 , 1 do
+			local fileList = registerData[index]
+			if fileList and type( fileList ) == "string" then
+				fileList = { fileList }
+				registerData[index] = fileList
+			end
+			if not fileList or type( fileList ) ~= "table" or #fileList < 1 then
+				fileList = {}
+				if index == 1 then table.insert( fileList , "1_data" )
+				else if index == 2 then table.insert( fileList , "2_data-updates" )
+				else if index == 3 then table.insert( fileList , "3_data-final-fixes" )
+				else if index == 4 then table.insert( fileList , "4_control" ) end
+				registerData[index] = fileList
+			end
+		end
 		SIInit.AutoLoadDataList[SIInit.packageName] = registerData
 	end
 	if SIInit.State == SIInit.StateDefine.Settings or SIInit.State == SIInit.StateDefine.Data or SIInit.State == SIInit.StateDefine.Control then
+		if SIInit.State == SIInit.StateDefine.Data then need( "define/generator/sigen" )
+		else if SIInit.State == SIInit.StateDefine.Control then
+			need( "define/runtime/load" )
+		end
 		local constantsDataList = { CORE = need( "constants" ) }
 		for name , data in pairs( SIInit.AutoLoadDataList ) do
 			SIInit.packageName = name
-			local constantsData = need( "package/"..name.."/1_constants" )
+			local constantsData = need( "package/"..name.."/0_constants" )
 			if constantsData then constantsDataList[name] = constantsData end
 		end
 		for name , constantsData in pairs( constantsDataList ) do
