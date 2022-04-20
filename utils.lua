@@ -416,7 +416,7 @@ function SIInit.AutoLoad( stateCode )
 				end
 				if #prototypeList > 0 then data:extend( prototypeList ) end
 				-- 添加函数
-				function constantsData.GetPicturePath( prototypeType )
+				constantsData.GetPicturePath = function( prototypeType )
 					if not constantsData.picturePaths then return constantsData.picturePath end
 					if constantsData.mainPicturePath > 0 then
 						local dataPack = constantsData.picturePaths[constantsData.mainPicturePath]
@@ -433,6 +433,12 @@ function SIInit.AutoLoad( stateCode )
 						end
 					end
 					return constantsData.picturePath
+				end
+				-- 根据当前状态挂载不同的函数
+				if SIInit.State == SIInit.StateDefine.Data then
+					constantsData.Extend = function( ... )
+						data:extend{ ... }
+					end
 				end
 			end
 			-- 加载完毕回调
