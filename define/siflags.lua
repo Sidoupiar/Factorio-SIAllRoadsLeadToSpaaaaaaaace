@@ -1,4 +1,4 @@
-return
+local SIFlags =
 {
 	itemFlags =
 	{
@@ -115,3 +115,4 @@ return
 		Not = "not"
 	}
 }
+return SIFlags

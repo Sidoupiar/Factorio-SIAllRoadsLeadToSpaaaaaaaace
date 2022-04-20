@@ -1,4 +1,4 @@
-local newModList = {}
+local SIMods = {}
 
 local modList = nil
 if mods then modList = mods
@@ -8,7 +8,7 @@ if modList then
 	for name , versionString in pairs( modList ) do
 		local loaded = true
 		local version = tonumber( string.gsub( versionString , "." , "" ) )
-		newModList[name] =
+		SIMods[name] =
 		{
 			displayName = { "mod-name."..name } ,
 			description = { "mod-description."..name } ,
@@ -18,4 +18,4 @@ if modList then
 	end
 end
 
-return newModList
+return SIMods

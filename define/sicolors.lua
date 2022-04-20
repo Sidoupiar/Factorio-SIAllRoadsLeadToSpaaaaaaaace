@@ -1,4 +1,4 @@
-return
+local SIColors =
 {
 	baseColor =
 	{
@@ -54,3 +54,4 @@ return
 		red       = { r = 1.00 , g = 0.35 , b = 0.35 , a = 0.50 }   -- 红色
 	}
 }
+return SIColors

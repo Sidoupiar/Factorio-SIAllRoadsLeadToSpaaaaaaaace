@@ -1,4 +1,4 @@
-local numberList =
+local SINumbers =
 {
 	lineMax = 10 ,
 	
@@ -35,18 +35,18 @@ local numberList =
 	ticksPerHalfDay = 12500
 }
 
-numberList.machinePictureSize_hr = numberList.machinePictureSize * numberList.pictureHrScale
-numberList.machinePictureTotalFrameCount = numberList.machinePictureTotalWidth * numberList.machinePictureTotalHeight
-numberList.machineAnimationSpeed = numberList.machinePictureTotalFrameCount / 60
+SINumbers.machinePictureSize_hr = SINumbers.machinePictureSize * SINumbers.pictureHrScale
+SINumbers.machinePictureTotalFrameCount = SINumbers.machinePictureTotalWidth * SINumbers.machinePictureTotalHeight
+SINumbers.machineAnimationSpeed = SINumbers.machinePictureTotalFrameCount / 60
 
 
 
-local innerNumberList = table.deepcopy( numberList )
+local innerNumberList = table.deepcopy( SINumbers )
 
-function numberList.RestoreDefault()
+function SINumbers.RestoreDefault()
 	for key , value in pairs( table.deepcopy( innerNumberList ) ) do
-		numberList[key] = value
+		SINumbers[key] = value
 	end
 end
 
-return numberList
+return SINumbers

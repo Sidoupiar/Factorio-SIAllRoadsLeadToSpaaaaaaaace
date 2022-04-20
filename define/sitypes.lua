@@ -1,4 +1,4 @@
-return
+local SITypes =
 {
 	group            = "item-group" ,
 	subgroup         = "item-subgroup" ,
@@ -464,3 +464,4 @@ return
 		unit     = "unit"
 	}
 }
+return SITypes
