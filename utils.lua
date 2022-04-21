@@ -18,6 +18,7 @@ local packageList =
 {
 	"0_special" ,
 	"1_resource" ,
+	"9997_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"
 }
@@ -276,7 +277,7 @@ SIInit =
 }
 
 function SIInit.AutoLoad( stateCode )
-	if( not table.Has( SIInit.StateDefine , stateCode ) )
+	if not table.Has( SIInit.StateDefine , stateCode ) then
 		e( "不存在的阶段 : "..stateCode )
 		return
 	end
