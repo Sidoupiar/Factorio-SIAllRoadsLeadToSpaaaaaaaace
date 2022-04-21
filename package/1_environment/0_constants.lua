@@ -1,5 +1,5 @@
 local constants =
 {
-	name = "特殊"
+	name = "环境"
 }
 return constants
