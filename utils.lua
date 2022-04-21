@@ -275,10 +275,10 @@ SIInit =
 	State = nil ,
 	PackageName = nil ,
 	OrderCode = 10000 ,
-	CurrentConstants = {}
+	CurrentConstants = {} ,
+	ConstantsData = {} ,
 	CoreName = CoreName ,
-	AutoLoadDataList = {} ,
-	ConstantsData = {}
+	AutoLoadDataList = {}
 }
 
 function SIInit.AutoLoad( stateCode )
