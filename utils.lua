@@ -18,6 +18,7 @@ local packageList =
 {
 	"0_special" ,
 	"1_resource" ,
+	"1000_trade" ,
 	"9997_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"

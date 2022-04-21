@@ -1,5 +1,5 @@
 local constants =
 {
-	name = "垃圾回收"
+	name = "贸易"
 }
 return constants
