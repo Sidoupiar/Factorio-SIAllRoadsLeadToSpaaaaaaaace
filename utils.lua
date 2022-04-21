@@ -17,8 +17,12 @@ local CoreName = "__SIAllRoadsLeadToRome__"
 local packageList =
 {
 	"0_special" ,
-	"1_resource" ,
-	"1000_trade" ,
+	"1_environment" ,
+	"2_resource" ,
+	"3_plant" ,
+	"4_living" ,
+	"5_ruin" ,
+	"6_trade" ,
 	"9997_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"
