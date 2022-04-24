@@ -15,7 +15,7 @@ local AutoFillSource =
 {
 	"item" =
 	{
-		icon_size = 32 ,
+		icon_size = 64 ,
 		icon_mipmap = 4
 	}
 }
@@ -57,6 +57,7 @@ local function Init( type , name , customData , needOverwrite )
 		type = type ,
 		name = name
 	}
+	SITools.CopyData( curData , AutoFillData[type] , false )
 	SITools.CopyData( curData , customData , needOverwrite )
 	return curData
 end
@@ -87,12 +88,16 @@ function SIGen.FindData( type , name )
 	return curData
 end
 
+function SIGen.GetRaw()
+	return Raw
+end
+
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 分组控制 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 function SIGen.Group( groupName , subGroupName )
-	
+
 end
 
 -- ------------------------------------------------------------------------------------------------
@@ -130,3 +135,16 @@ for index , typeName in pairs( SITypes.all ) do
 		return SIGen.Copy( typeName , name , customData , needOverwrite )
 	end
 end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 修改属性 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+function SIGen.setCustomData( customData , needOverwrite )
+	SITools.CopyData( SIGen.Data , customData , needOverwrite )
+	return SIGen
+end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 流程控制 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------

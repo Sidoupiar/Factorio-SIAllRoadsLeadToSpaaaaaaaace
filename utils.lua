@@ -464,11 +464,14 @@ function SIInit.AutoLoad( stateCode )
 			if constantsData.AfterLoad then constantsData.AfterLoad() end
 		end
 	end
-	for name , data in pairs( SIInit.AutoLoadDataList ) do
+	for name , autoLoadData in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
 		SIInit.CurrentConstants = SIInit.ConstantsData[name]
-		for index , fileName in pairs( data[SIInit.State] ) do
+		for index , fileName in pairs( autoLoadData[SIInit.State] ) do
 			need( "package."..name.."."..fileName , true )
 		end
+	end
+	if SIInit.State == SIInit.StateDefine.DataFinalFixes then
+		for type , list in pairs( SIGen.GetRaw() ) do data:extend( list ) end
 	end
 end
