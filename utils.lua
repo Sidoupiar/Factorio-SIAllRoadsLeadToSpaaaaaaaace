@@ -8,6 +8,7 @@ SIFlags = require( "define/siflags" )
 SITypes = require( "define/sitypes" )
 SIColors = require( "define/sicolors" )
 SIMods = require( "define/simods" )
+SITools = require( "define/sitools" )
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 定义数据 ----------------------------------------------------------------------------
@@ -69,6 +70,10 @@ function string:Split( separator )
 	return list
 end
 
+function string:UpperCaseFirst()
+	return self:sub( 1 , 1 ):upper() .. self:sub( -self:len()+1 )
+end
+
 function string:StartsWith( str )
 	return self:sub( 1 , str:len() ) == str
 end
@@ -123,6 +128,14 @@ function string:GetEnergyClass()
 		value = value:sub( 1 , pos-1 )
 	end
 	return tonumber( value ) , class
+end
+
+function string:ToFunctionName()
+	local functionName = ""
+	for index , str in pairs( self:Split( "-" ) ) do
+		functionName = functionName .. str:UpperCaseFirst()
+	end
+	return functionName
 end
 
 function table.Size( data )

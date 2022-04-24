@@ -464,4 +464,31 @@ local SITypes =
 		unit     = "unit"
 	}
 }
+
+SITypes.all = {}
+for i , v in pairs
+{
+	"fluid" ,
+	"tile" ,
+	"signal" ,
+	"recipe" ,
+	"technology" ,
+	"damageType" ,
+	"equipmentGrid" ,
+	"beam" ,
+	"decorative" ,
+	"input" ,
+	"ambientSound" ,
+	"font" ,
+	"controlAutoplace" ,
+	"category" ,
+	"item" ,
+	"entity" ,
+	"equipment"
+} do
+	if type( SITypes[v] ) == "table" then
+		for key , value in piars( SITypes[v] ) do table.insert( SITypes.all , value ) end
+	else table.insert( SITypes.all , SITypes[v] ) end
+end
+
 return SITypes
