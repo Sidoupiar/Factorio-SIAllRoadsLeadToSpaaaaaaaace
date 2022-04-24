@@ -118,21 +118,34 @@ end
 -- ------------------------------------------------------------------------------------------------
 
 function SIGen.New( type , name , customData , needOverwrite )
+	if not type or not name then
+		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
+		return SIGen
+	end
 	return Init( type , name , customData , needOverwrite )
 end
 
 function SIGen.Load( type , name , customData , needOverwrite )
+	if not type or not name then
+		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
+		return SIGen
+	end
 	local curData = SIGen.FindData( type , name )
-	if not curData then e( "找不到类型为["..type.."] , 名称为["..name.."]的数据" ) end
+	if not curData then e( "找不到 type 为["..type.."] , name 为["..name.."]的原型" ) end
+	SITools.CopyData( curData , customData , needOverwrite )
 	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
 		if curData.fromSIGen then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
-		Append( SITools.CopyData( curData , customData , needOverwrite ) )
-	else SITools.CopyData( curData , customData , needOverwrite ) end
+		Append( curData )
+	end
 	return SIGen
 end
 
 function SIGen.Copy( type , name , customData , needOverwrite )
+	if not type or not name then
+		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
+		return SIGen
+	end
 	local curData = SIGen.FindData( type , name )
 	if curData then return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) )
 	else return Init( type , name , util.deepcopy( customData ) , needOverwrite ) end
@@ -156,11 +169,38 @@ end
 -- ------------------------------------------------------------------------------------------------
 
 function SIGen.SetCustomData( customData , needOverwrite )
-	if customData.type and SIGen.Data.type ~= customData.type or customData.name and SIGen.Data.name ~= customData.name then
+	local type = SIGen.Data.type
+	local name = SIGen.Data.name
+	SITools.CopyData( SIGen.Data , customData , needOverwrite )
+	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
 		if SIGen.Data.fromSIGen then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
-		Append( SITools.CopyData( SIGen.Data , customData , needOverwrite ) )
-	else SITools.CopyData( SIGen.Data , customData , needOverwrite ) end
+		Append( SIGen.Data )
+	end
+	return SIGen
+end
+
+function SIGen.SetType( newType )
+	if not newType then return SIGen end
+	local type = SIGen.Data.type
+	SIGen.Data.type = newType
+	if type ~= newType then
+		if SIGen.Data.fromSIGen then Raw[type][SIGen.Data.name] = nil
+		else data.raw[type][SIGen.Data.name] = nil end
+		Append( SIGen.Data )
+	end
+	return SIGen
+end
+
+function SIGen.SetName( newName )
+	if not newName then return SIGen end
+	local name = SIGen.Data.name
+	SIGen.Data.name = newName
+	if name ~= newName then
+		if SIGen.Data.fromSIGen then Raw[SIGen.Data.type][name] = nil
+		else data.raw[SIGen.Data.type][name] = nil end
+		Append( SIGen.Data )
+	end
 	return SIGen
 end
 
