@@ -472,6 +472,8 @@ function SIInit.AutoLoad( stateCode )
 		end
 	end
 	if SIInit.State == SIInit.StateDefine.DataFinalFixes then
-		for type , list in pairs( SIGen.GetRaw() ) do data:extend( list ) end
+		for type , list in pairs( SIGen.GetRaw() ) do
+			if #list > 0 then data:extend( list ) end
+		end
 	end
 end

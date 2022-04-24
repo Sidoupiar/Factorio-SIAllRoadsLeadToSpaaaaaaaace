@@ -10,6 +10,7 @@ SIGen =
 local AutoFillData = {}
 local GroupSettings = {}
 local Raw = {}
+local GenIndex = 100000
 
 local AutoFillSource =
 {
@@ -52,24 +53,31 @@ end
 -- ------------------------------------------------------------------------------------------------
 
 local function Init( type , name , customData , needOverwrite )
+	GenIndex = GenIndex + 1
 	local curData =
 	{
 		type = type ,
-		name = name
+		name = name ,
+		fromSIGen = true ,
+		indexSIGen = GenIndex
 	}
-	SITools.CopyData( curData , AutoFillData[type] , false )
+	local autoFillData = AutoFillData[type]
+	if autoFillData then
+		if autoFillData.defaultValues then SITools.CopyData( curData , autoFillData.defaultValues , false ) end
+		if autoFillData.callBack then autoFillData.callBack() end
+	end
 	SITools.CopyData( curData , customData , needOverwrite )
-	return curData
+	return Append( curData )
 end
 
-local function Append( data )
-	SIGen.Data = data
-	local list = Raw[data.type]
+local function Append( curData )
+	SIGen.Data = curData
+	local list = Raw[curData.type]
 	if not list then
 		list = {}
-		Raw[data.type] = list
+		Raw[curData.type] = list
 	end
-	list[data.name] = data
+	list[curData.name] = curData
 	return SIGen
 end
 
@@ -80,10 +88,15 @@ end
 function SIGen.FindData( type , name )
 	local list = data.raw[type]
 	local curData = nil
-	if list then curData = list[name]
+	if list then
+		curData = list[name]
+		if curData then curData.fromSIGen = false end
 	if not curData then
 		list = Raw[type]
-		if list then curData = list[name] end
+		if list then
+			curData = list[name]
+			if curData then curData.fromSIGen = true end
+		end
 	end
 	return curData
 end
@@ -105,22 +118,24 @@ end
 -- ------------------------------------------------------------------------------------------------
 
 function SIGen.New( type , name , customData , needOverwrite )
-	return Append( Init( type , name , customData , needOverwrite ) )
+	return Init( type , name , customData , needOverwrite )
 end
 
 function SIGen.Load( type , name , customData , needOverwrite )
 	local curData = SIGen.FindData( type , name )
 	if not curData then e( "找不到类型为["..type.."] , 名称为["..name.."]的数据" ) end
-	if curData.type ~= customData.type or curData.name ~= customData.name then Append( curData ) end
-	SITools.CopyData( curData , customData , needOverwrite )
+	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
+		if curData.fromSIGen then Raw[type][name] = nil
+		else data.raw[type][name] = nil end
+		Append( SITools.CopyData( curData , customData , needOverwrite ) )
+	else SITools.CopyData( curData , customData , needOverwrite ) end
 	return SIGen
 end
 
 function SIGen.Copy( type , name , customData , needOverwrite )
 	local curData = SIGen.FindData( type , name )
-	if curData then SITools.CopyData( curData , customData , needOverwrite )
-	else curData = Init( type , name , customData , needOverwrite ) end
-	return Append( util.deepcopy( curData ) )
+	if curData then return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) )
+	else return Init( type , name , util.deepcopy( customData ) , needOverwrite ) end
 end
 
 for index , typeName in pairs( SITypes.all ) do
@@ -140,8 +155,12 @@ end
 -- ---------- 修改属性 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-function SIGen.setCustomData( customData , needOverwrite )
-	SITools.CopyData( SIGen.Data , customData , needOverwrite )
+function SIGen.SetCustomData( customData , needOverwrite )
+	if customData.type and SIGen.Data.type ~= customData.type or customData.name and SIGen.Data.name ~= customData.name then
+		if SIGen.Data.fromSIGen then Raw[type][name] = nil
+		else data.raw[type][name] = nil end
+		Append( SITools.CopyData( SIGen.Data , customData , needOverwrite ) )
+	else SITools.CopyData( SIGen.Data , customData , needOverwrite ) end
 	return SIGen
 end
 
