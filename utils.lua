@@ -335,19 +335,19 @@ function SIInit.AutoLoad( stateCode )
 		for name , constantsData in pairs( constantsDataList ) do
 			SIInit.packageName = name
 			SIInit.OrderCode = SIInit.OrderCode + 1000
-			local class = constantsData.id:upper()
+			local class = "SI" .. constantsData.id:upper()
 			_G[class] = constantsData
 			SIInit.ConstantsData[name] = constantsData
 			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
 			local realClass = class:gsub( "_" , "-" ) .. "-"
-			local realName = constantsData.name:gsub( "_" , "-" ) .. "-"
+			local realName = "SI" .. constantsData.name:gsub( "_" , "-" ) .. "-"
 			constantsData.class = class
 			constantsData.realClass = realClass
 			constantsData.realName = realName
 			constantsData.orderIndex = 100000
 			constantsData.orderCode = SIInit.OrderCode
-			constantsData.orderName = "z-" .. SIInit.OrderCode .. "[" .. realClass .. "o]-"
+			constantsData.orderName = "z" .. SIInit.OrderCode .. "[" .. realClass .. "o]-"
 			-- 加载前回调
 			if constantsData.BeforeLoad then constantsData.BeforeLoad() end
 			if SIInit.State == SIInit.StateDefine.Settings then
