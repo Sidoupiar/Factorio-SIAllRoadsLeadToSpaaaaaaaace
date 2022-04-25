@@ -462,33 +462,41 @@ local SITypes =
 		material = "material" ,
 		resource = "resource" ,
 		unit     = "unit"
-	}
+	} ,
+
+	all = {} ,
+	autoName = {}
 }
 
-SITypes.all = {}
-for i , v in pairs
+for type , real in pairs
 {
-	"fluid" ,
-	"tile" ,
-	"signal" ,
-	"recipe" ,
-	"technology" ,
-	"damageType" ,
-	"equipmentGrid" ,
-	"beam" ,
-	"decorative" ,
-	"input" ,
-	"ambientSound" ,
-	"font" ,
-	"controlAutoplace" ,
-	"category" ,
-	"item" ,
-	"entity" ,
-	"equipment"
+	fluid = "流体" ,
+	tile = "地板" ,
+	signal = "信号" ,
+	recipe = "配方" ,
+	technology = "科技" ,
+	damageType = "伤害" ,
+	equipmentGrid = "区域" ,
+	beam = "激光" ,
+	decorative = "遮盖" ,
+	input = "按键" ,
+	ambientSound = "音乐" ,
+	font = "字体" ,
+	controlAutoplace = "放置" ,
+	category = "类别" ,
+	item = "物品" ,
+	entity = "实体" ,
+	equipment = "模块"
 } do
-	if type( SITypes[v] ) == "table" then
-		for key , value in piars( SITypes[v] ) do table.insert( SITypes.all , value ) end
-	else table.insert( SITypes.all , SITypes[v] ) end
+	if type( SITypes[type] ) == "table" then
+		for key , value in piars( SITypes[type] ) do
+			table.insert( SITypes.all , value )
+			SITypes.autoName[value] = real
+		end
+	else
+		table.insert( SITypes.all , SITypes[type] )
+		SITypes.autoName[SITypes[type]] = real
+	end
 end
 
 return SITypes

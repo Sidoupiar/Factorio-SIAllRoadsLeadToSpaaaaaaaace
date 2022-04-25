@@ -335,16 +335,19 @@ function SIInit.AutoLoad( stateCode )
 		for name , constantsData in pairs( constantsDataList ) do
 			SIInit.packageName = name
 			SIInit.OrderCode = SIInit.OrderCode + 1000
-			local class = constantsData.name:upper()
+			local class = constantsData.id:upper()
 			_G[class] = constantsData
 			SIInit.ConstantsData[name] = constantsData
 			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
+			local realClass = class:gsub( "_" , "-" ) .. "-"
 			local realName = constantsData.name:gsub( "_" , "-" ) .. "-"
 			constantsData.class = class
+			constantsData.realClass = realClass
 			constantsData.realName = realName
+			constantsData.orderIndex = 100000
 			constantsData.orderCode = SIInit.OrderCode
-			constantsData.orderName = SIInit.OrderCode .. "[" .. realName .. "o]-"
+			constantsData.orderName = "z-" .. SIInit.OrderCode .. "[" .. realClass .. "o]-"
 			-- 加载前回调
 			if constantsData.BeforeLoad then constantsData.BeforeLoad() end
 			if SIInit.State == SIInit.StateDefine.Settings then
@@ -435,6 +438,16 @@ function SIInit.AutoLoad( stateCode )
 				end
 				if #prototypeList > 0 then data:extend( prototypeList ) end
 				-- 添加函数
+				constantsData.AutoName = function( sourceName , typeName )
+					if typeName then typeName = SITypes.autoName[typeName] end
+					if typeName then typeName = typeName .. "-"
+					else typeName = "" end
+					return constantsData.realName .. typeName .. sourceName
+				end
+				constantsData.AutoOrder = function()
+					constantsData.orderIndex = constantsData.orderIndex + 1
+					return constantsData.orderName .. constantsData.orderIndex
+				end
 				constantsData.GetPicturePath = function( prototypeType )
 					if not constantsData.picturePaths then return constantsData.picturePath end
 					if constantsData.mainPicturePath > 0 then
