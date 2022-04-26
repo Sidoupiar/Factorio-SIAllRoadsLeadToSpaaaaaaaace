@@ -288,7 +288,7 @@ SIInit =
 	State = nil ,
 	PackageName = nil ,
 	OrderCode = 10000 ,
-	CurrentConstants = {} ,
+	CurrentConstantsData = {} ,
 	ConstantsData = {} ,
 	CoreName = CoreName ,
 	AutoLoadDataList = {}
@@ -338,7 +338,7 @@ function SIInit.AutoLoad( stateCode )
 			local class = "SI" .. constantsData.id:upper()
 			_G[class] = constantsData
 			SIInit.ConstantsData[name] = constantsData
-			SIInit.CurrentConstants = constantsData
+			SIInit.CurrentConstantsData = constantsData
 			-- 添加基础数据
 			local realClass = class:gsub( "_" , "-" ) .. "-"
 			local realName = "SI" .. constantsData.name:gsub( "_" , "-" ) .. "-"
@@ -448,23 +448,24 @@ function SIInit.AutoLoad( stateCode )
 					constantsData.orderIndex = constantsData.orderIndex + 1
 					return constantsData.orderName .. constantsData.orderIndex
 				end
-				constantsData.GetPicturePath = function( prototypeType )
-					if not constantsData.picturePaths then return constantsData.picturePath end
+				constantsData.GetPicturePath = function( name , typeName )
+					name = name .. ".png"
+					if not constantsData.picturePaths then return constantsData.picturePath .. name end
 					if constantsData.mainPicturePath > 0 then
 						local dataPack = constantsData.picturePaths[constantsData.mainPicturePath]
 						for code , type in pairs( dataPack.typeList ) do
-							if type == prototypeType then return dataPack.path end
+							if type == typeName then return dataPack.path .. name end
 						end
 					else
 						for index , dataPack in pairs( constantsData.picturePaths ) do
 							if index ~= constantsData.mainPicturePath then
 								for code , type in pairs( dataPack.typeList ) do
-									if type == prototypeType then return dataPack.path end
+									if type == typeName then return dataPack.path .. name end
 								end
 							end
 						end
 					end
-					return constantsData.picturePath
+					return constantsData.picturePath .. name
 				end
 				-- 根据当前状态挂载不同的函数
 				if SIInit.State == SIInit.StateDefine.Data then
@@ -479,7 +480,7 @@ function SIInit.AutoLoad( stateCode )
 	end
 	for name , autoLoadData in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
-		SIInit.CurrentConstants = SIInit.ConstantsData[name]
+		SIInit.CurrentConstantsData = SIInit.ConstantsData[name]
 		for index , fileName in pairs( autoLoadData[SIInit.State] ) do
 			need( "package."..name.."."..fileName , true )
 		end
