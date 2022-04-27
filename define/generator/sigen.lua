@@ -122,7 +122,6 @@ function SIGen.Group( groupName , subGroupName )
 			localised_name = { "item-group-name."..name } ,
 			localised_description = { "item-group-description."..name }
 			icon = SIInit.CurrentConstantsData.GetPicturePath( name , SITypes.group ) ,
-			icon_size = 64 ,
 			order = SIInit.CurrentConstantsData.AutoOrder()
 		}
 		data:extend{ group }
