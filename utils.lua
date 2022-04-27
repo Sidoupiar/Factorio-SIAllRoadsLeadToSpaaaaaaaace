@@ -323,8 +323,8 @@ function SIInit.AutoLoad( stateCode )
 	end
 	if SIInit.State == SIInit.StateDefine.Settings or SIInit.State == SIInit.StateDefine.Data or SIInit.State == SIInit.StateDefine.Control then
 		if SIInit.State == SIInit.StateDefine.Data then
-			need( "define.generator.sigen" , true )
 			need( "define.generator.sidatakeys" , true )
+			need( "define.generator.sigen" , true )
 		else if SIInit.State == SIInit.StateDefine.Control then
 			need( "define.runtime.load" , true )
 		end
