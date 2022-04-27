@@ -240,21 +240,19 @@ function SIGen.ValueSet( key , value )
 	if Check() then return SIGen end
 	if key == "type" then return SIGen.SetType( value )
 	else if key == "name" then return SIGen.SetName( value )
-	else
-		if key:find( "." ) then
-			local curData = SIGen.Data
-			local keys = key:Split( "." )
-			local keyLength = #keys
-			for index = 1 , keyLength , 1 do
-				local curKey = keys[index]
-				if index == keyLength then
-					if curKey == "" then table.insert( curData , value )
-					else curData[curKey] = value end
-				else curData = curData[curKey] end
-			end
-		else SIGen.Data[key] = value end
-		return SIGen
-	end
+	else if key:find( "." ) then
+		local curData = SIGen.Data
+		local keys = key:Split( "." )
+		local keyLength = #keys
+		for index = 1 , keyLength , 1 do
+			local curKey = keys[index]
+			if index == keyLength then
+				if curKey == "" then table.insert( curData , value )
+				else curData[curKey] = value end
+			else curData = curData[curKey] end
+		end
+	else SIGen.Data[key] = value end
+	return SIGen
 end
 
 function SIGen.ValueRemove( key )
