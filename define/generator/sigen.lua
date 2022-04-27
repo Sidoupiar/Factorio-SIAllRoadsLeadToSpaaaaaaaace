@@ -61,6 +61,14 @@ local function Append( curData )
 	return SIGen
 end
 
+local function Check()
+	if not SIGen.Data then
+		e( "必须先创建原型 , 之后才能修改属性" )
+		return true
+	end
+	return false
+end
+
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 查询实体 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
@@ -190,6 +198,7 @@ end
 -- ------------------------------------------------------------------------------------------------
 
 function SIGen.SetCustomData( customData , needOverwrite )
+	if Check() then return SIGen end
 	local type = SIGen.Data.type
 	local name = SIGen.Data.name
 	SITools.CopyData( SIGen.Data , customData , needOverwrite )
@@ -202,6 +211,7 @@ function SIGen.SetCustomData( customData , needOverwrite )
 end
 
 function SIGen.SetType( newType )
+	if Check() then return SIGen end
 	if not newType then return SIGen end
 	local type = SIGen.Data.type
 	SIGen.Data.type = newType
@@ -214,6 +224,7 @@ function SIGen.SetType( newType )
 end
 
 function SIGen.SetName( newName )
+	if Check() then return SIGen end
 	if not newName then return SIGen end
 	local name = SIGen.Data.name
 	SIGen.Data.name = newName
@@ -221,6 +232,73 @@ function SIGen.SetName( newName )
 		if SIGen.Data.fromSIGen then Raw[SIGen.Data.type][name] = nil
 		else data.raw[SIGen.Data.type][name] = nil end
 		Append( SIGen.Data )
+	end
+	return SIGen
+end
+
+function SIGen.ValueSet( key , value )
+	if Check() then return SIGen end
+	if key == "type" then return SIGen.SetType( value )
+	else if key == "name" then return SIGen.SetName( value )
+	else
+		if key:find( "." ) then
+			local curData = SIGen.Data
+			local keys = key:Split( "." )
+			local keyLength = #keys
+			for index = 1 , keyLength , 1 do
+				local curKey = keys[index]
+				if index == keyLength then
+					if curKey == "" then table.insert( curData , value )
+					else curData[curKey] = value end
+				else curData = curData[curKey] end
+			end
+		else SIGen.Data[key] = value end
+		return SIGen
+	end
+end
+
+function SIGen.ValueRemove( key )
+	if Check() then return SIGen end
+	if key ~= "type" and key ~= "name" then
+		if key:find( "." ) then
+			local curData = SIGen.Data
+			local keys = key:Split( "." )
+			local keyLength = #keys
+			for index = 1 , keyLength , 1 do
+				local curKey = keys[index]
+				if index == keyLength then
+					local number = tonumber( curKey )
+					if number then table.remove( curData , number )
+					else if curKey == "" then table.remove( curData )
+					else curData[curKey] = nil end
+				else curData = curData[curKey] end
+			end
+		else SIGen.Data[key] = nil end
+	end
+	return SIGen
+end
+
+function SIGen.ListSet( key , value , index )
+	if Check() then return SIGen end
+	return SIGen.ValueSet( key.."."..( index and index or "" ) , value )
+end
+
+function SIGen.ListRemove( key , value , index )
+	if Check() then return SIGen end
+	return SIGen.ValueRemove( key.."."..( index and index or "" ) , value )
+end
+
+function SIGen.ListAdd( key , value , index )
+	if Check() then return SIGen end
+	if key ~= "type" and key ~= "name" then
+		local curData = SIGen.Data
+		if key:find( "." ) then
+			local keys = key:Split( "." )
+			local keyLength = #keys
+			for index = 1 , keyLength , 1 do curData = curData[curKey] end
+		end
+		if index then table.insert( curData[key] , index , value )
+		else table.insert( curData[key] , value ) end
 	end
 	return SIGen
 end
