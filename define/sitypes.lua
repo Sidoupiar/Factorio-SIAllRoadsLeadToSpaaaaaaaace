@@ -56,6 +56,17 @@ local SITypes =
 		gun             = "gun" ,
 		module          = "module"
 	} ,
+	unstackableItem =
+	{
+		armor           = "armor" ,
+		blueprint       = "blueprint" ,
+		blueprintBook   = "blueprint-book" ,
+		redprint        = "deconstruction-item" ,
+		selectionTool   = "selection-tool" ,
+		itemTag         = "item-with-tags" ,
+		itemLabel       = "item-with-label" ,
+		itemInventory   = "item-with-inventory"
+	} ,
 	iconableItem =
 	{
 		item            = "item" ,

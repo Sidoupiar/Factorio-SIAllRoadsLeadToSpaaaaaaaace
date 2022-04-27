@@ -315,9 +315,31 @@ local AutoFillSource =
 {
 	"item" =
 	{
-		types = SITypes.item
-		icon_size = 64 ,
-		icon_mipmap = 4
+		defaultValues =
+		{
+			icon_size = SINumbers.iconSize ,
+			icon_mipmaps = SINumbers.mipMaps
+		}
+	} ,
+	"item2" =
+	{
+		types = SITypes.stackableItem ,
+		super = "item" ,
+		defaultValues =
+		{
+			stack_size = 100 ,
+			stackable = true
+		}
+	} ,
+	"item3" =
+	{
+		types = SITypes.unstackableItem ,
+		super = "item" ,
+		defaultValues =
+		{
+			stack_size = 1 ,
+			stackable = false
+		}
 	}
 }
 
@@ -342,7 +364,6 @@ for type , data in pairs( AutoFillSource ) do
 		defaultValues = data.defaultValues ,
 		callBack = data.callBack
 	}
-	AutoFillData[type] = util.deepcopy( newData )
 	if data.types then
 		for index , typeName in pairs( data.types ) do AutoFillData[typeName] = util.deepcopy( newData ) end
 	end
