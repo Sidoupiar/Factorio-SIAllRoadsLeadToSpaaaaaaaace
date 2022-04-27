@@ -26,17 +26,17 @@ local function Init( type , name , customData , needOverwrite )
 		return nil
 	end
 	GenIndex = GenIndex + 1
-	local realName = SIInit.CurrentConstantsData.AutoName( name , type )
+	local realName = SIInit.CurrentConstants.AutoName( name , type )
 	local curData =
 	{
 		type = type ,
 		name = realName ,
 		localised_name = { "SI-name."..realName } ,
 		localised_description = { "SI-description."..realName } ,
-		icon = SIInit.CurrentConstantsData.GetPicturePath( name , type ) ,
+		icon = SIInit.CurrentConstants.GetPicturePath( name , type ) ,
 		group = GroupSettings.groupName ,
 		subgroup = GroupSettings.subGroupName ,
-		order = SIInit.CurrentConstantsData.AutoOrder() ,
+		order = SIInit.CurrentConstants.AutoOrder() ,
 		sourceName = name ,
 		fromSIGen = true ,
 		indexSIGen = GenIndex
@@ -104,25 +104,25 @@ function SIGen.Group( groupName , subGroupName )
 	local list = data.raw[SITypes.group]
 	if list then
 		group = list[groupName]
-		if not group then group = list[SIInit.CurrentConstantsData.AutoName( groupName , SITypes.group )] end
+		if not group then group = list[SIInit.CurrentConstants.AutoName( groupName , SITypes.group )] end
 	end
 	if group then
 		list = data.raw[SITypes.subgroup]
 		if list then
 			subgroup = list[subGroupName]
-			if not subGroup then subGroup = list[SIInit.CurrentConstantsData.AutoName( subGroupName , SITypes.subgroup )] end
+			if not subGroup then subGroup = list[SIInit.CurrentConstants.AutoName( subGroupName , SITypes.subgroup )] end
 		end
 	end
 	if not group then
-		local name = SIInit.CurrentConstantsData.AutoName( groupName , SITypes.group )
+		local name = SIInit.CurrentConstants.AutoName( groupName , SITypes.group )
 		group =
 		{
 			type = SITypes.group ,
 			name = name ,
 			localised_name = { "item-group-name."..name } ,
 			localised_description = { "item-group-description."..name }
-			icon = SIInit.CurrentConstantsData.GetPicturePath( name , SITypes.group ) ,
-			order = SIInit.CurrentConstantsData.AutoOrder()
+			icon = SIInit.CurrentConstants.GetPicturePath( name , SITypes.group ) ,
+			order = SIInit.CurrentConstants.AutoOrder()
 		}
 		data:extend{ group }
 	end
@@ -130,9 +130,9 @@ function SIGen.Group( groupName , subGroupName )
 		subGroup =
 		{
 			type = SITypes.subgroup ,
-			name = SIInit.CurrentConstantsData.AutoName( groupName , SITypes.subgroup ) ,
+			name = SIInit.CurrentConstants.AutoName( groupName , SITypes.subgroup ) ,
 			group = group.name ,
-			order = SIInit.CurrentConstantsData.AutoOrder()
+			order = SIInit.CurrentConstants.AutoOrder()
 		}
 		data:extend{ subGroup }
 	end

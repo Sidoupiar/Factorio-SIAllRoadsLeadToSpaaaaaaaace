@@ -339,8 +339,8 @@ function SIInit.AutoLoad( stateCode )
 			SIInit.OrderCode = SIInit.OrderCode + 1000
 			local class = "SI" .. constantsData.id:upper()
 			_G[class] = constantsData
-			SIInit.ConstantsData[name] = constantsData
-			SIInit.CurrentConstantsData = constantsData
+			SIInit.ConstantsList[name] = constantsData
+			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
 			local realClass = class:gsub( "_" , "-" ) .. "-"
 			local realName = "SI" .. constantsData.name:gsub( "_" , "-" ) .. "-"
@@ -482,7 +482,7 @@ function SIInit.AutoLoad( stateCode )
 	end
 	for name , autoLoadData in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
-		SIInit.CurrentConstantsData = SIInit.ConstantsData[name]
+		SIInit.CurrentConstants = SIInit.ConstantsList[name]
 		for index , fileName in pairs( autoLoadData[SIInit.State] ) do
 			need( "package."..name.."."..fileName , true )
 		end
