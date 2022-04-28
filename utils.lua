@@ -17,7 +17,7 @@ SITools = require( "define/sitools" )
 local CoreName = "__SIAllRoadsLeadToRome__"
 local packageList =
 {
-	"0_special" ,
+	"0_core" ,
 	"1_environment" ,
 	"2_resource" ,
 	"3_plant" ,
@@ -329,7 +329,7 @@ function SIInit.AutoLoad( stateCode )
 		need( "define.runtime.load" , true )
 	end
 	if SIInit.State == SIInit.StateDefine.Settings or SIInit.State == SIInit.StateDefine.Data or SIInit.State == SIInit.StateDefine.Control then
-		local constantsDataList = { CORE = need( "constants" , true ) }
+		local constantsDataList = {}
 		for name , data in pairs( SIInit.AutoLoadDataList ) do
 			SIInit.packageName = name
 			local constantsData = need( "package."..name..".0_constants" , true )

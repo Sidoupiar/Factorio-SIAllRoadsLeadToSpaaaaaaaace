@@ -104,7 +104,7 @@ function SIGen.Group( groupName , subGroupName )
 	local list = data.raw[SITypes.group]
 	if list then
 		group = list[groupName]
-		if not group then group = list[SIInit.CurrentConstants.AutoName( groupName , SITypes.group )] end
+		if not group then group = list[SICORE.AutoName( groupName , SITypes.group )] end
 	end
 	if group then
 		list = data.raw[SITypes.subgroup]
@@ -114,15 +114,15 @@ function SIGen.Group( groupName , subGroupName )
 		end
 	end
 	if not group then
-		local name = SIInit.CurrentConstants.AutoName( groupName , SITypes.group )
+		local name = SICORE.AutoName( groupName , SITypes.group )
 		group =
 		{
 			type = SITypes.group ,
 			name = name ,
 			localised_name = { "item-group-name."..name } ,
 			localised_description = { "item-group-description."..name }
-			icon = SIInit.CurrentConstants.GetPicturePath( name , SITypes.group ) ,
-			order = SIInit.CurrentConstants.AutoOrder()
+			icon = SICORE.GetPicturePath( name , SITypes.group ) ,
+			order = SICORE.AutoOrder()
 		}
 		data:extend{ group }
 	end
