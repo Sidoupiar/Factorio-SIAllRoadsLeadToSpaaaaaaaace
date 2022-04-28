@@ -15,6 +15,7 @@ local GroupSettings =
 local GenIndex = 100000
 local AutoFillData = {}
 local Raw = {}
+local CORE = nil
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 内部方法 ----------------------------------------------------------------------------
@@ -99,12 +100,16 @@ end
 -- ------------------------------------------------------------------------------------------------
 
 function SIGen.Group( groupName , subGroupName )
+	if not CORE then
+		e( "创建分组时必须添加管理核心 CoreConstants" )
+		return nil
+	end
 	local group = nil
 	local subGroup = nil
 	local list = data.raw[SITypes.group]
 	if list then
 		group = list[groupName]
-		if not group then group = list[SICORE.AutoName( groupName , SITypes.group )] end
+		if not group then group = list[CORE.AutoName( groupName , SITypes.group )] end
 	end
 	if group then
 		list = data.raw[SITypes.subgroup]
@@ -114,15 +119,15 @@ function SIGen.Group( groupName , subGroupName )
 		end
 	end
 	if not group then
-		local name = SICORE.AutoName( groupName , SITypes.group )
+		local name = CORE.AutoName( groupName , SITypes.group )
 		group =
 		{
 			type = SITypes.group ,
 			name = name ,
 			localised_name = { "item-group-name."..name } ,
 			localised_description = { "item-group-description."..name }
-			icon = SICORE.GetPicturePath( name , SITypes.group ) ,
-			order = SICORE.AutoOrder()
+			icon = CORE.GetPicturePath( name , SITypes.group ) ,
+			order = CORE.AutoOrder()
 		}
 		data:extend{ group }
 	end
@@ -312,7 +317,13 @@ end
 -- ---------- 流程控制 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+function SIGen.SetCore( coreConstants )
+	CORE = coreConstants
+	return SIGen
+end
+
 function SIGen.Clean()
+	CORE = nil
 	SIGen.Data = nil
 	GroupSettings =
 	{

@@ -427,18 +427,6 @@ function SIInit.AutoLoad( stateCode )
 					constantsData.soundSource = string.sub( constantsData.soundSource , 1 , 2 ) == "__" and constantsData.soundSource or SIInit.CoreName
 					constantsData.soundPath = constantsData.soundSource .. "/package/" .. name .. "/sound/"
 				else constantsData.soundPath = constantsData.base .. "/package/" .. name .. "/sound/" end
-				-- 自动注册伤害类型和其他类型
-				local prototypeList = {}
-				if constantsData.damageType then
-					for index , name in pairs( constantsData.damageType ) do table.insert( prototypeList , { type = SITypes.damageType , name = name } ) end
-				end
-				if constantsData.categoryList then
-					for id , category in pairs( SITypes.category ) do
-						if constantsData.categoryList[category] then
-							for index , name in pairs( constantsData.categoryList[category] ) do table.insert( prototypeList , { type = category , name = name } ) end
-						end
-					end
-				end
 				if #prototypeList > 0 then data:extend( prototypeList ) end
 				-- 添加函数
 				constantsData.HasAutoName = function( sourceName , typeName )
@@ -485,10 +473,16 @@ function SIInit.AutoLoad( stateCode )
 					end
 					return constantsData.picturePath .. name
 				end
-				-- 根据当前状态挂载不同的函数
-				if SIInit.State == SIInit.StateDefine.Data then
-					constantsData.Extend = function( ... )
-						data:extend{ ... }
+				-- 自动注册伤害类型和其他类型
+				local prototypeList = {}
+				if constantsData.damageType then
+					for index , name in pairs( constantsData.damageType ) do table.insert( prototypeList , { type = SITypes.damageType , name = constantsData.AutoName( name , SITypes.damageType ) } ) end
+				end
+				if constantsData.categoryList then
+					for id , category in pairs( SITypes.category ) do
+						if constantsData.categoryList[category] then
+							for index , name in pairs( constantsData.categoryList[category] ) do table.insert( prototypeList , { type = category , name = constantsData.AutoName( name , category ) } ) end
+						end
 					end
 				end
 			end
@@ -496,6 +490,7 @@ function SIInit.AutoLoad( stateCode )
 			if constantsData.AfterLoad then constantsData.AfterLoad() end
 		end
 	end
+	SIGen.SetCore( SICORE )
 	for name , autoLoadData in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
 		SIInit.CurrentConstants = SIInit.ConstantsList[name]
