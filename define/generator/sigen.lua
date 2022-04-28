@@ -164,6 +164,7 @@ function SIGen.Load( type , name , customData , needOverwrite )
 	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
 		if curData.fromSIGen then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
+		if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type ) end
 		Append( curData )
 	end
 	return SIGen
@@ -175,7 +176,9 @@ function SIGen.Copy( type , name , customData , needOverwrite )
 		return SIGen
 	end
 	local curData = SIGen.FindData( type , name )
-	if curData then return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) )
+	if curData then
+		if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type ) end
+		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) )
 	else return Init( type , name , util.deepcopy( customData ) , needOverwrite ) end
 end
 
@@ -200,6 +203,7 @@ function SIGen.SetCustomData( customData , needOverwrite )
 	if Check() then return SIGen end
 	local type = SIGen.Data.type
 	local name = SIGen.Data.name
+	if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or type ) end
 	SITools.CopyData( SIGen.Data , customData , needOverwrite )
 	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
 		if SIGen.Data.fromSIGen then Raw[type][name] = nil
@@ -213,10 +217,12 @@ function SIGen.SetType( newType )
 	if Check() then return SIGen end
 	if not newType then return SIGen end
 	local type = SIGen.Data.type
-	SIGen.Data.type = newType
 	if type ~= newType then
-		if SIGen.Data.fromSIGen then Raw[type][SIGen.Data.name] = nil
-		else data.raw[type][SIGen.Data.name] = nil end
+		local name = SIGen.Data.name
+		if SIGen.Data.fromSIGen then Raw[type][name] = nil
+		else data.raw[type][name] = nil end
+		SIGen.Data.type = newType
+		SIGen.Data.name = SIInit.CurrentConstants.AutoName( SIInit.CurrentConstants.RemoveAutoName( name , type ) , newType )
 		Append( SIGen.Data )
 	end
 	return SIGen
@@ -225,11 +231,13 @@ end
 function SIGen.SetName( newName )
 	if Check() then return SIGen end
 	if not newName then return SIGen end
+	local type = SIGen.Data.type
 	local name = SIGen.Data.name
-	SIGen.Data.name = newName
+	newName = SIInit.CurrentConstants.AutoName( newName , type )
 	if name ~= newName then
-		if SIGen.Data.fromSIGen then Raw[SIGen.Data.type][name] = nil
-		else data.raw[SIGen.Data.type][name] = nil end
+		if SIGen.Data.fromSIGen then Raw[type][name] = nil
+		else data.raw[type][name] = nil end
+		SIGen.Data.name = newName
 		Append( SIGen.Data )
 	end
 	return SIGen
@@ -304,7 +312,15 @@ end
 -- ---------- 流程控制 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-
+function SIGen.Clean()
+	SIGen.Data = nil
+	GroupSettings =
+	{
+		groupName = nil ,
+		subGroupName = nil
+	}
+	return SIGen
+end
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 自动填充 ----------------------------------------------------------------------------

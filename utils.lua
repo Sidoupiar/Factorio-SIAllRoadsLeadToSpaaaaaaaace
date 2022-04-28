@@ -24,6 +24,7 @@ local packageList =
 	"4_living" ,
 	"5_ruin" ,
 	"6_trade" ,
+	"7_tool_item" ,
 	"9997_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"
@@ -321,13 +322,13 @@ function SIInit.AutoLoad( stateCode )
 		end
 		SIInit.AutoLoadDataList[SIInit.packageName] = registerData
 	end
+	if SIInit.State == SIInit.StateDefine.Data then
+		need( "define.generator.sidatakeys" , true )
+		need( "define.generator.sigen" , true )
+	else if SIInit.State == SIInit.StateDefine.Control then
+		need( "define.runtime.load" , true )
+	end
 	if SIInit.State == SIInit.StateDefine.Settings or SIInit.State == SIInit.StateDefine.Data or SIInit.State == SIInit.StateDefine.Control then
-		if SIInit.State == SIInit.StateDefine.Data then
-			need( "define.generator.sidatakeys" , true )
-			need( "define.generator.sigen" , true )
-		else if SIInit.State == SIInit.StateDefine.Control then
-			need( "define.runtime.load" , true )
-		end
 		local constantsDataList = { CORE = need( "constants" , true ) }
 		for name , data in pairs( SIInit.AutoLoadDataList ) do
 			SIInit.packageName = name
@@ -440,11 +441,26 @@ function SIInit.AutoLoad( stateCode )
 				end
 				if #prototypeList > 0 then data:extend( prototypeList ) end
 				-- 添加函数
+				constantsData.HasAutoName = function( sourceName , typeName )
+					if typeName then typeName = SITypes.autoName[typeName] end
+					if typeName then typeName = typeName .. "-"
+					else typeName = "" end
+					return sourceName:find( constantsData.realName..typeName ) == 1
+				end
 				constantsData.AutoName = function( sourceName , typeName )
+					if constantsData.HasAutoName( sourceName , typeName ) then return sourceName end
 					if typeName then typeName = SITypes.autoName[typeName] end
 					if typeName then typeName = typeName .. "-"
 					else typeName = "" end
 					return constantsData.realName .. typeName .. sourceName
+				end
+				constantsData.RemoveAutoName = function( sourceName , typeName )
+					if typeName then typeName = SITypes.autoName[typeName] end
+					if typeName then typeName = typeName .. "-"
+					else typeName = "" end
+					local prefix = constantsData.realName .. typeName
+					if sourceName:find( prefix ) == 1 then return sourceName:sub( prefix:len() )
+					else return sourceName end
 				end
 				constantsData.AutoOrder = function()
 					constantsData.orderIndex = constantsData.orderIndex + 1
@@ -487,6 +503,7 @@ function SIInit.AutoLoad( stateCode )
 			need( "package."..name.."."..fileName , true )
 		end
 	end
+	SIGen.Clean()
 	if SIInit.State == SIInit.StateDefine.DataFinalFixes then
 		for type , list in pairs( SIGen.GetRaw() ) do
 			if #list > 0 then data:extend( list ) end
