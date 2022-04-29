@@ -2,9 +2,12 @@ local constants =
 {
 	id = "CORE" ,
 	name = "通用核心" ,
-	group =
+	raw =
 	{
-		material = "材料"
+		group =
+		{
+			material = "材料"
+		}
 	}
 }
 return constants

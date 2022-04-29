@@ -473,6 +473,12 @@ function SIInit.AutoLoad( stateCode )
 					end
 					return constantsData.picturePath .. name
 				end
+				-- 处理节点
+				if constantsData.raw then
+					local newRaw = {}
+					-- 待定
+					constantsData.raw = newRaw
+				end
 				-- 自动注册伤害类型和其他类型
 				local prototypeList = {}
 				if constantsData.damageType then
