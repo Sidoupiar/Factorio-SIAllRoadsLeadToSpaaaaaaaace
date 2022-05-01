@@ -1,6 +1,6 @@
 local constants =
 {
-	id = "GARBAGE" ,
+	id = "Garbage" ,
 	name = "垃圾回收"
 }
 return constants

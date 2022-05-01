@@ -1,6 +1,6 @@
 local constants =
 {
-	id = "TRADE" ,
+	id = "Trade" ,
 	name = "贸易"
 }
 return constants

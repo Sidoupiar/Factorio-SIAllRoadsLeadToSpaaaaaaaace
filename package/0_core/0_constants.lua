@@ -1,6 +1,6 @@
 local constants =
 {
-	id = "CORE" ,
+	id = "Core" ,
 	name = "通用核心" ,
 	raw =
 	{

@@ -21,7 +21,7 @@ local CORE = nil
 -- ---------- 内部方法 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local function Init( type , name , customData , needOverwrite )
+local function Init( type , name , customData , needOverwrite , callback )
 	if not GroupSettings.currentGroupData then
 		e( "创建原型时必须先定义所在的分组" )
 		return nil
@@ -48,10 +48,10 @@ local function Init( type , name , customData , needOverwrite )
 		if autoFillData.callBack then autoFillData.callBack() end
 	end
 	SITools.CopyData( curData , customData , needOverwrite )
-	return Append( curData )
+	return Append( curData , callback )
 end
 
-local function Append( curData )
+local function Append( curData , callback )
 	SIGen.Data = curData
 	local list = Raw[curData.type]
 	if not list then
@@ -59,6 +59,7 @@ local function Append( curData )
 		Raw[curData.type] = list
 	end
 	list[curData.sourceName or curData.name] = curData
+	if callback then callback( curData ) end
 	return SIGen
 end
 
@@ -71,10 +72,21 @@ local function Check()
 end
 
 -- ------------------------------------------------------------------------------------------------
--- ---------- 查询实体 ----------------------------------------------------------------------------
+-- ---------- 查询遍历 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-function SIGen.FindData( type , name )
+-- ----------------------------------------
+-- 通过原型类型和原型名称来查找原型
+-- 使用 callback 来处理原型
+-- ----------------------------------------
+-- type = 原型类型
+-- name = 原型名称 , 不含前缀
+-- callback = 回调函数 , 查找完毕后会调用
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 找到的原型本体
+-- ----------------------------------------
+function SIGen.FindData( type , name , callback )
 	local curData = nil
 	local list = data.raw[type]
 	if list then
@@ -88,17 +100,51 @@ function SIGen.FindData( type , name )
 			if curData then curData.fromSIGen = true end
 		end
 	end
-	return curData
+	if callback then callback( curData ) end
+	return SIGen
 end
 
-function SIGen.GetRaw()
-	return Raw
+-- ----------------------------------------
+-- 通过原型类型来遍历这个类型下的所有原型
+-- 使用 callback 来处理这些原型
+-- 每找到一个原型就会调用一次 callback
+-- ----------------------------------------
+-- typeOrList = 原型类型 , 也可以是一个原型类型的列表
+-- callback = 回调函数 , 每找到一个原型就会调用一次
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 当前是第几个原型
+-- [2] = 找到的原型本体
+-- ----------------------------------------
+function SIGen.TypeIndicator( typeOrList , callback )
+	if not callback then return SIGen end
+	local prototypeList = {}
+	for _ , typeName in pairs( SITools.IsTable( typeOrList ) and typeOrList or { typeOrList } ) do
+		for _ , list in pairs{ data.raw[typeName] , Raw[typeName] } do
+			if list then
+				for name , prototype in pairs( list ) do
+					if prototype then table.insert( prototypeList , prototype ) end
+				end
+			end
+		end
+	end
+	for index , prototype in pairs( prototypeList ) do callback( index , prototype ) end
+	return SIGen
 end
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 分组控制 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+-- ----------------------------------------
+-- 设置分组和子分组
+-- SIGen 中新创建的原型会默认使用这个分组来安排位置
+-- 如果分组或子分组不存在则自动创建
+-- 创建的分组会保存进 data.raw 中
+-- ----------------------------------------
+-- groupName = 分组名称
+-- subGroupName = 子分组名称
+-- ----------------------------------------
 function SIGen.Group( groupName , subGroupName )
 	if not CORE then
 		e( "创建分组时必须添加管理核心 CoreConstants" )
@@ -150,15 +196,44 @@ end
 -- ---------- 创建实体 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-function SIGen.New( type , name , customData , needOverwrite )
+-- ----------------------------------------
+-- 创建一个新的原型
+-- 这个原型会被设置为当前编辑的原型
+-- 创建的原型无法在 data.raw 中找到 , 需要通 SIGen.FindData 函数才能找到
+-- ----------------------------------------
+-- type = 原型类型
+-- name = 原型名称 , 不含前缀
+-- customData = 自定义数据表 , 可以包含任意字段 , 它们会被复制进创建的原型中
+-- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
+-- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 创建完毕的原型本体
+-- ----------------------------------------
+function SIGen.New( type , name , customData , needOverwrite , callback )
 	if not type or not name then
 		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
 		return SIGen
 	end
-	return Init( type , name , customData , needOverwrite )
+	return Init( type , name , customData , needOverwrite , callback )
 end
 
-function SIGen.Load( type , name , customData , needOverwrite )
+-- ----------------------------------------
+-- 从已有原型中加载一个原型 , 发生的修改会直接在原始原型上生效
+-- 这个原型会被设置为当前编辑的原型
+-- 若通过 customData 改了原型名称或原型类型 , 则会导致在原来的位置上无法找到原始原型
+-- 改了原型名称或原型类型后 , 则该原型无法在 data.raw 中找到 , 需要通 SIGen.FindData 函数才能找到
+-- ----------------------------------------
+-- type = 原型类型
+-- name = 原型名称 , 不含前缀
+-- customData = 自定义数据表 , 可以包含任意字段 , 它们会被复制进创建的原型中
+-- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
+-- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 创建完毕的原型本体
+-- ----------------------------------------
+function SIGen.Load( type , name , customData , needOverwrite , callback )
 	if not type or not name then
 		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
 		return SIGen
@@ -169,34 +244,74 @@ function SIGen.Load( type , name , customData , needOverwrite )
 	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
 		if curData.fromSIGen then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
-		if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type ) end
-		Append( curData )
+		if customData.name then
+			curData.sourceName = customData.name
+			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
+		end
+		curData.fromSIGen = true
+		return Append( curData , callback )
+	else
+		if callback then callback( curData ) end
+		return SIGen
 	end
-	return SIGen
 end
 
-function SIGen.Copy( type , name , customData , needOverwrite )
+-- ----------------------------------------
+-- 从已有原型中加载一个原型 , 复制原始原型的数据并创建为新的原型
+-- 这个原型会被设置为当前编辑的原型
+-- 任何对原型的修改不会影响原始原型
+-- 创建的原型无法在 data.raw 中找到 , 需要通 SIGen.FindData 函数才能找到
+-- ----------------------------------------
+-- type = 原型类型
+-- name = 原型名称 , 不含前缀
+-- customData = 自定义数据表 , 可以包含任意字段 , 它们会被复制进创建的原型中
+-- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
+-- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 创建完毕的原型本体
+-- ----------------------------------------
+function SIGen.Copy( type , name , customData , needOverwrite , callback )
 	if not type or not name then
 		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
 		return SIGen
 	end
 	local curData = SIGen.FindData( type , name )
 	if curData then
-		if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type ) end
-		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) )
-	else return Init( type , name , util.deepcopy( customData ) , needOverwrite ) end
+		if customData.name then
+			curData.sourceName = customData.name
+			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
+		end
+		curData.fromSIGen = true
+		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) , callback )
+	else return Init( type , name , util.deepcopy( customData ) , needOverwrite , callback ) end
 end
 
+-- ----------------------------------------
+-- 按类别创建/加载/复制原型
+-- 这个原型会被设置为当前编辑的原型
+-- 命名规则为 SITypes 的原型类型对应的键首字母大写+New/Load/Copy 前缀
+-- 比如创建一个物品 , 物品原型类型在 SITypes 中的键为 item , 则函数为 NewItem
+-- 创建的原型无法在 data.raw 中找到 , 需要通 SIGen.FindData 函数才能找到
+-- ----------------------------------------
+-- name = 原型名称 , 不含前缀
+-- customData = 自定义数据表 , 可以包含任意字段 , 它们会被复制进创建的原型中
+-- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
+-- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 创建完毕的原型本体
+-- ----------------------------------------
 for index , typeName in pairs( SITypes.all ) do
 	local functionName = typeName:ToFunctionName()
-	SIGen["New"..functionName] = function( name , customData , needOverwrite )
-		return SIGen.New( typeName , name , customData , needOverwrite )
+	SIGen["New"..functionName] = function( name , customData , needOverwrite , callback )
+		return SIGen.New( typeName , name , customData , needOverwrite , callback )
 	end
-	SIGen["Load"..functionName] = function( name , customData , needOverwrite )
-		return SIGen.Load( typeName , name , customData , needOverwrite )
+	SIGen["Load"..functionName] = function( name , customData , needOverwrite , callback )
+		return SIGen.Load( typeName , name , customData , needOverwrite , callback )
 	end
-	SIGen["Copy"..functionName] = function( name , customData , needOverwrite )
-		return SIGen.Copy( typeName , name , customData , needOverwrite )
+	SIGen["Copy"..functionName] = function( name , customData , needOverwrite , callback )
+		return SIGen.Copy( typeName , name , customData , needOverwrite , callback )
 	end
 end
 
@@ -204,6 +319,12 @@ end
 -- ---------- 修改属性 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+-- ----------------------------------------
+-- 把自定义表中的键值对保存进当前编辑的原型中
+-- ----------------------------------------
+-- customData = 自定义数据表 , 可以包含任意字段 , 它们会被复制进创建的原型中
+-- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
+-- ----------------------------------------
 function SIGen.SetCustomData( customData , needOverwrite )
 	if Check() then return SIGen end
 	local type = SIGen.Data.type
@@ -218,6 +339,12 @@ function SIGen.SetCustomData( customData , needOverwrite )
 	return SIGen
 end
 
+-- ----------------------------------------
+-- 变更当前编辑的原型的原型类型
+-- 若改了原型类型 , 则会导致在原来的位置上无法找到原型
+-- ----------------------------------------
+-- newType = 新的原型类型
+-- ----------------------------------------
 function SIGen.SetType( newType )
 	if Check() then return SIGen end
 	if not newType then return SIGen end
@@ -233,6 +360,12 @@ function SIGen.SetType( newType )
 	return SIGen
 end
 
+-- ----------------------------------------
+-- 变更当前编辑的原型的原型名称
+-- 若改了原型名称 , 则会导致在原来的位置上无法找到原型
+-- ----------------------------------------
+-- newName = 新的原型名称 , 不含前缀
+-- ----------------------------------------
 function SIGen.SetName( newName )
 	if Check() then return SIGen end
 	if not newName then return SIGen end
@@ -248,6 +381,15 @@ function SIGen.SetName( newName )
 	return SIGen
 end
 
+-- ----------------------------------------
+-- 通过属性名称来变更当前编辑的原型中的属性
+-- 多层表中的属性可以使用 . 来连接多个层级的属性名称 , 比如 icons.1.icon
+-- 当要给列表结构添加元素时 , 可以把索引留空 , 比如 icons.
+-- 使用多层属性名称时 , 需要确保属性名称是存在的 , 不然会报错
+-- ----------------------------------------
+-- key = 属性名称
+-- value = 属性值
+-- ----------------------------------------
 function SIGen.ValueSet( key , value )
 	if Check() then return SIGen end
 	if key == "type" then return SIGen.SetType( value )
@@ -267,6 +409,14 @@ function SIGen.ValueSet( key , value )
 	return SIGen
 end
 
+-- ----------------------------------------
+-- 移除当前编辑的原型中的属性
+-- 多层表中的属性可以使用 . 来连接多个层级的属性名称 , 比如 icons.1.icon
+-- 当移除列表结构的最后一个元素时 , 可以把索引留空 , 比如 icons.
+-- 使用多层属性名称时 , 需要确保属性名称是存在的 , 不然会报错
+-- ----------------------------------------
+-- key = 属性名称
+-- ----------------------------------------
 function SIGen.ValueRemove( key )
 	if Check() then return SIGen end
 	if key ~= "type" and key ~= "name" then
@@ -288,16 +438,15 @@ function SIGen.ValueRemove( key )
 	return SIGen
 end
 
-function SIGen.ListSet( key , value , index )
-	if Check() then return SIGen end
-	return SIGen.ValueSet( key.."."..( index and index or "" ) , value )
-end
-
-function SIGen.ListRemove( key , value , index )
-	if Check() then return SIGen end
-	return SIGen.ValueRemove( key.."."..( index and index or "" ) , value )
-end
-
+-- ----------------------------------------
+-- 通过属性名称来向当前编辑的原型中的属性内添加新的项目 , 仅限于列表结构
+-- 多层表中的属性可以使用 . 来连接多个层级的属性名称 , 比如 icons.1.icon
+-- 使用多层属性名称时 , 需要确保属性名称是存在的 , 不然会报错
+-- ----------------------------------------
+-- key = 属性名称
+-- value = 属性值
+-- index = 列表索引位置 , 添加至最后一位则留空
+-- ----------------------------------------
 function SIGen.ListAdd( key , value , index )
 	if Check() then return SIGen end
 	if key ~= "type" and key ~= "name" then
@@ -313,15 +462,44 @@ function SIGen.ListAdd( key , value , index )
 	return SIGen
 end
 
+-- ----------------------------------------
+-- 通过属性名称来变更当前编辑的原型中的属性 , 仅限于列表结构
+-- 多层表中的属性可以使用 . 来连接多个层级的属性名称 , 比如 icons.1.icon
+-- 使用多层属性名称时 , 需要确保属性名称是存在的 , 不然会报错
+-- ----------------------------------------
+-- key = 属性名称
+-- value = 属性值
+-- index = 列表索引位置 , 添加至最后一位则留空
+-- ----------------------------------------
+function SIGen.ListSet( key , value , index )
+	if Check() then return SIGen end
+	return SIGen.ValueSet( key.."."..( index and index or "" ) , value )
+end
+
+-- ----------------------------------------
+-- 移除当前编辑的原型中的属性 , 仅限于列表结构
+-- 多层表中的属性可以使用 . 来连接多个层级的属性名称 , 比如 icons.1.icon
+-- 使用多层属性名称时 , 需要确保属性名称是存在的 , 不然会报错
+-- ----------------------------------------
+-- key = 属性名称
+-- index = 列表索引位置 , 最后一位则留空
+-- ----------------------------------------
+function SIGen.ListRemove( key , index )
+	if Check() then return SIGen end
+	return SIGen.ValueRemove( key.."."..( index and index or "" ) )
+end
+
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 流程控制 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+-- 框架内部函数
 function SIGen.SetCore( coreConstants )
 	CORE = coreConstants
 	return SIGen
 end
 
+-- 框架内部函数
 function SIGen.Clean()
 	CORE = nil
 	SIGen.Data = nil
@@ -331,6 +509,11 @@ function SIGen.Clean()
 		subGroupName = nil
 	}
 	return SIGen
+end
+
+-- 框架内部函数
+function SIGen.GetRaw()
+	return Raw
 end
 
 -- ------------------------------------------------------------------------------------------------

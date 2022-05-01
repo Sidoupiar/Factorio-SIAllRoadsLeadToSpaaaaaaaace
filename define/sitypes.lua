@@ -499,7 +499,7 @@ for type , real in pairs
 	entity = "实体" ,
 	equipment = "模块"
 } do
-	if type( SITypes[type] ) == "table" then
+	if SITools.IsTable( SITypes[type] ) then
 		for key , value in piars( SITypes[type] ) do
 			table.insert( SITypes.all , value )
 			SITypes.autoName[value] = real

@@ -1,6 +1,6 @@
 local constants =
 {
-	id = "PLANT" ,
+	id = "Plant" ,
 	name = "植物"
 }
 return constants

@@ -3,12 +3,13 @@
 -- ------------------------------------------------------------------------------------------------
 
 if not util then util = require( "__core__/lualib/util" ) end
+
+SITools = require( "define/sitools" )
 SINumbers = require( "define/sinumbers" )
 SIFlags = require( "define/siflags" )
 SITypes = require( "define/sitypes" )
 SIColors = require( "define/sicolors" )
 SIMods = require( "define/simods" )
-SITools = require( "define/sitools" )
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 定义数据 ----------------------------------------------------------------------------
@@ -159,7 +160,7 @@ end
 
 function table.GetWithName( data , name )
 	for k , v in pairs( data ) do
-		if type( v ) == "table" and v.name == name then return v end
+		if SITools.IsTable( v ) and v.name == name then return v end
 	end
 	return nil
 end
@@ -171,7 +172,7 @@ function table.ShallowCopy( data )
 end
 
 function table.TableToString( data , level )
-	if type( data ) ~= "table" then e( "数据类型错误：无法对非 table 类型的数据进行转换" ) end
+	if SITools.IsNotTable( data ) then e( "数据类型错误：无法对非 table 类型的数据进行转换" ) end
 	level = level or 1
 	local levelSpace = ""
 	for i = 1 , level , 1 do levelSpace = levelSpace .. "    " end
@@ -179,10 +180,9 @@ function table.TableToString( data , level )
 	local maxSize = table.Size( data )
 	local s = level == 1 and "\n{" or "{"
 	for k , v in pairs( data ) do
-		s = s .. "\n" .. levelSpace .. ( type( k ) == "number" and "" or ( tostring( k ) .. " : " ) )
-		local dataType = type( v )
-		if dataType == "table" then s = s .. table.TableToString( v , level+1 )
-		elseif dataType == "string" then s = s .. "\"" .. v .. "\""
+		s = s .. "\n" .. levelSpace .. ( SITools.IsNumber( k ) and "" or ( tostring( k ) .. " : " ) )
+		if SITools.IsTable( v ) then s = s .. table.TableToString( v , level+1 )
+		elseif SITools.IsString( v ) then s = s .. "\"" .. v .. "\""
 		else s = s .. tostring( v ) end
 		if size < maxSize then s = s .. " ," end
 		size = size + 1
@@ -269,6 +269,8 @@ end
 -- ---------- 基础数据 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+SIAPI = {}
+
 SISettings =
 {
 	Startup = {} ,
@@ -304,14 +306,14 @@ function SIInit.AutoLoad( stateCode )
 	for index , name in pairs( packageList ) do
 		SIInit.packageName = name
 		local registerData = need( "package."..name..".0_auto_load" , true )
-		if not registerData or type( registerData ) ~= "table" then registerData = {} end
+		if not registerData or SITools.IsNotTable( registerData ) then registerData = {} end
 		for index = 1 , 4 , 1 do
 			local fileList = registerData[index]
-			if fileList and type( fileList ) == "string" then
+			if fileList and SITools.IsString( fileList ) then
 				fileList = { fileList }
 				registerData[index] = fileList
 			end
-			if not fileList or type( fileList ) ~= "table" or #fileList < 1 then
+			if not fileList or SITools.IsNotTable( fileList ) or #fileList < 1 then
 				fileList = {}
 				if index == 1 then table.insert( fileList , "1_data" )
 				else if index == 2 then table.insert( fileList , "2_data-updates" )
@@ -338,12 +340,13 @@ function SIInit.AutoLoad( stateCode )
 		for name , constantsData in pairs( constantsDataList ) do
 			SIInit.packageName = name
 			SIInit.OrderCode = SIInit.OrderCode + 1000
-			local class = "SI" .. constantsData.id:upper()
+			local class = "SIConstants_" .. constantsData.id
 			_G[class] = constantsData
+			SIAPI[constantsData.id] = {}
 			SIInit.ConstantsList[name] = constantsData
 			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
-			local realClass = class:gsub( "_" , "-" ) .. "-"
+			local realClass = "SI" .. constantsData.id:upper():gsub( "_" , "-" ) .. "-"
 			local realName = "SI" .. constantsData.name:gsub( "_" , "-" ) .. "-"
 			constantsData.class = class
 			constantsData.realClass = realClass
@@ -391,7 +394,7 @@ function SIInit.AutoLoad( stateCode )
 						if v[2] == "startup" then startupList[settingName] = function() return settings.startup[key].value end
 						elseif v[2] == "runtime-global" then runtimeList[settingName] = function() return settings.global[key].value end
 						elseif v[2] == "runtime-per-user" then perPlayerList[settingName] = function( playerOrIndex )
-								if type( playerOrIndex ) == "number" or not playerOrIndex.is_player then playerOrIndex = game.players[playerOrIndex] end
+								if SITools.IsNumber( playerOrIndex ) or not playerOrIndex.is_player then playerOrIndex = game.players[playerOrIndex] end
 								return playerOrIndex.mod_settings[key]
 							end
 						end
@@ -496,15 +499,15 @@ function SIInit.AutoLoad( stateCode )
 			if constantsData.AfterLoad then constantsData.AfterLoad() end
 		end
 	end
-	SIGen.SetCore( SICORE )
+	SIGen.SetCore( SIConstants_Core )
 	for name , autoLoadData in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
 		SIInit.CurrentConstants = SIInit.ConstantsList[name]
 		for index , fileName in pairs( autoLoadData[SIInit.State] ) do
 			need( "package."..name.."."..fileName , true )
 		end
+		SIGen.Clean()
 	end
-	SIGen.Clean()
 	if SIInit.State == SIInit.StateDefine.DataFinalFixes then
 		for type , list in pairs( SIGen.GetRaw() ) do
 			if #list > 0 then data:extend( list ) end

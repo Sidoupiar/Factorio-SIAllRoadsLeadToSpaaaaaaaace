@@ -1,6 +1,6 @@
 local constants =
 {
-	id = "TOOLITEM" ,
+	id = "ToolItem" ,
 	name = "工具"
 }
 return constants
