@@ -8,11 +8,13 @@ end )
 SIGen.TypeIndicator( SITypes.item , function( index , item )
 	if not item.burnt_result then
 		local data = SIConstants_Garbage.fuelSettings[item.sourceName or item.name]
-		item.fuel_category = fuelCategory
-		item.fuel_acceleration_multiplier = 1.0
-		item.fuel_emissions_multiplier = data and data.emissionsMultiplier or 1.0
-		item.fuel_value = data and data.fuelValue or "1J"
-		item.burnt_result = data and data.result or SIConstants_Garbage.item.fuelGarbage
+		if not data or not data.pass then
+			item.fuel_category = fuelCategory
+			item.fuel_acceleration_multiplier = 1.0
+			item.fuel_emissions_multiplier = data and data.emissionsMultiplier or 1.0
+			item.fuel_value = data and data.fuelValue or "1J"
+			item.burnt_result = data and data.result or SIConstants_Garbage.item.fuelGarbage
+		end
 	end
 	if not item.rocket_launch_product and not item.rocket_launch_products then
 		local result = SIConstants_Garbage.rocketLaunchSettings[item.sourceName or item.name]

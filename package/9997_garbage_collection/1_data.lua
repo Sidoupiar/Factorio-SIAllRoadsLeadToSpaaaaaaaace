@@ -13,7 +13,8 @@ function SIAPI.Garbage.AddFuelSetting( name , result , fuelValue , emissionsMult
 	{
 		result = result ,
 		fuelValue = fuelValue ,
-		emissionsMultiplier = emissionsMultiplier
+		emissionsMultiplier = emissionsMultiplier ,
+		pass = false
 	}
 end
 
