@@ -4,9 +4,14 @@ local constants =
 	name = "通用核心" ,
 	raw =
 	{
-		group =
+		[SITypes.group] =
 		{
 			material = "材料"
+		} ,
+		[SITypes.item.capsule] =
+		{
+			roundBadge = "循环徽章" ,
+			epBadge = "环保徽章"
 		}
 	}
 }
