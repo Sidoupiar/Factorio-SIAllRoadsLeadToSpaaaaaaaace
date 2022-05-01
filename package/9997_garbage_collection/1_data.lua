@@ -3,7 +3,7 @@ SIConstants_Garbage.fuelSettings =
 
 }
 
-SIConstants_Garbage.rocketSendSettings =
+SIConstants_Garbage.rocketLaunchSettings =
 {
 
 }
@@ -17,6 +17,6 @@ function SIAPI.Garbage.AddFuelSetting( name , result , fuelValue , emissionsMult
 	}
 end
 
-function SIAPI.Garbage.AddRocketSendSetting( name , result )
-	SIConstants_Garbage.rocketSendSettings[name] = result
+function SIAPI.Garbage.AddRocketLaunchSetting( name , result )
+	SIConstants_Garbage.rocketLaunchSettings[name] = result
 end

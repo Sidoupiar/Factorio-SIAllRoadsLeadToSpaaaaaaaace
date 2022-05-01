@@ -476,7 +476,8 @@ local SITypes =
 	} ,
 
 	all = {} ,
-	autoName = {}
+	autoName = {} ,
+	rawCode = {}
 }
 
 for type , real in pairs
@@ -503,10 +504,12 @@ for type , real in pairs
 		for key , value in piars( SITypes[type] ) do
 			table.insert( SITypes.all , value )
 			SITypes.autoName[value] = real
+			SITypes.rawCode[value] = type
 		end
 	else
 		table.insert( SITypes.all , SITypes[type] )
 		SITypes.autoName[SITypes[type]] = real
+		SITypes.rawCode[SITypes[type]] = type
 	end
 end
 

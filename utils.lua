@@ -485,14 +485,37 @@ function SIInit.AutoLoad( stateCode )
 				-- 自动注册伤害类型和其他类型
 				local prototypeList = {}
 				if constantsData.damageType then
-					for index , name in pairs( constantsData.damageType ) do table.insert( prototypeList , { type = SITypes.damageType , name = constantsData.AutoName( name , SITypes.damageType ) } ) end
+					for index , name in pairs( constantsData.damageType ) do
+						name = constantsData.AutoName( name , SITypes.damageType )
+						constantsData.damageType[index] = name
+						table.insert( prototypeList , { type = SITypes.damageType , name = name } )
+					end
 				end
 				if constantsData.categoryList then
 					for id , category in pairs( SITypes.category ) do
 						if constantsData.categoryList[category] then
-							for index , name in pairs( constantsData.categoryList[category] ) do table.insert( prototypeList , { type = category , name = constantsData.AutoName( name , category ) } ) end
+							for index , name in pairs( constantsData.categoryList[category] ) do
+								name = constantsData.AutoName( name , category )
+								constantsData.categoryList[category][index] = name
+								table.insert( prototypeList , { type = category , name = name } )
+							end
 						end
 					end
+				end
+				-- 提前处理公开数据
+				if constantsData.raw then
+					for typeName , list in pairs( constantsData.raw ) do
+						local rawCode = SITypes.rawCode[typeName]
+						local output = constants[rawCode]
+						if not output then
+							output = {}
+							constants[rawCode] = output
+						end
+						for key , name in pairs( list ) do
+							output[key] = constantsData.AutoName( name , typeName )
+						end
+					end
+					constantsData.raw = nil
 				end
 			end
 			-- 加载完毕回调
