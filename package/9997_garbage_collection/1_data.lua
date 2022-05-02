@@ -228,7 +228,6 @@ end )
 .NewCapsule( SIConstants_Garbage.item.winterBook , bookThrowData , true ).SetStackSize( 200 )
 .NewCapsule( SIConstants_Garbage.item.ashBook , bookThrowData , true ).SetStackSize( 200 )
 .NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( 15 )
-.NewCapsule( SIConstants_Garbage.item.burntMachine , machineThrowData , true )
 .NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
 	recipeName = recipe.name
 	recipe.enabled = true
@@ -286,7 +285,9 @@ end )
 end )
 .SetSize( 3 )
 .SetAnimation4Way()
-
+.NewCapsule( SIConstants_Garbage.item.burntMachine , machineThrowData , true , function( item )
+	item.place_result = machineName
+end )
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 数据列表 ----------------------------------------------------------------------------
