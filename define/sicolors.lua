@@ -52,6 +52,31 @@ local SIColors =
 		gray      = { r = 0.90 , g = 0.90 , b = 0.30 , a = 0.50 } , -- 灰色
 		green     = { r = 0.35 , g = 1.00 , b = 0.35 , a = 0.50 } , -- 绿色
 		red       = { r = 1.00 , g = 0.35 , b = 0.35 , a = 0.50 }   -- 红色
-	}
+	} ,
+
+	Color = function( r , g , b , a )
+		local color = {}
+		if r then color.r = r
+		else color.r = 0.0 end
+		if g then color.g = g
+		else color.g = 0.0 end
+		if b then color.b = b
+		else color.b = 0.0 end
+		if a then color.a = a
+		else color.a = 1.0 end
+		return color
+	end ,
+	Color256 = function( r , g , b , a )
+		local color = {}
+		if r then color.r = r / 256.0
+		else color.r = 0.0 end
+		if g then color.g = g / 256.0
+		else color.g = 0.0 end
+		if b then color.b = b / 256.0
+		else color.b = 0.0 end
+		if a then color.a = a / 256.0
+		else color.a = 1.0 end
+		return color
+	end
 }
 return SIColors

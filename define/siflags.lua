@@ -38,7 +38,7 @@ local SIFlags =
 		south = "south" ,
 		west  = "west"
 	} ,
-	collisionMask =
+	collisionMasks =
 	{
 		ground        = "ground-tile" ,
 		water         = "water-tile" ,
@@ -101,18 +101,38 @@ local SIFlags =
 		collidingWithTilesOnly  = "colliding-with-tiles-only"
 		
 	} ,
-	
 	sciencePack =
 	{
 		key   = "description.science-pack-remaining-amount-key" ,
 		value = "description.science-pack-remaining-amount-value"
 	} ,
-	
-	condition =
+	conditions =
 	{
-		And = "and" ,
-		Or  = "or" ,
-		Not = "not"
+		AND = "and" ,
+		OR  = "or" ,
+		NOT = "not"
+	} ,
+	priorities =
+	{
+		noAtlas          = "no-atlas" ,
+		veryLow          = "very-low" ,
+		low              = "low" ,
+		medium           = "medium" ,
+		high             = "high" ,
+		extraHigh        = "extra-high" ,
+		extraHighNoScale = "extra-high-no-scale"
+	} ,
+	blendModes =
+	{
+		normal           = "normal" ,
+		additive         = "additive" ,
+		additiveSoft     = "additive-soft" ,
+		multiplicative   = "multiplicative" ,
+		overwrite        = "overwrite"
+	} ,
+	graphicFlags =
+	{
+		light            = "light"
 	}
 }
 return SIFlags

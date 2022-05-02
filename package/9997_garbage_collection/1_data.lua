@@ -1,21 +1,323 @@
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 原型定义 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+local recipeName = nil
+local machineName = nil
+local ashThrowData
+{
+	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
+	capsule_action =
+	{
+		type = "throw" ,
+		uses_stack = true ,
+		attack_parameters =
+		{
+			type = "projectile" ,
+			range = 16.5 ,
+			cooldown = 35 ,
+			activation_type = "throw" ,
+			ammo_type =
+			{
+				category = SIConstants_Core.categoryList[SITypes.category.ammo].peopleThrow ,
+				target_type = "position" ,
+				action =
+				{
+					{
+						type = "direct" ,
+						action_delivery =
+						{
+							type = "projectile" ,
+							projectile = badgeName ,
+							starting_speed = 0.25
+						}
+					} ,
+					{
+						type = "direct" ,
+						action_delivery =
+						{
+							type = "instant" ,
+							target_effects =
+							{
+								type = "play-sound" ,
+								sound = SITools.SoundList_Base( "fight/throw-projectile" , 6 , 0.4 )
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+local bookThrowData = util.deepcopy( ashThrowData )
+local blockThrowData = util.deepcopy( ashThrowData )
+local machineThrowData = util.deepcopy( ashThrowData )
+SIGen.Group( SIConstants_Core.group )
+.NewProjectile( "扔出去的灰烬" , nil , false , function( projectile )
+	ashThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.acceleration = 0
+	projectile.action =
+	{
+		{
+			type = "direct" ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					{
+						type = "create-particle" ,
+						particle_name = "stone-particle" ,
+						repeat_count = 3 ,
+						initial_height = 0.5 ,
+						initial_vertical_speed = 0.05 ,
+						initial_vertical_speed_deviation = 0.1 ,
+						speed_from_center = 0.05 ,
+						speed_from_center_deviation = 0.1 ,
+						offset_deviation = { { -0.8985 , -0.5 } , { 0.8985 , 0.5 } }
+					}
+				}
+			}
+		} ,
+		{
+			type = "area" ,
+			radius = 0.8 ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 )
+				}
+			}
+		}
+	}
+end )
+.SetSize( 1 )
+.SetAnimation( 0.5 )
+.NewProjectile( "扔出去的认证书" , nil , false , function( projectile )
+	bookThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.acceleration = 0
+	projectile.action =
+	{
+		{
+			type = "direct" ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					{
+						type = "create-particle" ,
+						particle_name = "stone-particle" ,
+						repeat_count = 3 ,
+						initial_height = 0.5 ,
+						initial_vertical_speed = 0.05 ,
+						initial_vertical_speed_deviation = 0.1 ,
+						speed_from_center = 0.05 ,
+						speed_from_center_deviation = 0.1 ,
+						offset_deviation = { { -0.8985 , -0.5 } , { 0.8985 , 0.5 } }
+					}
+				}
+			}
+		} ,
+		{
+			type = "area" ,
+			radius = 0.8 ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 )
+				}
+			}
+		}
+	}
+end )
+.NewProjectile( "扔出去的废料" , nil , false , function( projectile )
+	blockThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.acceleration = 0
+	projectile.action =
+	{
+		{
+			type = "direct" ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					{
+						type = "create-particle" ,
+						particle_name = "stone-particle" ,
+						repeat_count = 3 ,
+						initial_height = 0.5 ,
+						initial_vertical_speed = 0.05 ,
+						initial_vertical_speed_deviation = 0.1 ,
+						speed_from_center = 0.05 ,
+						speed_from_center_deviation = 0.1 ,
+						offset_deviation = { { -0.8985 , -0.5 } , { 0.8985 , 0.5 } }
+					}
+				}
+			}
+		} ,
+		{
+			type = "area" ,
+			radius = 0.8 ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 23.0 )
+				}
+			}
+		}
+	}
+end )
+.SetSize( 1 )
+.SetAnimation( 0.5 )
+.NewProjectile( "扔出去的垃圾焚烧炉" , nil , false , function( projectile )
+	machineThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.acceleration = 0
+	projectile.action =
+	{
+		{
+			type = "direct" ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					{
+						type = "create-particle" ,
+						particle_name = "stone-particle" ,
+						repeat_count = 3 ,
+						initial_height = 0.5 ,
+						initial_vertical_speed = 0.05 ,
+						initial_vertical_speed_deviation = 0.1 ,
+						speed_from_center = 0.05 ,
+						speed_from_center_deviation = 0.1 ,
+						offset_deviation = { { -0.8985 , -0.5 } , { 0.8985 , 0.5 } }
+					}
+				}
+			}
+		} ,
+		{
+			type = "area" ,
+			radius = 0.8 ,
+			action_delivery =
+			{
+				type = "instant" ,
+				target_effects =
+				{
+					SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 42.0 )
+				}
+			}
+		}
+	}
+end )
+.SetSize( 1 )
+.SetAnimation( 0.5 )
+.NewCapsule( SIConstants_Garbage.item.fuelGarbage , ashThrowData , true ).SetStackSize( 4768 )
+.NewCapsule( SIConstants_Garbage.item.filterGarbage , ashThrowData , true ).SetStackSize( 4399 )
+.NewCapsule( SIConstants_Garbage.item.whiteGarbage , ashThrowData , true ).SetStackSize( 5553 )
+.NewCapsule( SIConstants_Garbage.item.oreGarbage , ashThrowData , true ).SetStackSize( 6172 )
+.NewCapsule( SIConstants_Garbage.item.launchBook , bookThrowData , true ).SetStackSize( 200 )
+.NewCapsule( SIConstants_Garbage.item.epBadgeBook , bookThrowData , true ).SetStackSize( 200 )
+.NewCapsule( SIConstants_Garbage.item.winterBook , bookThrowData , true ).SetStackSize( 200 )
+.NewCapsule( SIConstants_Garbage.item.ashBook , bookThrowData , true ).SetStackSize( 200 )
+.NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( 15 )
+.NewCapsule( SIConstants_Garbage.item.burntMachine , machineThrowData , true )
+.NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
+	recipeName = recipe.name
+	recipe.enabled = true
+	recipe.hidden = true
+	recipe.hide_from_player_crafting = true
+	recipe.allow_inserter_overload = false
+	recipe.allow_decomposition = false
+	recipe.allow_as_intermediate = false
+	recipe.allow_intermediates = false
+	recipe.always_show_made_in = false
+	recipe.energy_required = 10
+	recipe.category = SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage
+	recipe.ingredients = {}
+	recipe.results = { { type = "item" , name = SIConstants_Garbage.item.filterGarbage , amount = 1 } }
+	recipe.main_product = SIConstants_Garbage.item.filterGarbage
+end )
+.NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )
+	machineName = entity.name
+	entity.minable =
+	{
+		mining_time = 2.5 ,
+		results =
+		{
+			{ type = "item" , name = SIConstants_Core.item.roundBadge , amount = 1 , probability = 0.05 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false } ,
+			{ type = "item" , name = SIConstants_Garbage.item.burntMachine , amount = 1 }
+		}
+	}
+	entity.max_health = 400
+	entity.dying_explosion = "big-explosion"
+	entity.corpse = "big-remnants"
+	entity.loot = { { item = SIConstants_Garbage.item.brokenMachine , probability = 1.0 , count_min = 1 , count_max = 3 } }
+	entity.show_recipe_icon = false
+	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage }
+	entity.fixed_recipe = recipeName
+	entity.energy_usage = "850KW"
+	entity.energy_source =
+	{
+		type = "burner" ,
+		fuel_inventory_size = 20 ,
+		burnt_inventory_size = 20 ,
+		fuel_categories = { SIConstants_Garbage.categoryList[SITypes.category.fuel].garbage } ,
+		effectivity = 0.23 ,
+		smoke =
+		{
+			{
+				name = "smoke" ,
+				frequency = 5 ,
+				starting_vertical_speed = 0.08 ,
+				starting_frame_deviation = 60 ,
+				position = { 0.0 , -0.8 } ,
+				deviation = { 0.1 , 0.1 }
+			}
+		}
+	}
+end )
+.SetSize( 3 )
+.SetAnimation4Way()
+
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 数据列表 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
 SIConstants_Garbage.fuelSettings =
 {
-
+	[SIConstants_Garbage.item.fuelGarbage] = { pass = true } ,
+	[SIConstants_Garbage.item.filterGarbage] = { result = SIConstants_Garbage.item.whiteGarbage } ,
+	[SIConstants_Garbage.item.whiteGarbage] = { result = SIConstants_Garbage.item.oreGarbage } ,
+	[SIConstants_Garbage.item.oreGarbage] = { pass = true }
 }
 
 SIConstants_Garbage.rocketLaunchSettings =
 {
-
+	[SIConstants_Core.item.epBadge] = SIConstants_Garbage.item.epBadgeBook ,
+	[SIConstants_Garbage.item.fuelGarbage] = SIConstants_Garbage.item.ashBook ,
+	[SIConstants_Garbage.item.whiteGarbage] = SIConstants_Garbage.item.winterBook ,
+	[SIConstants_Garbage.item.oreGarbage] = SIConstants_Garbage.item.winterBook
 }
 
 function SIAPI.Garbage.AddFuelSetting( name , result , fuelValue , emissionsMultiplier )
-	SIConstants_Garbage.fuelSettings[name] =
-	{
-		result = result ,
-		fuelValue = fuelValue ,
-		emissionsMultiplier = emissionsMultiplier ,
-		pass = false
-	}
+	if result then
+		SIConstants_Garbage.fuelSettings[name] =
+		{
+			result = result ,
+			fuelValue = fuelValue ,
+			emissionsMultiplier = emissionsMultiplier ,
+			pass = false
+		}
+	else SIConstants_Garbage.fuelSettings[name] = { pass = true }
 end
 
 function SIAPI.Garbage.AddRocketLaunchSetting( name , result )

@@ -5,9 +5,9 @@
 if not util then util = require( "__core__/lualib/util" ) end
 
 SITools = require( "define/sitools" )
-SINumbers = require( "define/sinumbers" )
 SIFlags = require( "define/siflags" )
 SITypes = require( "define/sitypes" )
+SINumbers = require( "define/sinumbers" )
 SIColors = require( "define/sicolors" )
 SIMods = require( "define/simods" )
 
@@ -43,8 +43,8 @@ SIOrderListSize = #SIOrderList
 
 if not date then date = {} end
 
-date.ticksPerDay = SINumbers.ticksPerDay
-date.ticksPerHalfDay = SINumbers.ticksPerHalfDay
+date.ticksPerDay = 25000
+date.ticksPerHalfDay = 12500
 
 function date.FormatDateByTick( tick )
 	local d , t = math.modf( tick/date.ticksPerDay )
@@ -436,21 +436,17 @@ function SIInit.AutoLoad( stateCode )
 					if typeName then typeName = SITypes.autoName[typeName] end
 					if typeName then typeName = typeName .. "-"
 					else typeName = "" end
-					return sourceName:find( constantsData.realName..typeName ) == 1
+					local prefix = constantsData.realName .. typeName
+					return sourceName:StartsWith( prefix ) , prefix
 				end
 				constantsData.AutoName = function( sourceName , typeName )
-					if constantsData.HasAutoName( sourceName , typeName ) then return sourceName end
-					if typeName then typeName = SITypes.autoName[typeName] end
-					if typeName then typeName = typeName .. "-"
-					else typeName = "" end
-					return constantsData.realName .. typeName .. sourceName
+					local result , prefix = constantsData.HasAutoName( sourceName , typeName )
+					if result then return sourceName
+					else return prefix .. sourceName end
 				end
 				constantsData.RemoveAutoName = function( sourceName , typeName )
-					if typeName then typeName = SITypes.autoName[typeName] end
-					if typeName then typeName = typeName .. "-"
-					else typeName = "" end
-					local prefix = constantsData.realName .. typeName
-					if sourceName:find( prefix ) == 1 then return sourceName:sub( prefix:len() )
+					local result , prefix = constantsData.HasAutoName( sourceName , typeName )
+					if result then return sourceName:sub( prefix:len() )
 					else return sourceName end
 				end
 				constantsData.AutoOrder = function()
@@ -503,16 +499,18 @@ function SIInit.AutoLoad( stateCode )
 					end
 				end
 				-- 提前处理公开数据
-				if constantsData.raw then
+				if constantsData.raw and SITools.IsTable( constantsData.raw ) then
 					for typeName , list in pairs( constantsData.raw ) do
-						local rawCode = SITypes.rawCode[typeName]
-						local output = constants[rawCode]
-						if not output then
-							output = {}
-							constants[rawCode] = output
-						end
-						for key , name in pairs( list ) do
-							output[key] = constantsData.AutoName( name , typeName )
+						if list.list then
+							local rawCode = list.name or SITypes.rawCode[typeName]
+							local output = constants[rawCode]
+							if not output then
+								output = {}
+								constants[rawCode] = output
+							end
+							for key , name in pairs( list.list ) do
+								output[key] = constantsData.AutoName( name , typeName )
+							end
 						end
 					end
 					constantsData.raw = nil

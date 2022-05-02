@@ -18,7 +18,40 @@ local Raw = {}
 local CORE = nil
 
 -- ------------------------------------------------------------------------------------------------
--- ---------- 内部方法 ----------------------------------------------------------------------------
+-- ---------- 工具函数 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+local function CreateLayer4Way( size , scale , shift , hasHr , direction )
+	return
+	{
+		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-"..direction , SIGen.Data.type ) ,
+		width = size.width ,
+		height = size.height ,
+		scale = scale or 1.0 ,
+		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
+		priority = SIFlags.priorities.high ,
+		line_length = size.widthCount or 1 ,
+		frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
+		animation_speed = graphicSetting.animSpeed or nil ,
+		draw_as_glow = isGlow and true or nil ,
+		hr_version = hasHr and
+		{
+			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-"..direction.."-hr" , SIGen.Data.type ) ,
+			width = size.width * SINumbers.graphicHrSizeScale ,
+			height = size.height * SINumbers.graphicHrSizeScale ,
+			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
+			shift = shift and util.by_pixel( shift.x*SINumbers.graphicHrSizeScale , shift.y*SINumbers.graphicHrSizeScale ) or util.by_pixel( 0.0 , 0.0 ) ,
+			priority = SIFlags.priorities.high ,
+			line_length = size.widthCount or 1 ,
+			frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
+			animation_speed = size.animSpeed or nil ,
+			draw_as_glow = isGlow and true or nil
+		} or nil
+	}
+end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 内部函数 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 local function Init( type , name , customData , needOverwrite , callback )
@@ -45,7 +78,7 @@ local function Init( type , name , customData , needOverwrite , callback )
 	local autoFillData = AutoFillData[type]
 	if autoFillData then
 		if autoFillData.defaultValues then SITools.CopyData( curData , autoFillData.defaultValues , false ) end
-		if autoFillData.callBack then autoFillData.callBack() end
+		if autoFillData.callback then autoFillData.callback( curData ) end
 	end
 	SITools.CopyData( curData , customData , needOverwrite )
 	return Append( curData , callback )
@@ -58,7 +91,7 @@ local function Append( curData , callback )
 		list = {}
 		Raw[curData.type] = list
 	end
-	list[curData.sourceName or curData.name] = curData
+	list[curData.sourceName] = curData
 	if callback then callback( curData ) end
 	return SIGen
 end
@@ -247,10 +280,13 @@ function SIGen.Load( type , name , customData , needOverwrite , callback )
 		if customData.name then
 			curData.sourceName = customData.name
 			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
-		end
+		else curData.sourceName = curData.name end
 		curData.fromSIGen = true
 		return Append( curData , callback )
 	else
+		curData.sourceName = curData.name
+		curData.fromSIGen = false
+		SIGen.Data = curData
 		if callback then callback( curData ) end
 		return SIGen
 	end
@@ -281,7 +317,7 @@ function SIGen.Copy( type , name , customData , needOverwrite , callback )
 		if customData.name then
 			curData.sourceName = customData.name
 			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
-		end
+		else curData.sourceName = curData.name end
 		curData.fromSIGen = true
 		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) , callback )
 	else return Init( type , name , util.deepcopy( customData ) , needOverwrite , callback ) end
@@ -316,7 +352,7 @@ for index , typeName in pairs( SITypes.all ) do
 end
 
 -- ------------------------------------------------------------------------------------------------
--- ---------- 修改属性 ----------------------------------------------------------------------------
+-- -------- 修改通用属性 --------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 -- ----------------------------------------
@@ -490,6 +526,122 @@ function SIGen.ListRemove( key , index )
 end
 
 -- ------------------------------------------------------------------------------------------------
+-- -------- 修改具体属性 --------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+-- ----------------------------------------
+-- 修改物品的堆叠数量
+-- ----------------------------------------
+-- stackSize = 堆叠数量
+-- ----------------------------------------
+function SIGen.SetStackSize( stackSize )
+	if Check() then return SIGen end
+	stackSize = stackSize or 1
+	if stackSize > 1 then SIGen.Data.stackable = true
+	else SIGen.Data.stackable = false end
+	SIGen.Data.stack_size = stackSize
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 根据给定的大小创建选择区域和碰撞区域
+-- ----------------------------------------
+-- width = 区域宽度
+-- height = 区域高度 , 不填写是使用宽度的数值
+-- ----------------------------------------
+function SIGen.SetSize( width , height )
+	if Check() then return SIGen end
+	if not height then height = width end
+	local size = SIGen.Data.SIGenSize or {}
+	if size.width ~= width or size.height ~= height then
+		SIGen.Data.selection_box = SITools.BoundBox( width , height )
+		SIGen.Data.collision_box = SITools.BoundBox_Collision( width , height )
+	end
+	SIGen.Data.SIGenSize = { width = width , height = height }
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 根据参数创建动画帧图结构 , 无方向
+-- 这种模式下会附带一个影子属性 shadow
+-- ----------------------------------------
+-- scale = 缩放比例 , 原图比例为 1.0
+-- shift = 偏移位置 , 默认 { 0.0 , 0.0 }
+-- hasHr = 是否创建高清图部分 , 默认否
+-- isGlow = 是否发光 , 默认不发光
+-- ----------------------------------------
+function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
+	if Check() then return SIGen end
+	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
+	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
+	SIGen.Data.animation =
+	{
+		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName , SIGen.Data.type ) ,
+		width = size.width * graphicSetting.width ,
+		height = size.height * graphicSetting.height ,
+		scale = scale or 1.0 ,
+		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
+		priority = SIFlags.priorities.high ,
+		line_length = graphicSetting.widthCount or 1 ,
+		frame_count = graphicSetting.widthCount and graphicSetting.heightCount and graphicSetting.widthCount * graphicSetting.heightCount or 1 ,
+		animation_speed = graphicSetting.animSpeed or nil ,
+		draw_as_glow = isGlow and true or nil ,
+		hr_version = hasHr and
+		{
+			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-hr" , SIGen.Data.type ) ,
+			width = size.width * graphicSetting.width * SINumbers.graphicHrSizeScale ,
+			height = size.height * graphicSetting.height * SINumbers.graphicHrSizeScale ,
+			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
+			shift = shift and util.by_pixel( shift.x*SINumbers.graphicHrSizeScale , shift.y*SINumbers.graphicHrSizeScale ) or util.by_pixel( 0.0 , 0.0 ) ,
+			priority = SIFlags.priorities.high ,
+			line_length = graphicSetting.widthCount or 1 ,
+			frame_count = graphicSetting.widthCount and graphicSetting.heightCount and graphicSetting.widthCount * graphicSetting.heightCount or 1 ,
+			animation_speed = graphicSetting.animSpeed or nil ,
+			draw_as_glow = isGlow and true or nil
+		} or nil
+	}
+	SIGen.Data.shadow = util.deepcopy( SIGen.Data.animation )
+	SIGen.Data.shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-shadow" , SIGen.Data.type )
+	SIGen.Data.shadow.draw_as_glow = nil
+	SIGen.Data.shadow.draw_as_shadow = true
+	if hasHr then
+		SIGen.Data.shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-shadow-hr" , SIGen.Data.type )
+		SIGen.Data.shadow.hr_version.draw_as_glow = nil
+		SIGen.Data.shadow.hr_version.draw_as_shadow = true
+	end
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 根据参数创建动画帧图结构 , 四个方向
+-- 这种模式下没有影子属性
+-- ----------------------------------------
+-- scale = 缩放比例 , 原图比例为 1.0
+-- shift = 偏移位置 , 默认 { 0.0 , 0.0 }
+-- hasHr = 是否创建高清图部分 , 默认否
+-- isGlow = 是否发光 , 默认不发光
+-- ----------------------------------------
+function SIGen.SetAnimation4Way( scale , shift , hasHr )
+	if Check() then return SIGen end
+	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
+	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
+	local horizontally = util.deepcopy( graphicSetting )
+	horizontally.width = size.width * graphicSetting.width
+	horizontally.height = size.height * graphicSetting.height
+	local vertically = util.deepcopy( graphicSetting )
+	vertically.width = horizontally.height
+	vertically.height = horizontally.width
+	SIGen.Data.animation
+	{
+		north = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.north ) ,
+		east = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.east ) ,
+		south = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.south ) ,
+		west = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.west )
+	}
+	return SIGen
+end
+
+-- ------------------------------------------------------------------------------------------------
 -- ---------- 流程控制 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
@@ -522,15 +674,18 @@ end
 
 local AutoFillSource =
 {
-	"item" =
+	item =
 	{
 		defaultValues =
 		{
 			icon_size = SINumbers.iconSize ,
 			icon_mipmaps = SINumbers.mipMaps
-		}
+		} ,
+		callback = function( data )
+			data.icon = SIInit.CurrentConstants.GetPicturePath( data.sourceName.."-icon" , data.type )
+		end
 	} ,
-	"item2" =
+	item2 =
 	{
 		types = SITypes.stackableItem ,
 		super = "item" ,
@@ -540,7 +695,7 @@ local AutoFillSource =
 			stackable = true
 		}
 	} ,
-	"item3" =
+	item3 =
 	{
 		types = SITypes.unstackableItem ,
 		super = "item" ,
@@ -548,6 +703,66 @@ local AutoFillSource =
 		{
 			stack_size = 1 ,
 			stackable = false
+		}
+	} ,
+	recipe =
+	{
+		types = { SITypes.recipe } ,
+		super = "item" ,
+		defaultValues =
+		{
+			enabled = false , -- 默认启用
+			hidden = false , -- 默认隐藏
+			hide_from_stats = false , -- 从统计页隐藏
+			hide_from_player_crafting = false , -- 从玩家背包隐藏
+			allow_inserter_overload = true , -- 允许爪子给机器装更多的原料作为储备
+			allow_decomposition = true , -- 允许计算配方的原料
+			allow_as_intermediate = true , -- 允许作为手搓的中间配方
+			allow_intermediates = true , -- 允许手搓时使用中间配方
+			always_show_made_in = true , -- 总是显示那些机器可以制作它
+			always_show_products = true , -- 总是显示产物
+			show_amount_in_title = true , -- 在标题中显示数量
+			unlock_results = true , -- 配方解锁时会同时解锁在选择器中选择产物的功能
+			energy_required = 1.0 , -- 能量需求 , 机器能耗为 1
+			overload_multiplier = 5.0 , -- 爪子给机器装更多的原料作为储备时的多装倍率
+			requester_paste_multiplier = 50.0 -- 原料需求复制给物流箱子时的需求倍率
+		}
+	} ,
+	entity =
+	{
+		super = "item" ,
+		defaultValues =
+		{
+			allow_copy_paste = true ,
+			selectable_in_game = true ,
+			selection_priority = 50 ,
+			remove_decoratives = "automatic" ,
+			vehicle_impact_sound = SITools.SoundList_Base( "car-metal-impact" , 5 , 0.5 , 2 ) ,
+			open_sound = SITools.Sounds( "__base__/sound/machine-open.ogg" , 0.5 ) ,
+			close_sound = SITools.Sounds( "__base__/sound/machine-close.ogg" , 0.5 )
+		}
+	} ,
+	healthEntity =
+	{
+		super = "entity" ,
+		defaultValues =
+		{
+			alert_when_damaged = true ,
+			hide_resistances = true ,
+			create_ghost_on_death = true
+		}
+	}
+	machine =
+	{
+		types = { SITypes.entity.machine , SITypes.entity.furnace } ,
+		super = "healthEntity" ,
+		defaultValues =
+		{
+			crafting_speed = 1.0 ,
+			scale_entity_info_icon = false ,
+			show_recipe_icon = true ,
+			return_ingredients_on_change = true ,
+			always_draw_idle_animation = false
 		}
 	}
 }
@@ -563,6 +778,7 @@ for type , data in pairs( AutoFillSource ) do
 						if not data.defaultValues[key] then data.defaultValues[key] = value end
 					end
 				end
+				if not data.callback and parent.callback then data.callback = parent.callback end
 				if parent.parent then PutParentAutoFillData( data , parent.parent ) end
 			end
 		end
@@ -571,7 +787,7 @@ for type , data in pairs( AutoFillSource ) do
 	local newData =
 	{
 		defaultValues = data.defaultValues ,
-		callBack = data.callBack
+		callback = data.callback
 	}
 	if data.types then
 		for index , typeName in pairs( data.types ) do AutoFillData[typeName] = util.deepcopy( newData ) end

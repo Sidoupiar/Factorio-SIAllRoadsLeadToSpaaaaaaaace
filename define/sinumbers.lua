@@ -11,35 +11,51 @@ local SINumbers =
 	defaultMiningTime = 1 ,
 	defaultProductCount = 1 ,
 	defaultMinableFluidCount = 1 ,
-	
-	pictureHrScale = 2 ,
-	pictureHrScaleDown = 0.5 ,
-	machinePictureSize = 32 ,
-	machinePictureTotalWidth = 8 ,
-	machinePictureTotalHeight = 8 ,
+
+	graphicHrSizeScale = 2 ,
+	graphicHrScaleDown = 0.5 ,
 	moduleInfoIconScale = 0.4 ,
-	resourcePictureSize = 32 ,
-	resourcePictureSide = 32 ,
-	resourcePictureFrameCount = 8 ,
-	resourceVariationCount = 8 ,
-	projectilePictureSize = 32 ,
-	projectilePictureLineLength = 8 ,
-	projectilePictureFrameCount = 16 ,
-	projectilePictureAnimSpeed = 0.25 ,
 	equipmentPictureSize = 32 ,
 	
 	healthToMiningTime = 800 ,
 	lightSizeMult = 2.4 ,
-	
-	ticksPerDay = 25000 ,
-	ticksPerHalfDay = 12500
+
+	graphicSetting_Default =
+	{
+		width = 32 ,
+		height = 32 ,
+		widthCount = 8
+		heightCount = 8 ,
+		animSpeed = 0.25
+	} ,
+	graphicSetting =
+	{
+		[SITypes.entity.projectile] =
+		{
+			width = 32 ,
+			height = 32 ,
+			widthCount = 8
+			heightCount = 2 ,
+			animSpeed = 0.25
+		} ,
+		[SITypes.entity.resource] =
+		{
+			width = 32 ,
+			height = 32 ,
+			widthCount = 8
+			heightCount = 8 ,
+			animSpeed = 0.25
+		} ,
+		[SITypes.entity.machine] =
+		{
+			width = 32 ,
+			height = 32 ,
+			widthCount = 8
+			heightCount = 8 ,
+			animSpeed = 64.0 / 60.0
+		}
+	}
 }
-
-SINumbers.machinePictureSize_hr = SINumbers.machinePictureSize * SINumbers.pictureHrScale
-SINumbers.machinePictureTotalFrameCount = SINumbers.machinePictureTotalWidth * SINumbers.machinePictureTotalHeight
-SINumbers.machineAnimationSpeed = SINumbers.machinePictureTotalFrameCount / 60
-
-
 
 local innerNumberList = table.deepcopy( SINumbers )
 
