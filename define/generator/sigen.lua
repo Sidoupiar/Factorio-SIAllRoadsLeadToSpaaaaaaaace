@@ -21,7 +21,7 @@ local CORE = nil
 -- ---------- 工具函数 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local function CreateLayer4Way( size , scale , shift , hasHr , direction )
+local function CreateLayer4Way( size , scale , shift , hasHr , directionName )
 	return
 	{
 		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-"..direction , SIGen.Data.type ) ,
