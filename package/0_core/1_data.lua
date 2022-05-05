@@ -94,4 +94,4 @@ SIGen.Group( SIConstants_Core.group.mics , "徽章" )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-for name , itemName in pairs( SIConstants_Core.item ) do SIGen.NewCapsule( itemName , throwData , true ).SetStackSize( 28956 ) end
+for name , itemName in pairs( SIConstants_Core.item ) do SIGen.NewCapsule( itemName , throwData , true ).SetStackSize( SINumbers.stackSize.badge ) end

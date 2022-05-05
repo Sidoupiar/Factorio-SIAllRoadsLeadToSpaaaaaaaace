@@ -223,11 +223,11 @@ end )
 .NewCapsule( SIConstants_Garbage.item.filterGarbage , ashThrowData , true ).SetStackSize( 4399 )
 .NewCapsule( SIConstants_Garbage.item.whiteGarbage , ashThrowData , true ).SetStackSize( 5553 )
 .NewCapsule( SIConstants_Garbage.item.oreGarbage , ashThrowData , true ).SetStackSize( 6172 )
-.NewCapsule( SIConstants_Garbage.item.launchBook , bookThrowData , true ).SetStackSize( 200 )
-.NewCapsule( SIConstants_Garbage.item.epBadgeBook , bookThrowData , true ).SetStackSize( 200 )
-.NewCapsule( SIConstants_Garbage.item.winterBook , bookThrowData , true ).SetStackSize( 200 )
-.NewCapsule( SIConstants_Garbage.item.ashBook , bookThrowData , true ).SetStackSize( 200 )
-.NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( 15 )
+.NewCapsule( SIConstants_Garbage.item.launchBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.epBadgeBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.winterBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.ashBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( SINumbers.stackSize.misc )
 .NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
 	recipe.enabled = true
 	recipe.hidden = true
@@ -290,6 +290,7 @@ end )
 .NewCapsule( SIConstants_Garbage.item.burntMachine , machineThrowData , true , function( item )
 	item.place_result = SIGen.LastDataName
 end )
+.SetStackSize( SINumbers.stackSize.machine )
 .NewRecipe( "组装垃圾焚烧炉" , nil , false , function( recipe )
 	recipe.ingredients = {}
 	recipe.results =

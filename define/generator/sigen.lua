@@ -175,6 +175,7 @@ function SIGen.Group( groupName , subGroupName )
 			localised_name = { "item-group-name."..name } ,
 			localised_description = { "item-group-description."..name }
 			icon = CORE.GetPicturePath( name , SITypes.group ) ,
+			icon_size = SINumbers.icon.sizeGroup ,
 			order = CORE.AutoOrder()
 		}
 		data:extend{ group }
@@ -681,8 +682,8 @@ local AutoFillSource =
 	{
 		defaultValues =
 		{
-			icon_size = SINumbers.iconSize ,
-			icon_mipmaps = SINumbers.mipMaps
+			icon_size = SINumbers.icon.sizeNormal ,
+			icon_mipmaps = SINumbers.icon.mipMaps
 		} ,
 		callback = function( data )
 			data.icon = SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-icon" , data.type )
