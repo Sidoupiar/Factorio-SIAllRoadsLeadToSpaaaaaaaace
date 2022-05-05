@@ -1,32 +1,45 @@
 local SINumbers =
 {
+	-- 按照一堆叠 100KG 进行大致衡量
+	-- 生产类物资堆叠偏高 , 攻击类物资堆叠偏低
+	-- 考虑到实用性 , 建筑类物资堆叠偏高 , 用不着的物资堆叠偏低
 	stackSize =
 	{
-		materialTiny = 500 ,
-		materialSmall = 350 ,
-		materialNormal = 200 ,
-		materialBig = 100 ,
-		materialHuge = 50 ,
-		machine = 20 ,
-		turret = 11 ,
-		weapon = 4 ,
-		grenade = 29 ,
-		ammo = 99 ,
-		misc = 15 ,
-		tool = 25 ,
-		vehicle = 1 ,
-		sciencePack = 40 ,
-		module = 10 ,
-		equipment = 1 ,
-		wall = 50 ,
-		floor = 1000 ,
-		decoration = 300 ,
-		plant = 60 ,
-		badge = 28956 ,
-		spoils = 18 ,
-		physicalMoney = 500 ,
-		commemorativeCoin = 99 ,
-		soul = 99
+		ore               = 999 ,   -- 开采出来的原矿
+		powder            = 15000 , -- 粉末类物资
+		materialTiny      = 4000 ,  -- 细小但是还不足以成为粉末的存在
+		materialSmall     = 1500 ,  -- 碎块型物资
+		materialNormal    = 400 ,   -- 通常物资
+		materialBig       = 150 ,   -- 比较大块的物资
+		materialHuge      = 40 ,    -- 很大块的物资
+		component         = 110 ,   -- 元器件 , 比较精密的物资
+		misc              = 14 ,    -- 杂项
+		tool              = 26 ,    -- 工具 , 锤子扳手之类的
+		module            = 10 ,    -- 插件
+		fuel              = 45 ,    -- 燃料
+		sciencePack       = 45 ,    -- 研究包
+		container         = 15 ,    -- 这里指成箱的物资 , 打包的
+		machine           = 18 ,    -- 生产设备 , 建筑物
+		plant             = 32 ,    -- 植物 , 可以摆出来的那种
+
+		turret            = 6 ,     -- 炮塔 , 攻击设备
+		weapon            = 3 ,     -- 武器
+		grenade           = 28 ,    -- 手雷
+		landmine          = 9 ,     -- 地雷
+		ammo              = 99 ,    -- 弹药
+		vehicle           = 1 ,     -- 载具
+		equipment         = 1 ,     -- 模块
+		wall              = 50 ,    -- 围墙
+
+		floor             = 1000 ,  -- 地板
+		decoration        = 300 ,   -- 装饰物
+		badge             = 28956 , -- 徽章
+
+		food              = 22 ,    -- 作为商品的料理 , 当然也可以用来吃
+		soul              = 99 ,    -- 打败敌人掉落的灵魂
+		spoils            = 18 ,    -- 战利品
+		commemorativeCoin = 99 ,    -- 纪念币
+		physicalMoney     = 500     -- 物品形式的货币 , 作为商品
 	} ,
 	ui =
 	{
