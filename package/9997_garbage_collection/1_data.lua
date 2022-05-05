@@ -72,7 +72,7 @@ local ashThrowData
 						action_delivery =
 						{
 							type = "projectile" ,
-							projectile = badgeName ,
+							projectile = nil ,
 							starting_speed = 0.25
 						}
 					} ,
