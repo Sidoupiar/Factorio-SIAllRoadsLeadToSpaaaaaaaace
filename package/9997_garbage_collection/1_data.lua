@@ -240,7 +240,11 @@ end )
 	recipe.energy_required = 10
 	recipe.category = SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage
 	recipe.ingredients = {}
-	recipe.results = { { type = "item" , name = SIConstants_Garbage.item.filterGarbage , amount = 1 } }
+	recipe.results =
+	{
+		{ type = "item" , name = SIConstants_Garbage.item.filterGarbage , amount = 1 } ,
+		{ type = "item" , name = SIConstants_Core.item.epBadge , amount = 1 , probability = 0.04 }
+	}
 	recipe.main_product = SIConstants_Garbage.item.filterGarbage
 end )
 .NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )

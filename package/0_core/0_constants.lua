@@ -26,6 +26,7 @@ local constants =
 			name = "item" ,
 			list =
 			{
+				machineBadge = "设备徽章" ,
 				roundBadge = "循环徽章" ,
 				epBadge = "环保徽章"
 			}
