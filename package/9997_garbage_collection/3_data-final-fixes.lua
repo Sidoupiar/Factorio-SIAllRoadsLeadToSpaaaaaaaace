@@ -32,7 +32,7 @@ SIGen.TypeIndicator( SITypes.item , function( index , item )
 			if SITools.IsTable( result ) then
 				if result[1] and SITools.IsTable( result[1] ) then item.rocket_launch_products = result
 				else item.rocket_launch_products = { result } end
-			else item.rocket_launch_products = { { name = result , amount = 1 , probability = 1.0 , catalyst_amount = 1 } } end
-		else item.rocket_launch_products = { { name = SIConstants_Garbage.item.launchGarbage , amount = 1 , probability = 1.0 , catalyst_amount = 1 } } end
+			else item.rocket_launch_products = { { name = result , amount = 1 , probability = 1.0 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false } } end
+		else item.rocket_launch_products = { { name = SIConstants_Garbage.item.launchGarbage , amount = 1 , probability = 1.0 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false } } end
 	end
 end )
