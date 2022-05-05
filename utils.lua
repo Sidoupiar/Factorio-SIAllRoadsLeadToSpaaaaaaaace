@@ -342,7 +342,12 @@ function SIInit.AutoLoad( stateCode )
 			SIInit.OrderCode = SIInit.OrderCode + 1000
 			local class = "SIConstants_" .. constantsData.id
 			_G[class] = constantsData
-			SIAPI[constantsData.id] = {}
+			constantsData.api =
+			{
+				name = constantsData.id ,
+				path = SIInit.packageName
+			}
+			SIAPI[constantsData.id] = constantsData.api
 			SIInit.ConstantsList[name] = constantsData
 			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据

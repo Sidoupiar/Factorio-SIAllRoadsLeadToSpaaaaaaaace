@@ -2,8 +2,6 @@
 -- ---------- 原型定义 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local recipeName = nil
-local machineName = nil
 local ashThrowData
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
@@ -135,6 +133,8 @@ end )
 		}
 	}
 end )
+.SetSize( 1 )
+.SetAnimation( 0.5 )
 .NewProjectile( "扔出去的废料" , nil , false , function( projectile )
 	blockThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.acceleration = 0
@@ -229,7 +229,6 @@ end )
 .NewCapsule( SIConstants_Garbage.item.ashBook , bookThrowData , true ).SetStackSize( 200 )
 .NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( 15 )
 .NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
-	recipeName = recipe.name
 	recipe.enabled = true
 	recipe.hidden = true
 	recipe.hide_from_player_crafting = true
@@ -245,7 +244,6 @@ end )
 	recipe.main_product = SIConstants_Garbage.item.filterGarbage
 end )
 .NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )
-	machineName = entity.name
 	entity.minable =
 	{
 		mining_time = 2.5 ,
@@ -261,7 +259,7 @@ end )
 	entity.loot = { { item = SIConstants_Garbage.item.brokenMachine , probability = 1.0 , count_min = 1 , count_max = 3 } }
 	entity.show_recipe_icon = false
 	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage }
-	entity.fixed_recipe = recipeName
+	entity.fixed_recipe = SIGen.LastDataName
 	entity.energy_usage = "850KW"
 	entity.energy_source =
 	{
@@ -286,14 +284,23 @@ end )
 .SetSize( 3 )
 .SetAnimation4Way()
 .NewCapsule( SIConstants_Garbage.item.burntMachine , machineThrowData , true , function( item )
-	item.place_result = machineName
+	item.place_result = SIGen.LastDataName
+end )
+.NewRecipe( "组装垃圾焚烧炉" , nil , false , function( recipe )
+	recipe.ingredients = {}
+	recipe.results =
+	{
+		{ type = "item" , name = SIConstants_Garbage.item.burntMachine , amount = 1 } ,
+		{ type = "item" , name = SIConstants_Core.item.machineBadge , amount = 1 , probability = 0.2 }
+	}
+	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 数据列表 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-SIConstants_Garbage.fuelSettings =
+SIConstants_Garbage.settingsFuel =
 {
 	[SIConstants_Garbage.item.fuelGarbage] = { pass = true } ,
 	[SIConstants_Garbage.item.filterGarbage] = { result = SIConstants_Garbage.item.whiteGarbage } ,
@@ -301,7 +308,7 @@ SIConstants_Garbage.fuelSettings =
 	[SIConstants_Garbage.item.oreGarbage] = { pass = true }
 }
 
-SIConstants_Garbage.rocketLaunchSettings =
+SIConstants_Garbage.settingsRocketLaunch =
 {
 	[SIConstants_Core.item.epBadge] = SIConstants_Garbage.item.epBadgeBook ,
 	[SIConstants_Garbage.item.fuelGarbage] = SIConstants_Garbage.item.ashBook ,
@@ -309,18 +316,18 @@ SIConstants_Garbage.rocketLaunchSettings =
 	[SIConstants_Garbage.item.oreGarbage] = SIConstants_Garbage.item.winterBook
 }
 
-function SIAPI.Garbage.AddFuelSetting( name , result , fuelValue , emissionsMultiplier )
+function SIConstants_Garbage.api.AddFuelSetting( name , result , fuelValue , emissionsMultiplier )
 	if result then
-		SIConstants_Garbage.fuelSettings[name] =
+		SIConstants_Garbage.settingsFuel[name] =
 		{
 			result = result ,
 			fuelValue = fuelValue ,
 			emissionsMultiplier = emissionsMultiplier ,
 			pass = false
 		}
-	else SIConstants_Garbage.fuelSettings[name] = { pass = true }
+	else SIConstants_Garbage.settingsFuel[name] = { pass = true }
 end
 
-function SIAPI.Garbage.AddRocketLaunchSetting( name , result )
-	SIConstants_Garbage.rocketLaunchSettings[name] = result
+function SIConstants_Garbage.api.AddRocketLaunchSetting( name , result )
+	SIConstants_Garbage.settingsRocketLaunch[name] = result
 end

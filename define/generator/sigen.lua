@@ -1,5 +1,6 @@
 SIGen =
 {
+	LastDataName = nil ,
 	Data = nil
 }
 
@@ -16,39 +17,6 @@ local GenIndex = 100000
 local AutoFillData = {}
 local Raw = {}
 local CORE = nil
-
--- ------------------------------------------------------------------------------------------------
--- ---------- 工具函数 ----------------------------------------------------------------------------
--- ------------------------------------------------------------------------------------------------
-
-local function CreateLayer4Way( size , scale , shift , hasHr , directionName )
-	return
-	{
-		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-"..direction , SIGen.Data.type ) ,
-		width = size.width ,
-		height = size.height ,
-		scale = scale or 1.0 ,
-		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
-		priority = SIFlags.priorities.high ,
-		line_length = size.widthCount or 1 ,
-		frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
-		animation_speed = graphicSetting.animSpeed or nil ,
-		draw_as_glow = isGlow and true or nil ,
-		hr_version = hasHr and
-		{
-			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-"..direction.."-hr" , SIGen.Data.type ) ,
-			width = size.width * SINumbers.graphicHrSizeScale ,
-			height = size.height * SINumbers.graphicHrSizeScale ,
-			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
-			shift = shift and util.by_pixel( shift.x*SINumbers.graphicHrSizeScale , shift.y*SINumbers.graphicHrSizeScale ) or util.by_pixel( 0.0 , 0.0 ) ,
-			priority = SIFlags.priorities.high ,
-			line_length = size.widthCount or 1 ,
-			frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
-			animation_speed = size.animSpeed or nil ,
-			draw_as_glow = isGlow and true or nil
-		} or nil
-	}
-end
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 内部函数 ----------------------------------------------------------------------------
@@ -71,9 +39,9 @@ local function Init( type , name , customData , needOverwrite , callback )
 		group = GroupSettings.groupName ,
 		subgroup = GroupSettings.subGroupName ,
 		order = SIInit.CurrentConstants.AutoOrder() ,
-		sourceName = name ,
-		fromSIGen = true ,
-		indexSIGen = GenIndex
+		SIGenSourceName = name ,
+		SIGenForm = true ,
+		SIGenIndex = GenIndex
 	}
 	local autoFillData = AutoFillData[type]
 	if autoFillData then
@@ -85,13 +53,14 @@ local function Init( type , name , customData , needOverwrite , callback )
 end
 
 local function Append( curData , callback )
+	SIGen.LastDataName = SIGen.Data.name
 	SIGen.Data = curData
 	local list = Raw[curData.type]
 	if not list then
 		list = {}
 		Raw[curData.type] = list
 	end
-	list[curData.sourceName] = curData
+	list[curData.SIGenSourceName] = curData
 	if callback then callback( curData ) end
 	return SIGen
 end
@@ -124,13 +93,13 @@ function SIGen.FindData( type , name , callback )
 	local list = data.raw[type]
 	if list then
 		curData = list[name]
-		if curData then curData.fromSIGen = false end
+		if curData then curData.SIGenForm = false end
 	end
 	if not curData then
 		list = Raw[type]
 		if list then
 			curData = list[name]
-			if curData then curData.fromSIGen = true end
+			if curData then curData.SIGenForm = true end
 		end
 	end
 	if callback then callback( curData ) end
@@ -275,17 +244,18 @@ function SIGen.Load( type , name , customData , needOverwrite , callback )
 	if not curData then e( "找不到 type 为["..type.."] , name 为["..name.."]的原型" ) end
 	SITools.CopyData( curData , customData , needOverwrite )
 	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
-		if curData.fromSIGen then Raw[type][name] = nil
+		if curData.SIGenForm then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
 		if customData.name then
-			curData.sourceName = customData.name
+			curData.SIGenSourceName = customData.name
 			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
-		else curData.sourceName = curData.name end
-		curData.fromSIGen = true
+		else curData.SIGenSourceName = curData.name end
+		curData.SIGenForm = true
 		return Append( curData , callback )
 	else
-		curData.sourceName = curData.name
-		curData.fromSIGen = false
+		curData.SIGenSourceName = curData.name
+		curData.SIGenForm = false
+		SIGen.LastDataName = SIGen.Data.name
 		SIGen.Data = curData
 		if callback then callback( curData ) end
 		return SIGen
@@ -315,10 +285,10 @@ function SIGen.Copy( type , name , customData , needOverwrite , callback )
 	local curData = SIGen.FindData( type , name )
 	if curData then
 		if customData.name then
-			curData.sourceName = customData.name
+			curData.SIGenSourceName = customData.name
 			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
-		else curData.sourceName = curData.name end
-		curData.fromSIGen = true
+		else curData.SIGenSourceName = curData.name end
+		curData.SIGenForm = true
 		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) , callback )
 	else return Init( type , name , util.deepcopy( customData ) , needOverwrite , callback ) end
 end
@@ -368,7 +338,7 @@ function SIGen.SetCustomData( customData , needOverwrite )
 	if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or type ) end
 	SITools.CopyData( SIGen.Data , customData , needOverwrite )
 	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
-		if SIGen.Data.fromSIGen then Raw[type][name] = nil
+		if SIGen.Data.SIGenForm then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
 		Append( SIGen.Data )
 	end
@@ -387,7 +357,7 @@ function SIGen.SetType( newType )
 	local type = SIGen.Data.type
 	if type ~= newType then
 		local name = SIGen.Data.name
-		if SIGen.Data.fromSIGen then Raw[type][name] = nil
+		if SIGen.Data.SIGenForm then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
 		SIGen.Data.type = newType
 		SIGen.Data.name = SIInit.CurrentConstants.AutoName( SIInit.CurrentConstants.RemoveAutoName( name , type ) , newType )
@@ -409,7 +379,7 @@ function SIGen.SetName( newName )
 	local name = SIGen.Data.name
 	newName = SIInit.CurrentConstants.AutoName( newName , type )
 	if name ~= newName then
-		if SIGen.Data.fromSIGen then Raw[type][name] = nil
+		if SIGen.Data.SIGenForm then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
 		SIGen.Data.name = newName
 		Append( SIGen.Data )
@@ -576,7 +546,7 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	SIGen.Data.animation =
 	{
-		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName , SIGen.Data.type ) ,
+		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName , SIGen.Data.type ) ,
 		width = size.width * graphicSetting.width ,
 		height = size.height * graphicSetting.height ,
 		scale = scale or 1.0 ,
@@ -588,7 +558,7 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 		draw_as_glow = isGlow and true or nil ,
 		hr_version = hasHr and
 		{
-			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-hr" , SIGen.Data.type ) ,
+			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-hr" , SIGen.Data.type ) ,
 			width = size.width * graphicSetting.width * SINumbers.graphicHrSizeScale ,
 			height = size.height * graphicSetting.height * SINumbers.graphicHrSizeScale ,
 			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
@@ -601,11 +571,11 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 		} or nil
 	}
 	SIGen.Data.shadow = util.deepcopy( SIGen.Data.animation )
-	SIGen.Data.shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-shadow" , SIGen.Data.type )
+	SIGen.Data.shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow" , SIGen.Data.type )
 	SIGen.Data.shadow.draw_as_glow = nil
 	SIGen.Data.shadow.draw_as_shadow = true
 	if hasHr then
-		SIGen.Data.shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.sourceName.."-shadow-hr" , SIGen.Data.type )
+		SIGen.Data.shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow-hr" , SIGen.Data.type )
 		SIGen.Data.shadow.hr_version.draw_as_glow = nil
 		SIGen.Data.shadow.hr_version.draw_as_shadow = true
 	end
@@ -669,6 +639,39 @@ function SIGen.GetRaw()
 end
 
 -- ------------------------------------------------------------------------------------------------
+-- --------- 构建数据包 ---------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+local function CreateLayer4Way( size , scale , shift , hasHr , directionName )
+	return
+	{
+		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction , SIGen.Data.type ) ,
+		width = size.width ,
+		height = size.height ,
+		scale = scale or 1.0 ,
+		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
+		priority = SIFlags.priorities.high ,
+		line_length = size.widthCount or 1 ,
+		frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
+		animation_speed = graphicSetting.animSpeed or nil ,
+		draw_as_glow = isGlow and true or nil ,
+		hr_version = hasHr and
+		{
+			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction.."-hr" , SIGen.Data.type ) ,
+			width = size.width * SINumbers.graphicHrSizeScale ,
+			height = size.height * SINumbers.graphicHrSizeScale ,
+			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
+			shift = shift and util.by_pixel( shift.x*SINumbers.graphicHrSizeScale , shift.y*SINumbers.graphicHrSizeScale ) or util.by_pixel( 0.0 , 0.0 ) ,
+			priority = SIFlags.priorities.high ,
+			line_length = size.widthCount or 1 ,
+			frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
+			animation_speed = size.animSpeed or nil ,
+			draw_as_glow = isGlow and true or nil
+		} or nil
+	}
+end
+
+-- ------------------------------------------------------------------------------------------------
 -- ---------- 自动填充 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
@@ -682,7 +685,7 @@ local AutoFillSource =
 			icon_mipmaps = SINumbers.mipMaps
 		} ,
 		callback = function( data )
-			data.icon = SIInit.CurrentConstants.GetPicturePath( data.sourceName.."-icon" , data.type )
+			data.icon = SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-icon" , data.type )
 		end
 	} ,
 	item2 =

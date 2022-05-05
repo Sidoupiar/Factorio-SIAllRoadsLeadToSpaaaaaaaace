@@ -17,7 +17,7 @@ end )
 local fuelCategory = SIConstants_Garbage.categoryList[SITypes.category.fuel].garbage
 SIGen.TypeIndicator( SITypes.item , function( index , item )
 	if not item.burnt_result then
-		local data = SIConstants_Garbage.fuelSettings[item.sourceName or item.name]
+		local data = SIConstants_Garbage.settingsFuel[item.sourceName or item.name]
 		if not data or not data.pass then
 			item.fuel_category = fuelCategory
 			item.fuel_acceleration_multiplier = 1.0
@@ -27,7 +27,7 @@ SIGen.TypeIndicator( SITypes.item , function( index , item )
 		end
 	end
 	if not item.rocket_launch_product and not item.rocket_launch_products then
-		local result = SIConstants_Garbage.rocketLaunchSettings[item.sourceName or item.name]
+		local result = SIConstants_Garbage.settingsRocketLaunch[item.sourceName or item.name]
 		if result then
 			if SITools.IsTable( result ) then
 				if result[1] and SITools.IsTable( result[1] ) then item.rocket_launch_products = result
