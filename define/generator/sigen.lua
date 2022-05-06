@@ -507,7 +507,7 @@ end
 -- ----------------------------------------
 function SIGen.SetStackSize( stackSize )
 	if Check() then return SIGen end
-	stackSize = stackSize or 1
+	stackSize = math.max( stackSize or 1 , 1 )
 	if stackSize > 1 then SIGen.Data.stackable = true
 	else SIGen.Data.stackable = false end
 	SIGen.Data.stack_size = stackSize
@@ -544,6 +544,7 @@ end
 function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 	if Check() then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
+	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
 	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	SIGen.Data.animation =
 	{
@@ -595,6 +596,7 @@ end
 function SIGen.SetAnimation4Way( scale , shift , hasHr )
 	if Check() then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
+	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
 	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	local horizontally = util.deepcopy( graphicSetting )
 	horizontally.width = size.width * graphicSetting.width
