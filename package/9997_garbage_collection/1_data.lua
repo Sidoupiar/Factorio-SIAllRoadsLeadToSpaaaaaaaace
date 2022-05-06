@@ -163,7 +163,7 @@ end )
 	entity.show_recipe_icon = false
 	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage }
 	entity.fixed_recipe = SIGen.LastDataName
-	entity.energy_usage = "850KW"
+	entity.energy_usage = "450KW"
 	entity.energy_source =
 	{
 		type = "burner" ,
