@@ -34,10 +34,7 @@ local ashThrowAction =
 			action_delivery =
 			{
 				type = "instant" ,
-				target_effects =
-				{
-					SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 )
-				}
+				target_effects = nil
 			}
 		}
 	}
@@ -45,6 +42,7 @@ local ashThrowAction =
 local bookThrowAction = util.deepcopy( ashThrowAction )
 local blockThrowAction = util.deepcopy( ashThrowAction )
 local machineThrowAction = util.deepcopy( ashThrowAction )
+ashThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
 bookThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
 blockThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 23.0 ) }
 machineThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 42.0 ) }
@@ -117,10 +115,10 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Garbage.item.fuelGarbage , ashThrowData , true ).SetStackSize( 4768 )
-.NewCapsule( SIConstants_Garbage.item.filterGarbage , ashThrowData , true ).SetStackSize( 4399 )
-.NewCapsule( SIConstants_Garbage.item.whiteGarbage , ashThrowData , true ).SetStackSize( 5553 )
-.NewCapsule( SIConstants_Garbage.item.oreGarbage , ashThrowData , true ).SetStackSize( 6172 )
+.NewCapsule( SIConstants_Garbage.item.fuelGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-7317 )
+.NewCapsule( SIConstants_Garbage.item.filterGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6559 )
+.NewCapsule( SIConstants_Garbage.item.whiteGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6122 )
+.NewCapsule( SIConstants_Garbage.item.oreGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5327 )
 .NewCapsule( SIConstants_Garbage.item.launchBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 .NewCapsule( SIConstants_Garbage.item.epBadgeBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 .NewCapsule( SIConstants_Garbage.item.winterBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
