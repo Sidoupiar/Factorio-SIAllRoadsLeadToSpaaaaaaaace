@@ -688,7 +688,7 @@ local AutoFillSource =
 			icon_mipmaps = SINumbers.icon.mipMaps
 		} ,
 		callback = function( data )
-			data.icon = SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-icon" , data.type )
+			data.icons = { SITools.Icon( SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-icon" , data.type ) ) }
 		end
 	} ,
 	item2 =

@@ -135,11 +135,14 @@ end )
 	recipe.always_show_made_in = false
 	recipe.energy_required = 10
 	recipe.category = SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage
-	recipe.ingredients = {}
+	recipe.ingredients =
+	{
+		SITools.IngredientItem( "coal" , 8 )
+	}
 	recipe.results =
 	{
-		{ type = "item" , name = SIConstants_Garbage.item.filterGarbage , amount = 1, catalyst_amount = 1 } ,
-		{ type = "item" , name = SIConstants_Core.item.epBadge , amount = 1 , probability = 0.04 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false }
+		SITools.ProductItem( SIConstants_Garbage.item.filterGarbage , 8 ) ,
+		SITools.ProductItemHide( SIConstants_Core.item.epBadge , 0.04 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.filterGarbage
 end )
@@ -149,14 +152,14 @@ end )
 		mining_time = 2.5 ,
 		results =
 		{
-			{ type = "item" , name = SIConstants_Core.item.roundBadge , amount = 1 , probability = 0.05 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false } ,
-			{ type = "item" , name = SIConstants_Garbage.item.burntMachine , amount = 1 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false }
+			SITools.ProductItemHide( SIConstants_Garbage.item.burntMachine ) ,
+			SITools.ProductItemHide( SIConstants_Core.item.roundBadge , 0.05 , 1 )
 		}
 	}
 	entity.max_health = 400
 	entity.dying_explosion = "big-explosion"
 	entity.corpse = "big-remnants"
-	entity.loot = { { item = SIConstants_Garbage.item.brokenMachine , probability = 1.0 , count_min = 1 , count_max = 3 } }
+	entity.loot = { SITools.Loot( SIConstants_Garbage.item.brokenMachine , 1.0 , 1 , 3 ) }
 	entity.show_recipe_icon = false
 	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage }
 	entity.fixed_recipe = SIGen.LastDataName
@@ -188,11 +191,12 @@ end )
 end )
 .SetStackSize( SINumbers.stackSize.machine )
 .NewRecipe( "组装垃圾焚烧炉" , nil , false , function( recipe )
-	recipe.ingredients = {}
+	recipe.ingredients =
+	{}
 	recipe.results =
 	{
-		{ type = "item" , name = SIConstants_Garbage.item.burntMachine , amount = 1 , catalyst_amount = 1 } ,
-		{ type = "item" , name = SIConstants_Core.item.machineBadge , amount = 1 , probability = 0.2 , catalyst_amount = 1 , show_details_in_recipe_tooltip = false }
+		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
+		SITools.ProductItemHide( SIConstants_Core.item.machineBadge , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )

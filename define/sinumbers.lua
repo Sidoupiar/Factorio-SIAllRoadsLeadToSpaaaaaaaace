@@ -55,7 +55,7 @@ local SINumbers =
 		sizeTechnology = 128 ,
 		pictureScale = 0.25 ,
 		mipMaps = 4
-	}
+	} ,
 	
 	defaultMiningTime = 1 ,
 	defaultProductCount = 1 ,
