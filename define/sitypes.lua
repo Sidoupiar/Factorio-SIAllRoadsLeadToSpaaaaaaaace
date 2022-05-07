@@ -482,23 +482,23 @@ local SITypes =
 
 for type , real in pairs
 {
-	fluid = "流体" ,
-	tile = "地板" ,
-	signal = "信号" ,
-	recipe = "配方" ,
-	technology = "科技" ,
-	damageType = "伤害" ,
-	equipmentGrid = "区域" ,
-	beam = "激光" ,
-	decorative = "遮盖" ,
-	input = "按键" ,
-	ambientSound = "音乐" ,
-	font = "字体" ,
+	fluid            = "流体" ,
+	tile             = "地板" ,
+	signal           = "信号" ,
+	recipe           = "配方" ,
+	technology       = "科技" ,
+	damageType       = "伤害" ,
+	equipmentGrid    = "区域" ,
+	beam             = "激光" ,
+	decorative       = "遮盖" ,
+	input            = "按键" ,
+	ambientSound     = "音乐" ,
+	font             = "字体" ,
 	controlAutoplace = "放置" ,
-	category = "类别" ,
-	item = "物品" ,
-	entity = "实体" ,
-	equipment = "模块"
+	category         = "类别" ,
+	item             = "物品" ,
+	entity           = "实体" ,
+	equipment        = "模块"
 } do
 	if SITools.IsTable( SITypes[type] ) then
 		for key , value in piars( SITypes[type] ) do

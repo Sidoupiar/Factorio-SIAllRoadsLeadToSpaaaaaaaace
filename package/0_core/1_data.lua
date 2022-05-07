@@ -2,9 +2,7 @@
 -- ---------- 原型定义 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-for name , groupName in pairs( SIConstants_Core.group ) do
-	SIGen.Group( groupName , "基础" )
-end
+for name , groupName in pairs( SIConstants_Core.group ) do SIGen.Group( groupName , "基础" ) end
 
 local throwData
 {
