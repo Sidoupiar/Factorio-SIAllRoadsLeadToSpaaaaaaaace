@@ -115,14 +115,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Garbage.item.fuelGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-7317 )
-.NewCapsule( SIConstants_Garbage.item.filterGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6559 )
-.NewCapsule( SIConstants_Garbage.item.whiteGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6122 )
-.NewCapsule( SIConstants_Garbage.item.oreGarbage , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5327 )
-.NewCapsule( SIConstants_Garbage.item.launchBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.epBadgeBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.winterBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.ashBook , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.fuelResult , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder )
 .NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( SINumbers.stackSize.misc )
 .NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
 	recipe.enabled = true
@@ -137,14 +130,14 @@ end )
 	recipe.category = SIConstants_Garbage.categoryList[SITypes.category.recipe].garbage
 	recipe.ingredients =
 	{
-		SITools.IngredientItem( "coal" , 8 )
+		SITools.IngredientItem( "coal" , 10 )
 	}
 	recipe.results =
 	{
-		SITools.ProductItem( SIConstants_Garbage.item.filterGarbage , 8 ) ,
-		SITools.ProductItemHide( SIConstants_Core.item.epBadge , 0.04 , 1 )
+		SITools.ProductItem( SIConstants_Garbage.item.ashFilter , 10 ) ,
+		SITools.ProductItemHide( SIConstants_Core.item.badgeEP , 0.04 , 1 )
 	}
-	recipe.main_product = SIConstants_Garbage.item.filterGarbage
+	recipe.main_product = SIConstants_Garbage.item.ashFilter
 end )
 .NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )
 	entity.minable =
@@ -153,7 +146,7 @@ end )
 		results =
 		{
 			SITools.ProductItemHide( SIConstants_Garbage.item.burntMachine ) ,
-			SITools.ProductItemHide( SIConstants_Core.item.roundBadge , 0.05 , 1 )
+			SITools.ProductItemHide( SIConstants_Core.item.badgeRound , 0.05 , 1 )
 		}
 	}
 	entity.max_health = 400
@@ -196,10 +189,17 @@ end )
 	recipe.results =
 	{
 		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
-		SITools.ProductItemHide( SIConstants_Core.item.machineBadge , 0.2 , 1 )
+		SITools.ProductItemHide( SIConstants_Core.item.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
+.NewCapsule( SIConstants_Garbage.item.ashFilter , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6559 )
+.NewCapsule( SIConstants_Garbage.item.ashWhite , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6122 )
+.NewCapsule( SIConstants_Garbage.item.ashOre , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5327 )
+.NewCapsule( SIConstants_Garbage.item.bookLaunch , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.bookBadgeEP , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.bookWinter , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.bookAsh , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 数据列表 ----------------------------------------------------------------------------
@@ -207,18 +207,13 @@ end )
 
 SIConstants_Garbage.settingsFuel =
 {
-	[SIConstants_Garbage.item.fuelGarbage] = { pass = true } ,
-	[SIConstants_Garbage.item.filterGarbage] = { result = SIConstants_Garbage.item.whiteGarbage } ,
-	[SIConstants_Garbage.item.whiteGarbage] = { result = SIConstants_Garbage.item.oreGarbage } ,
-	[SIConstants_Garbage.item.oreGarbage] = { pass = true }
+	[SIConstants_Garbage.item.fuelResult] = { pass = true }
 }
 
 SIConstants_Garbage.settingsRocketLaunch =
 {
-	[SIConstants_Core.item.epBadge] = SIConstants_Garbage.item.epBadgeBook ,
-	[SIConstants_Garbage.item.fuelGarbage] = SIConstants_Garbage.item.ashBook ,
-	[SIConstants_Garbage.item.whiteGarbage] = SIConstants_Garbage.item.winterBook ,
-	[SIConstants_Garbage.item.oreGarbage] = SIConstants_Garbage.item.winterBook
+	[SIConstants_Core.item.badgeEP] = SIConstants_Garbage.item.bookBadgeEP ,
+	[SIConstants_Garbage.item.fuelResult] = SIConstants_Garbage.item.bookAsh ,
 }
 
 function SIConstants_Garbage.api.AddFuelSetting( name , result , fuelValue , emissionsMultiplier )

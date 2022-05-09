@@ -67,12 +67,12 @@ local constants =
 			name = "item" ,
 			list =
 			{
-				materialBadge = "材料徽章" ,
-				machineBadge = "设备徽章" ,
-				roundBadge = "循环徽章" ,
-				wildBadge = "野性徽章" ,
-				tastyBadge = "美食徽章" ,
-				epBadge = "环保徽章" ,
+				badgeMaterial = "材料徽章" ,
+				badgeMachine = "设备徽章" ,
+				badgeRound = "循环徽章" ,
+				badgeWild = "野性徽章" ,
+				badgeTasty = "美食徽章" ,
+				badgeEP = "环保徽章" ,
 			}
 		}
 	} ,

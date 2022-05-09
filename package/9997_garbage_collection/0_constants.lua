@@ -20,16 +20,18 @@ local constants =
 			name = "item" ,
 			list =
 			{
-				fuelGarbage = "燃烧灰烬" ,
-				filterGarbage = "滤网灰烬" ,
-				whiteGarbage = "苍白灰烬" ,
-				oreGarbage = "矿物灰烬" ,
-				launchBook = "太空垃圾认证书" ,
-				epBadgeBook = "环保徽章认证书" ,
-				winterBook = "火山冬天认证书" ,
-				ashBook = "袅袅炊烟认证书" ,
+				fuelResult = "燃烧灰烬" ,
 				brokenMachine = "报废的机器" ,
-				burntMachine = "垃圾焚烧炉"
+				burntMachine = "垃圾焚烧炉" ,
+
+				ashFilter = "滤网灰烬" ,
+				ashWhite = "苍白灰烬" ,
+				ashOre = "矿物灰烬" ,
+				
+				bookLaunch = "太空垃圾认证书" ,
+				bookBadgeEP = "环保徽章认证书" ,
+				bookWinter = "火山冬天认证书" ,
+				bookAsh = "袅袅炊烟认证书"
 			}
 		}
 	}
