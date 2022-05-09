@@ -525,15 +525,16 @@ function SIInit.AutoLoad( stateCode )
 			if constantsData.AfterLoad then constantsData.AfterLoad() end
 		end
 	end
-	SIGen.SetCore( SIConstants_Core )
+	if SIGen then SIGen.SetCore( SIConstants_Core ) end
 	for name , autoLoadData in pairs( SIInit.AutoLoadDataList ) do
 		SIInit.packageName = name
 		SIInit.CurrentConstants = SIInit.ConstantsList[name]
 		for index , fileName in pairs( autoLoadData[SIInit.State] ) do
 			need( "package."..name.."."..fileName , true )
 		end
-		SIGen.Clean()
+		if SIGen then SIGen.Clean() end
 	end
+	if SIGen then SIGen.ResetAutoFillData() end
 	if SIInit.State == SIInit.StateDefine.DataFinalFixes then
 		for type , list in pairs( SIGen.GetRaw() ) do
 			if #list > 0 then data:extend( list ) end

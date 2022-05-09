@@ -76,6 +76,14 @@ local constants =
 			}
 		}
 	} ,
+	autoFillSource =
+	{
+		recipe =
+		{
+			types = { SITypes.recipe } ,
+			defaultValues = {}
+		}
+	} ,
 	damage =
 	{
 		-- 列表原本就有的伤害类型
@@ -89,6 +97,10 @@ local constants =
 		electric  = "electric"
 	} ,
 	AfterLoad = function()
+		-- 完成 autoFillSource
+		if SIConstants_Core.autoFillSource then
+			SIConstants_Core.autoFillSource.recipe.defaultValues.category = SIConstants_Core.categoryList[SITypes.category.recipe].commonMachine
+		end
 		-- 给 damage 表里增加新创建的伤害类型
 		if SIConstants_Core.damage and SIConstants_Core.damageType then
 			for index , name in pairs( SIConstants_Core.damageType ) do

@@ -621,6 +621,13 @@ end
 -- 框架内部函数
 function SIGen.SetCore( coreConstants )
 	CORE = coreConstants
+	if CORE.autoFillSource then TransAutoFillData( AutoFillData , CORE.autoFillSource ) end
+	return SIGen
+end
+
+-- 框架内部函数
+function SIGen.ResetAutoFillData()
+	AutoFillData = util.deepcopy( AutoFillSource )
 	return SIGen
 end
 
@@ -773,12 +780,13 @@ local AutoFillSource =
 	}
 }
 
-for type , data in pairs( AutoFillSource ) do
+local function TransAutoFillData( autoFillData , autoFillSource )
+for type , data in pairs( autoFillSource ) do
 	if not data.defaultValues then data.defaultValues = {} end
 	if data.parent then
 		local function PutParentAutoFillData( data , parentType )
-			if AutoFillSource[parentType] then
-				local parent = AutoFillSource[parentType]
+			if autoFillSource[parentType] then
+				local parent = autoFillSource[parentType]
 				if parent.defaultValues then
 					for key , value in pairs( parent.defaultValues ) do
 						if not data.defaultValues[key] then data.defaultValues[key] = value end
@@ -796,8 +804,17 @@ for type , data in pairs( AutoFillSource ) do
 		callback = data.callback
 	}
 	if data.types then
-		for index , typeName in pairs( data.types ) do AutoFillData[typeName] = util.deepcopy( newData ) end
+		for index , typeName in pairs( data.types ) do
+			local realData = autoFillData[typeName]
+			local curData = util.deepcopy( newData )
+			if realData then
+				if not realData.defaultValues then realData.defaultValues = {} end
+				for k , v in pairs( curData.defaultValues ) do realData.defaultValues[k] = v end
+				realData.callback = curData.callback
+			else realData = curData
+		end
 	end
 end
 
-AutoFillSource = nil
+TransAutoFillData( AutoFillData , AutoFillSource )
+AutoFillSource = AutoFillData
