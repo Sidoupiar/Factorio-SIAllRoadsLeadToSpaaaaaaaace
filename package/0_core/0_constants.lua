@@ -7,6 +7,10 @@ local constants =
 		[SITypes.category.ammo] =
 		{
 			peopleThrow = "手扔"
+		} ,
+		[SITypes.category.recipe] =
+		{
+			commonMachine = "通用机械制造"
 		}
 	} ,
 	damageType =
