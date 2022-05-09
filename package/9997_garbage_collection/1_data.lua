@@ -134,7 +134,16 @@ end )
 	}
 	recipe.results =
 	{
-		SITools.ProductItem( SIConstants_Garbage.item.ashFilter , 10 ) ,
+		SITools.ProductItem( SIConstants_Garbage.item.ashFilter , 0.1 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashFlue , 0.06 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashCore , 0.03 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashAttach , 0.01 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashWhite , 0.04 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashGrey , 0.04 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashLight , 0.01 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashOre , 0.025 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashDrop , 0.025 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.item.ashBroken , 0.01 , 1 , 3 ) ,
 		SITools.ProductItemHide( SIConstants_Core.item.badgeEP , 0.04 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashFilter
