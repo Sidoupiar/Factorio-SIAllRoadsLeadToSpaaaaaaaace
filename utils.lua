@@ -352,7 +352,8 @@ function SIInit.AutoLoad( stateCode )
 			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
 			local realClass = "SI" .. constantsData.id:upper():gsub( "_" , "-" ) .. "-"
-			local realName = "SI" .. constantsData.name:gsub( "_" , "-" ) .. "-"
+			constants.showName = constantsData.name:gsub( "_" , "-" )
+			local realName = "SI" .. constants.showName .. "-"
 			constantsData.class = class
 			constantsData.realClass = realClass
 			constantsData.realName = realName

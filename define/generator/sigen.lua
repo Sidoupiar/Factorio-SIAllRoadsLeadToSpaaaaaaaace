@@ -34,7 +34,7 @@ local function Init( type , name , customData , needOverwrite , callback )
 		type = type ,
 		name = realName ,
 		localised_name = { "SI-name."..realName } ,
-		localised_description = { "SI-description."..realName } ,
+		localised_description = { "SI-base.description" , SIInit.CurrentConstants.showName , { "SI-description."..realName } } ,
 		icon = SIInit.CurrentConstants.GetPicturePath( name , type ) ,
 		group = GroupSettings.groupName ,
 		subgroup = GroupSettings.subGroupName ,
