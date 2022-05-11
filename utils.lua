@@ -62,7 +62,7 @@ function math.Cnum( num , min , max )
 end
 
 function string:Split( separator )
-	if separator == "" then return { self } end
+	if not separator or separator:len() < 1 then return { self } end
 	local pos = 0
 	local list = {}
 	for st , sp in function() return self:find( separator , pos , true ) end do
@@ -71,6 +71,17 @@ function string:Split( separator )
 	end
 	table.insert( list , self:sub( pos ) )
 	return list
+end
+
+function string:Concat( list , separator )
+	local str = self and self .. separator or ""
+	local index = 1
+	for i , v in pairs( list ) do
+		if index > 1 then str = str + separator end
+		str = str + v
+		index = index + 1
+	end
+	return str
 end
 
 function string:UpperCaseFirst()
@@ -83,6 +94,21 @@ end
 
 function string:EndsWith( str )
 	return self:sub( -str:len() ) == str
+end
+
+function string:FindLast( str )
+	if not str or str:len() < 1 then return nil end
+	local length = str:len()
+	for index = self:len()-length , 1 , -1 do
+		local startPos , endPos = self:find( str , index , length )
+		if startPos then return startPos , endPos end
+	end
+	return nil
+end
+
+function string:RemoveLastAndAfter( str )
+	local startPos = self:FindLast( str )
+	return startPos and self:sub( 1 , startPos ) or self
 end
 
 function string:ToABlist()
