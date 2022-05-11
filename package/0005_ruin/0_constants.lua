@@ -1,6 +1,6 @@
 local constants =
 {
 	id = "Ruin" ,
-	name = "遗迹"
+	name = "古代遗迹"
 }
 return constants

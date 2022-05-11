@@ -26,6 +26,7 @@ local packageList =
 	"0005_ruin" ,
 	"0006_trade" ,
 	"0007_tool_item" ,
+	"9996_event" ,
 	"9997_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"

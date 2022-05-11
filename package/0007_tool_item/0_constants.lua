@@ -1,7 +1,7 @@
 local constants =
 {
 	id = "ToolItem" ,
-	name = "工具" ,
+	name = "加工工具" ,
 	raw =
 	{
 		[SITypes.item.capsule] =

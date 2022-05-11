@@ -1,6 +1,6 @@
 local constants =
 {
 	id = "Living" ,
-	name = "生物"
+	name = "异星生物"
 }
 return constants
