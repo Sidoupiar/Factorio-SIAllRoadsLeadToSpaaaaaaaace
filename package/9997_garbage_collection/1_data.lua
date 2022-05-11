@@ -192,7 +192,27 @@ end )
 	item.place_result = SIGen.LastDataName
 end )
 .SetStackSize( SINumbers.stackSize.machine )
-.NewRecipe( "组装垃圾焚烧炉" , nil , false , function( recipe )
+.NewRecipe( "组装垃圾焚烧炉-1" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
+		SITools.ProductItemHide( SIConstants_Core.item.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.burntMachine
+end )
+.NewRecipe( "组装垃圾焚烧炉-2" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
+		SITools.ProductItemHide( SIConstants_Core.item.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.burntMachine
+end )
+.NewRecipe( "组装垃圾焚烧炉-2" , nil , false , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =

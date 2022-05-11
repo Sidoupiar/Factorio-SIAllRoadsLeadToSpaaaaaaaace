@@ -61,7 +61,12 @@ local function Append( curData , callback )
 		Raw[curData.type] = list
 	end
 	list[curData.SIGenSourceName] = curData
-	if callback then callback( curData ) end
+	if callback then
+		local package = callback( curData )
+		if SITools.IsTable( package ) then
+			for k , v in pairs( package ) do curData[k] = v end
+		end
+	end
 	return SIGen
 end
 
