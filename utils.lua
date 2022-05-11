@@ -337,18 +337,15 @@ function SIInit.AutoLoad( stateCode )
 		if not registerData or SITools.IsNotTable( registerData ) then registerData = {} end
 		for index = 1 , 4 , 1 do
 			local fileList = registerData[index]
-			if fileList and SITools.IsString( fileList ) then
-				fileList = { fileList }
-				registerData[index] = fileList
-			end
+			if fileList and SITools.IsString( fileList ) then fileList = { fileList } end
 			if not fileList or SITools.IsNotTable( fileList ) or #fileList < 1 then
 				fileList = {}
 				if index == 1 then table.insert( fileList , "1_data" )
 				else if index == 2 then table.insert( fileList , "2_data-updates" )
 				else if index == 3 then table.insert( fileList , "3_data-final-fixes" )
 				else if index == 4 then table.insert( fileList , "4_control" ) end
-				registerData[index] = fileList
 			end
+			registerData[index] = fileList
 		end
 		SIInit.AutoLoadDataList[SIInit.packageName] = registerData
 	end
