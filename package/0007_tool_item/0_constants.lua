@@ -4,10 +4,14 @@ local constants =
 	name = "加工工具" ,
 	raw =
 	{
-		[SITypes.item.capsule] =
+		tool =
 		{
-			stableStone = "压舱石" ,
-			woodenPlain = "垫木"
+			type = SITypes.item.capsule ,
+			list =
+			{
+				stableStone = "压舱石" ,
+				woodenPlain = "垫木"
+			}
 		}
 	}
 }

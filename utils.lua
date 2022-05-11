@@ -508,14 +508,15 @@ function SIInit.AutoLoad( stateCode )
 				end
 				-- 提前处理公开数据
 				if constantsData.raw and SITools.IsTable( constantsData.raw ) then
-					for typeName , list in pairs( constantsData.raw ) do
-						if list.list then
-							local rawCode = list.name or SITypes.rawCode[typeName]
+					for name , list in pairs( constantsData.raw ) do
+						if list.type and list.list then
+							local rawCode = list.name or name
 							local output = constants[rawCode]
 							if not output then
 								output = {}
 								constants[rawCode] = output
 							end
+							local typeName = list.type
 							for key , name in pairs( list.list ) do
 								output[key] = constantsData.AutoName( name , typeName )
 							end

@@ -52,9 +52,9 @@ local constants =
 	} ,
 	raw =
 	{
-		[SITypes.group] =
+		group =
 		{
-			name = "group" ,
+			type = SITypes.group ,
 			list =
 			{
 				material = "材料" ,
@@ -62,9 +62,9 @@ local constants =
 				other = "扩展"
 			}
 		} ,
-		[SITypes.item.capsule] =
+		badge =
 		{
-			name = "badge" ,
+			type = SITypes.item.capsule ,
 			list =
 			{
 				badgeMaterial = "材料徽章" ,

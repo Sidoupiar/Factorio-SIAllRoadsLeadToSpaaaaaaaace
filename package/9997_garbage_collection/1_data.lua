@@ -1,8 +1,8 @@
 -- ------------------------------------------------------------------------------------------------
--- ---------- 原型定义 ----------------------------------------------------------------------------
+-- --------- 默认值定义 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local ashThrowAction =
+local commonThrowAction =
 {
 	acceleration = 0 ,
 	action =
@@ -39,14 +39,8 @@ local ashThrowAction =
 		}
 	}
 }
-local bookThrowAction = util.deepcopy( ashThrowAction )
-local blockThrowAction = util.deepcopy( ashThrowAction )
-local machineThrowAction = util.deepcopy( ashThrowAction )
-ashThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
-bookThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
-blockThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 23.0 ) }
-machineThrowAction.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 42.0 ) }
-local ashThrowData
+
+local commonThrowData
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
 	capsule_action =
@@ -91,31 +85,44 @@ local ashThrowData
 		}
 	}
 }
-local bookThrowData = util.deepcopy( ashThrowData )
-local blockThrowData = util.deepcopy( ashThrowData )
-local machineThrowData = util.deepcopy( ashThrowData )
+
+local resultThrowAction = util.deepcopy( commonThrowAction )
+local blockThrowAction = util.deepcopy( commonThrowAction )
+local machineThrowAction = util.deepcopy( commonThrowAction )
+local ashThrowAction = util.deepcopy( commonThrowAction )
+local bookThrowAction = util.deepcopy( commonThrowAction )
+
+local resultThrowData = util.deepcopy( commonThrowData )
+local blockThrowData = util.deepcopy( commonThrowData )
+local machineThrowData = util.deepcopy( commonThrowData )
+local ashThrowData = util.deepcopy( commonThrowData )
+local bookThrowData = util.deepcopy( commonThrowData )
+
 SIGen.Group( SIConstants_Core.group )
-.NewProjectile( "扔出去的灰烬" , ashThrowAction , true , function( projectile )
-	ashThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
-end )
-.SetSize( 1 )
-.SetAnimation( 0.5 )
-.NewProjectile( "扔出去的认证书" , bookThrowAction , true , function( projectile )
-	bookThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+
+-- ------------------------------------------------------------------------------------------------
+-- -------- 固有物品定义 --------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+.NewProjectile( "扔出去的燃烧灰烬" , resultThrowAction , true , function( projectile )
+	resultThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
 .NewProjectile( "扔出去的废料" , blockThrowAction , true , function( projectile )
 	blockThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 23.0 ) }
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
 .NewProjectile( "扔出去的垃圾焚烧炉" , machineThrowAction , true , function( projectile )
 	machineThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 42.0 ) }
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Garbage.item.fuelResult , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder )
+.NewCapsule( SIConstants_Garbage.item.fuelResult , resultThrowData , true ).SetStackSize( SINumbers.stackSize.powder )
 .NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( SINumbers.stackSize.misc )
 .NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
 	recipe.enabled = true
@@ -134,19 +141,19 @@ end )
 	}
 	recipe.results =
 	{
-		SITools.ProductItem( SIConstants_Garbage.item.ashFilter , 0.15 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashFlue , 0.09 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashCore , 0.04 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashAttach , 0.01 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashWhite , 0.06 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashGrey , 0.06 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashLight , 0.01 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashOre , 0.03 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashDrop , 0.03 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Garbage.item.ashBroken , 0.01 , 1 , 3 ) ,
+		SITools.ProductItem( SIConstants_Garbage.ash.ashFilter , 0.15 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashFlue , 0.09 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashCore , 0.04 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashAttach , 0.01 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashWhite , 0.06 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashGrey , 0.06 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashLight , 0.01 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashOre , 0.03 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashDrop , 0.03 , 1 , 3 ) ,
+		SITools.ProductItemHide( SIConstants_Garbage.ash.ashBroken , 0.01 , 1 , 3 ) ,
 		SITools.ProductItemHide( SIConstants_Core.badge.badgeEP , 0.02 , 1 )
 	}
-	recipe.main_product = SIConstants_Garbage.item.ashFilter
+	recipe.main_product = SIConstants_Garbage.ash.ashFilter
 end )
 .NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )
 	entity.minable =
@@ -222,24 +229,44 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
--- 灰烬系列
-.NewCapsule( SIConstants_Garbage.item.ashFilter , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-7311 )
-.NewCapsule( SIConstants_Garbage.item.ashFlue , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6984 )
-.NewCapsule( SIConstants_Garbage.item.ashCore , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6712 )
-.NewCapsule( SIConstants_Garbage.item.ashAttach , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6559 )
-.NewCapsule( SIConstants_Garbage.item.ashWhite , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6309 )
-.NewCapsule( SIConstants_Garbage.item.ashGrey , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6117 )
-.NewCapsule( SIConstants_Garbage.item.ashLight , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5944 )
-.NewCapsule( SIConstants_Garbage.item.ashOre , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5738 )
-.NewCapsule( SIConstants_Garbage.item.ashDrop , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5461 )
-.NewCapsule( SIConstants_Garbage.item.ashBroken , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5327 )
--- 认证书系列
-.NewCapsule( SIConstants_Garbage.item.bookLaunch , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.bookBadge , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.bookAsh , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.bookFog , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.bookWinter , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.bookCloud , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+
+-- ------------------------------------------------------------------------------------------------
+-- -------- 灰烬系列定义 --------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+.NewProjectile( "扔出去的灰烬" , ashThrowAction , true , function( projectile )
+	ashThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
+end )
+.SetSize( 1 )
+.SetAnimation( 0.5 )
+.NewCapsule( SIConstants_Garbage.ash.ashFilter , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-7311 )
+.NewCapsule( SIConstants_Garbage.ash.ashFlue , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6984 )
+.NewCapsule( SIConstants_Garbage.ash.ashCore , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6712 )
+.NewCapsule( SIConstants_Garbage.ash.ashAttach , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6559 )
+.NewCapsule( SIConstants_Garbage.ash.ashWhite , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6309 )
+.NewCapsule( SIConstants_Garbage.ash.ashGrey , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-6117 )
+.NewCapsule( SIConstants_Garbage.ash.ashLight , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5944 )
+.NewCapsule( SIConstants_Garbage.ash.ashOre , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5738 )
+.NewCapsule( SIConstants_Garbage.ash.ashDrop , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5461 )
+.NewCapsule( SIConstants_Garbage.ash.ashBroken , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5327 )
+
+-- ------------------------------------------------------------------------------------------------
+-- ------- 认证书系列定义 -------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+.NewProjectile( "扔出去的认证书" , bookThrowAction , true , function( projectile )
+	bookThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
+	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 3.0 ) }
+end )
+.SetSize( 1 )
+.SetAnimation( 0.5 )
+.NewCapsule( SIConstants_Garbage.book.bookLaunch , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.book.bookBadge , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.book.bookAsh , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.book.bookFog , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.book.bookWinter , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.book.bookCloud , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 数据列表 ----------------------------------------------------------------------------
@@ -248,31 +275,31 @@ end )
 SIConstants_Garbage.settingsFuel =
 {
 	[SIConstants_Garbage.item.fuelResult] = { pass = true } ,
-	[SIConstants_Garbage.item.ashFilter] = { pass = true } ,
-	[SIConstants_Garbage.item.ashFlue] = { pass = true } ,
-	[SIConstants_Garbage.item.ashCore] = { pass = true } ,
-	[SIConstants_Garbage.item.ashAttach] = { pass = true } ,
-	[SIConstants_Garbage.item.ashWhite] = { pass = true } ,
-	[SIConstants_Garbage.item.ashGrey] = { pass = true } ,
-	[SIConstants_Garbage.item.ashLight] = { pass = true } ,
-	[SIConstants_Garbage.item.ashOre] = { pass = true } ,
-	[SIConstants_Garbage.item.ashDrop] = { pass = true } ,
-	[SIConstants_Garbage.item.ashBroken] = { pass = true }
+	[SIConstants_Garbage.ash.ashFilter] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashFlue] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashCore] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashAttach] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashWhite] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashGrey] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashLight] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashOre] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashDrop] = { pass = true } ,
+	[SIConstants_Garbage.ash.ashBroken] = { pass = true }
 }
 
 SIConstants_Garbage.settingsRocketLaunch =
 {
-	[SIConstants_Garbage.item.fuelResult] = SIConstants_Garbage.item.bookAsh ,
-	[SIConstants_Garbage.item.ashFilter] = SIConstants_Garbage.item.bookFog ,
-	[SIConstants_Garbage.item.ashFlue] = SIConstants_Garbage.item.bookFog ,
-	[SIConstants_Garbage.item.ashCore] = SIConstants_Garbage.item.bookFog ,
-	[SIConstants_Garbage.item.ashAttach] = SIConstants_Garbage.item.bookFog ,
-	[SIConstants_Garbage.item.ashWhite] = SIConstants_Garbage.item.bookWinter ,
-	[SIConstants_Garbage.item.ashGrey] = SIConstants_Garbage.item.bookWinter ,
-	[SIConstants_Garbage.item.ashLight] = SIConstants_Garbage.item.bookWinter ,
-	[SIConstants_Garbage.item.ashOre] = SIConstants_Garbage.item.bookCloud ,
-	[SIConstants_Garbage.item.ashDrop] = SIConstants_Garbage.item.bookCloud ,
-	[SIConstants_Garbage.item.ashBroken] = SIConstants_Garbage.item.bookCloud
+	[SIConstants_Garbage.item.fuelResult] = SIConstants_Garbage.book.bookAsh ,
+	[SIConstants_Garbage.ash.ashFilter] = SIConstants_Garbage.book.bookFog ,
+	[SIConstants_Garbage.ash.ashFlue] = SIConstants_Garbage.book.bookFog ,
+	[SIConstants_Garbage.ash.ashCore] = SIConstants_Garbage.book.bookFog ,
+	[SIConstants_Garbage.ash.ashAttach] = SIConstants_Garbage.book.bookFog ,
+	[SIConstants_Garbage.ash.ashWhite] = SIConstants_Garbage.book.bookWinter ,
+	[SIConstants_Garbage.ash.ashGrey] = SIConstants_Garbage.book.bookWinter ,
+	[SIConstants_Garbage.ash.ashLight] = SIConstants_Garbage.book.bookWinter ,
+	[SIConstants_Garbage.ash.ashOre] = SIConstants_Garbage.book.bookCloud ,
+	[SIConstants_Garbage.ash.ashDrop] = SIConstants_Garbage.book.bookCloud ,
+	[SIConstants_Garbage.ash.ashBroken] = SIConstants_Garbage.book.bookCloud
 }
 
 function SIConstants_Garbage.api.AddFuelSetting( name , result , fuelValue , emissionsMultiplier )
