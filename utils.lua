@@ -540,7 +540,14 @@ function SIInit.AutoLoad( stateCode )
 	if SIGen then SIGen.ResetAutoFillData() end
 	if SIInit.State == SIInit.StateDefine.DataFinalFixes then
 		for type , list in pairs( SIGen.GetRaw() ) do
-			if #list > 0 then data:extend( list ) end
+			if table.Size( list ) > 0 then data:extend( list ) end
+		end
+	end
+	if SIInit.State == SIInit.StateDefine.Control and remote then
+		for constantsName , list in pairs( SIAPI ) do
+			local functionList = {}
+			for name , func in pairs( list ) do functionList[name] = func end
+			if table.Size( functionList ) > 0 then remote.add_interface( "SIAPI_"+constantsName , functionList ) end
 		end
 	end
 end
