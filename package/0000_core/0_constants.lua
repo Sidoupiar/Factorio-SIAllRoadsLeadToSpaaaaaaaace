@@ -2,17 +2,6 @@ local constants =
 {
 	id = "Core" ,
 	name = "通用核心" ,
-	categoryList =
-	{
-		[SITypes.category.ammo] =
-		{
-			peopleThrow = "手扔"
-		} ,
-		[SITypes.category.recipe] =
-		{
-			commonMachine = "通用机械制造"
-		}
-	} ,
 	damageType =
 	{
 		-- 物理伤害
@@ -49,7 +38,18 @@ local constants =
 		elementFull     = "盈元素" ,
 		elementVoid     = "虚元素" ,
 		elementSkill    = "技元素"
-	}
+	} ,
+	categoryList =
+	{
+		[SITypes.category.ammo] =
+		{
+			peopleThrow = "手扔"
+		} ,
+		[SITypes.category.recipe] =
+		{
+			commonMachine = "通用机械制造"
+		}
+	} ,
 	raw =
 	{
 		[SITypes.group] =
@@ -64,7 +64,7 @@ local constants =
 		} ,
 		[SITypes.item.capsule] =
 		{
-			name = "item" ,
+			name = "badge" ,
 			list =
 			{
 				badgeMaterial = "材料徽章" ,

@@ -144,7 +144,7 @@ end )
 		SITools.ProductItemHide( SIConstants_Garbage.item.ashOre , 0.03 , 1 , 3 ) ,
 		SITools.ProductItemHide( SIConstants_Garbage.item.ashDrop , 0.03 , 1 , 3 ) ,
 		SITools.ProductItemHide( SIConstants_Garbage.item.ashBroken , 0.01 , 1 , 3 ) ,
-		SITools.ProductItemHide( SIConstants_Core.item.badgeEP , 0.02 , 1 )
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeEP , 0.02 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashFilter
 end )
@@ -155,7 +155,7 @@ end )
 		results =
 		{
 			SITools.ProductItemHide( SIConstants_Garbage.item.burntMachine ) ,
-			SITools.ProductItemHide( SIConstants_Core.item.badgeRound , 0.05 , 1 )
+			SITools.ProductItemHide( SIConstants_Core.badge.badgeRound , 0.05 , 1 )
 		}
 	}
 	entity.max_health = 400
@@ -198,7 +198,7 @@ end )
 	recipe.results =
 	{
 		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
-		SITools.ProductItemHide( SIConstants_Core.item.badgeMachine , 0.2 , 1 )
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
@@ -208,7 +208,7 @@ end )
 	recipe.results =
 	{
 		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
-		SITools.ProductItemHide( SIConstants_Core.item.badgeMachine , 0.2 , 1 )
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
@@ -218,7 +218,7 @@ end )
 	recipe.results =
 	{
 		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
-		SITools.ProductItemHide( SIConstants_Core.item.badgeMachine , 0.2 , 1 )
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
@@ -235,7 +235,7 @@ end )
 .NewCapsule( SIConstants_Garbage.item.ashBroken , ashThrowData , true ).SetStackSize( SINumbers.stackSize.powder-5327 )
 -- 认证书系列
 .NewCapsule( SIConstants_Garbage.item.bookLaunch , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
-.NewCapsule( SIConstants_Garbage.item.bookBadgeEP , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
+.NewCapsule( SIConstants_Garbage.item.bookBadge , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 .NewCapsule( SIConstants_Garbage.item.bookAsh , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 .NewCapsule( SIConstants_Garbage.item.bookFog , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
 .NewCapsule( SIConstants_Garbage.item.bookWinter , bookThrowData , true ).SetStackSize( SINumbers.stackSize.material )
@@ -262,7 +262,6 @@ SIConstants_Garbage.settingsFuel =
 
 SIConstants_Garbage.settingsRocketLaunch =
 {
-	[SIConstants_Core.item.badgeEP] = SIConstants_Garbage.item.bookBadgeEP ,
 	[SIConstants_Garbage.item.fuelResult] = SIConstants_Garbage.item.bookAsh ,
 	[SIConstants_Garbage.item.ashFilter] = SIConstants_Garbage.item.bookFog ,
 	[SIConstants_Garbage.item.ashFlue] = SIConstants_Garbage.item.bookFog ,

@@ -24,6 +24,7 @@ local constants =
 				fuelResult    = "燃烧灰烬" ,
 				brokenMachine = "报废的机器" ,
 				burntMachine  = "垃圾焚烧炉" ,
+				sootBlower    = "吹灰机" ,
 				-- 灰烬系列
 				ashFilter = "滤网灰烬" ,
 				ashFlue   = "烟道灰烬" ,
@@ -37,11 +38,11 @@ local constants =
 				ashBroken = "破碎灰烬" ,
 				-- 认证书系列
 				bookLaunch = "太空垃圾认证书" ,
-				bookBadgeEP = "环保徽章认证书" ,
-				bookAsh = "袅袅炊烟认证书" ,
-				bookFog = "有害雾气认证书" ,
+				bookBadge  = "闪耀徽章认证书" ,
+				bookAsh    = "袅袅炊烟认证书" ,
+				bookFog    = "有害雾气认证书" ,
 				bookWinter = "火山冬天认证书" ,
-				bookCloud = "满天乌云认证书"
+				bookCloud  = "满天乌云认证书"
 			}
 		}
 	}
