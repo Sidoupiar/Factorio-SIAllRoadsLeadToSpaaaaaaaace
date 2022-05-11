@@ -15,7 +15,7 @@ SIMods = require( "define/simods" )
 -- ---------- 定义数据 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local CoreName = "__SIAllRoadsLeadToRome__"
+local CoreName = "__SIAllRoadsLeadToSpaaaaaaace__"
 local packageList =
 {
 	"0000_core" ,
