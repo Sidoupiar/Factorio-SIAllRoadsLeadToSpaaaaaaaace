@@ -18,14 +18,14 @@ SIMods = require( "define/simods" )
 local CoreName = "__SIAllRoadsLeadToRome__"
 local packageList =
 {
-	"0_core" ,
-	"1_environment" ,
-	"2_resource" ,
-	"3_plant" ,
-	"4_living" ,
-	"5_ruin" ,
-	"6_trade" ,
-	"7_tool_item" ,
+	"0000_core" ,
+	"0001_environment" ,
+	"0002_resource" ,
+	"0003_plant" ,
+	"0004_living" ,
+	"0005_ruin" ,
+	"0006_trade" ,
+	"0007_tool_item" ,
 	"9997_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"
