@@ -512,7 +512,7 @@ end
 -- ----------------------------------------
 function SIGen.SetStackSize( stackSize )
 	if Check() then return SIGen end
-	stackSize = math.max( stackSize or 1 , 1 )
+	stackSize = math.max( math.floor( stackSize or 1 ) , 1 )
 	if stackSize > 1 then SIGen.Data.stackable = true
 	else SIGen.Data.stackable = false end
 	SIGen.Data.stack_size = stackSize
