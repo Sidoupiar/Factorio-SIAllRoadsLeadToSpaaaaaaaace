@@ -1,4 +1,4 @@
-# 殊途同归[SIAllRoadsLeadToSpaaaaaaaace]()
+# 殊途同归[SIAllRoadsLeadToSpaaaaaaaace](https://github.com/Sidoupiar/Factorio-SIAllRoadsLeadToSpaaaaaaaace)
 
 特点:
 1. 总体来说就是各种能想到的孤儿配方在这里都会出现 , 具体请见[这里](https://www.sidoupiar.com/factorio/sidoupiar/2924/#article_index_4_1) , 使得部分配方难度史诗级提升
