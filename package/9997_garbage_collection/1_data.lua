@@ -175,7 +175,7 @@ end )
 	entity.energy_usage = "450KW"
 	entity.energy_source =
 	{
-		type = "burner" ,
+		type = SITypes.energy.burner ,
 		fuel_inventory_size = 20 ,
 		burnt_inventory_size = 20 ,
 		fuel_categories = { SIConstants_Garbage.categoryList[SITypes.category.fuel].garbage } ,
@@ -204,7 +204,7 @@ end )
 	{}
 	recipe.results =
 	{
-		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
+		SITools.ProductItem( SIConstants_Garbage.item.burntMachine ) ,
 		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
@@ -214,20 +214,200 @@ end )
 	{}
 	recipe.results =
 	{
-		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
+		SITools.ProductItem( SIConstants_Garbage.item.burntMachine ) ,
 		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
-.NewRecipe( "组装垃圾焚烧炉_2" , nil , false , function( recipe )
+.NewRecipe( "组装垃圾焚烧炉_3" , nil , false , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
 	{
-		SITools.ProductItem( SIConstants_Garbage.item.burntMachine , 1 ) ,
+		SITools.ProductItem( SIConstants_Garbage.item.burntMachine ) ,
 		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
+end )
+.NewAssemblingMachine( "吹灰机" , nil ,false , function( entity )
+	entity.minable =
+	{
+		mining_time = 1.9 ,
+		results =
+		{
+			SITools.ProductItem( SIConstants_Garbage.item.ashBlower ) ,
+			SITools.ProductItemHide( SIConstants_Core.badge.badgeRound , 0.05 , 1 )
+		}
+	}
+	entity.max_health = 220
+	entity.dying_explosion = "big-explosion"
+	entity.corpse = "big-remnants"
+	entity.loot = { SITools.Loot( SIConstants_Garbage.item.brokenMachine , 1.0 , 1 , 2 ) }
+	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].ashBlower }
+	entity.energy_usage = "210KW"
+	entity.energy_source =
+	{
+		type = SITypes.energy.electric ,
+		usage_priority = SITypes.electricUsagePriority.secondaryInput ,
+		buffer_capacity = "10MJ" ,
+		emissions_per_second_per_watt = 1
+	}
+end )
+.SetSize( 3 )
+.SetAnimation4Way()
+.NewCapsule( SIConstants_Garbage.item.ashBlower , machineThrowData , true , function( item )
+	item.place_result = SIGen.LastDataName
+end )
+.SetStackSize( SINumbers.stackSize.machine )
+.NewRecipe( "组装吹灰机_1" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashBlower ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashBlower
+end )
+.NewRecipe( "组装吹灰机_2" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashBlower ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashBlower
+end )
+.NewRecipe( "组装吹灰机_3" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashBlower ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashBlower
+end )
+.NewAssemblingMachine( "调灰机" , nil ,false , function( entity )
+	entity.minable =
+	{
+		mining_time = 1.9 ,
+		results =
+		{
+			SITools.ProductItem( SIConstants_Garbage.item.ashMixer ) ,
+			SITools.ProductItemHide( SIConstants_Core.badge.badgeRound , 0.05 , 1 )
+		}
+	}
+	entity.max_health = 220
+	entity.dying_explosion = "big-explosion"
+	entity.corpse = "big-remnants"
+	entity.loot = { SITools.Loot( SIConstants_Garbage.item.brokenMachine , 1.0 , 1 , 2 ) }
+	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].ashMixer }
+	entity.energy_usage = "210KW"
+	entity.energy_source =
+	{
+		type = SITypes.energy.electric ,
+		usage_priority = SITypes.electricUsagePriority.secondaryInput ,
+		buffer_capacity = "10MJ" ,
+		emissions_per_second_per_watt = 1
+	}
+end )
+.SetSize( 3 )
+.SetAnimation4Way()
+.NewCapsule( SIConstants_Garbage.item.ashMixer , machineThrowData , true , function( item )
+	item.place_result = SIGen.LastDataName
+end )
+.SetStackSize( SINumbers.stackSize.machine )
+.NewRecipe( "组装调灰机_1" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashMixer ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashMixer
+end )
+.NewRecipe( "组装调灰机_2" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashMixer ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashMixer
+end )
+.NewRecipe( "组装调灰机_3" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashMixer ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashMixer
+end )
+.NewAssemblingMachine( "喷灰机" , nil ,false , function( entity )
+	entity.minable =
+	{
+		mining_time = 1.9 ,
+		results =
+		{
+			SITools.ProductItem( SIConstants_Garbage.item.ashShower ) ,
+			SITools.ProductItemHide( SIConstants_Core.badge.badgeRound , 0.05 , 1 )
+		}
+	}
+	entity.max_health = 220
+	entity.dying_explosion = "big-explosion"
+	entity.corpse = "big-remnants"
+	entity.loot = { SITools.Loot( SIConstants_Garbage.item.brokenMachine , 1.0 , 1 , 2 ) }
+	entity.crafting_categories = { SIConstants_Garbage.categoryList[SITypes.category.recipe].ashShower }
+	entity.energy_usage = "210KW"
+	entity.energy_source =
+	{
+		type = SITypes.energy.electric ,
+		usage_priority = SITypes.electricUsagePriority.secondaryInput ,
+		buffer_capacity = "10MJ" ,
+		emissions_per_second_per_watt = 1
+	}
+end )
+.SetSize( 3 )
+.SetAnimation4Way()
+.NewCapsule( SIConstants_Garbage.item.ashShower , machineThrowData , true , function( item )
+	item.place_result = SIGen.LastDataName
+end )
+.SetStackSize( SINumbers.stackSize.machine )
+.NewRecipe( "组装喷灰机_1" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashShower ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashShower
+end )
+.NewRecipe( "组装喷灰机_2" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashShower ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashShower
+end )
+.NewRecipe( "组装喷灰机_3" , nil , false , function( recipe )
+	recipe.ingredients =
+	{}
+	recipe.results =
+	{
+		SITools.ProductItem( SIConstants_Garbage.item.ashShower ) ,
+		SITools.ProductItemHide( SIConstants_Core.badge.badgeMachine , 0.2 , 1 )
+	}
+	recipe.main_product = SIConstants_Garbage.item.ashShower
 end )
 
 -- ------------------------------------------------------------------------------------------------

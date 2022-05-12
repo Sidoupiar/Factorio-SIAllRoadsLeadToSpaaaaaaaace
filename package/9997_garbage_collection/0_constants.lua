@@ -10,7 +10,10 @@ local constants =
 		} ,
 		[SITypes.category.recipe] =
 		{
-			garbage = "燃烧废料"
+			garbage   = "燃烧废料" ,
+			ashBlower = "吹灰" ,
+			ashMixer  = "调灰" ,
+			ashShower = "喷灰"
 		}
 	} ,
 	raw =
