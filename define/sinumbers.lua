@@ -56,10 +56,6 @@ local SINumbers =
 		pictureScale = 0.25 ,
 		mipMaps = 4
 	} ,
-	
-	defaultMiningTime = 1 ,
-	defaultProductCount = 1 ,
-	defaultMinableFluidCount = 1 ,
 
 	graphicHrSizeScale = 2 ,
 	graphicHrScaleDown = 0.5 ,
@@ -67,44 +63,45 @@ local SINumbers =
 	equipmentPictureSize = 32 ,
 	
 	healthToMiningTime = 800 ,
+	sizeToMiningTime = 5 ,
 	lightSizeMult = 2.4 ,
 
 	graphicSetting_Default =
 	{
 		width = 32 ,
 		height = 32 ,
+		addenWidth = 0 ,
+		addenHeight = 0 ,
 		widthCount = 8
 		heightCount = 8 ,
-		animSpeed = 0.25
+		animSpeed = 0.25 ,
+		variation_count = 1
 	} ,
-	graphicSetting =
+	graphicSettings =
 	{
 		[SITypes.entity.projectile] =
 		{
-			width = 32 ,
-			height = 32 ,
-			widthCount = 8
-			heightCount = 2 ,
-			animSpeed = 0.25
+			heightCount = 2
 		} ,
 		[SITypes.entity.resource] =
 		{
-			width = 32 ,
-			height = 32 ,
-			widthCount = 8
-			heightCount = 8 ,
-			animSpeed = 0.25
+			addenWidth = 32 ,
+			addenHeight = 32 ,
+			variation_count = 8
 		} ,
 		[SITypes.entity.machine] =
 		{
-			width = 32 ,
-			height = 32 ,
-			widthCount = 8
-			heightCount = 8 ,
 			animSpeed = 64.0 / 60.0
 		}
 	}
 }
+
+SINumbers.graphicSetting_Default.frameCount = SINumbers.graphicSetting_Default.widthCount * SINumbers.graphicSetting_Default.heightCount
+for typeName , setting in pairs( SINumbers.graphicSettings ) do
+	local newSetting = SITools.CopyData( setting , SINumbers.graphicSetting_Default , false )
+	newSetting.frameCount = newSetting.widthCount * newSetting.heightCount
+	SINumbers.graphicSettings[typeName] = newSetting
+end
 
 local innerNumberList = table.deepcopy( SINumbers )
 

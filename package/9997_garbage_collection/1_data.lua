@@ -158,7 +158,6 @@ end )
 .NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )
 	entity.minable =
 	{
-		mining_time = 2.5 ,
 		results =
 		{
 			SITools.ProductItemHide( SIConstants_Garbage.item.burntMachine ) ,
@@ -195,6 +194,7 @@ end )
 end )
 .SetSize( 3 )
 .SetAnimation4Way()
+.AutoMiningTime()
 .NewCapsule( SIConstants_Garbage.item.burntMachine , machineThrowData , true , function( item )
 	item.place_result = SIGen.LastDataName
 end )
@@ -232,7 +232,6 @@ end )
 .NewAssemblingMachine( "吹灰机" , nil ,false , function( entity )
 	entity.minable =
 	{
-		mining_time = 1.9 ,
 		results =
 		{
 			SITools.ProductItem( SIConstants_Garbage.item.ashBlower ) ,
@@ -255,6 +254,7 @@ end )
 end )
 .SetSize( 3 )
 .SetAnimation4Way()
+.AutoMiningTime()
 .NewCapsule( SIConstants_Garbage.item.ashBlower , machineThrowData , true , function( item )
 	item.place_result = SIGen.LastDataName
 end )
@@ -292,7 +292,6 @@ end )
 .NewAssemblingMachine( "调灰机" , nil ,false , function( entity )
 	entity.minable =
 	{
-		mining_time = 1.9 ,
 		results =
 		{
 			SITools.ProductItem( SIConstants_Garbage.item.ashMixer ) ,
@@ -315,6 +314,7 @@ end )
 end )
 .SetSize( 3 )
 .SetAnimation4Way()
+.AutoMiningTime()
 .NewCapsule( SIConstants_Garbage.item.ashMixer , machineThrowData , true , function( item )
 	item.place_result = SIGen.LastDataName
 end )
@@ -375,6 +375,7 @@ end )
 end )
 .SetSize( 3 )
 .SetAnimation4Way()
+.AutoMiningTime()
 .NewCapsule( SIConstants_Garbage.item.ashShower , machineThrowData , true , function( item )
 	item.place_result = SIGen.LastDataName
 end )

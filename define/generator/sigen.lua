@@ -541,6 +541,7 @@ end
 
 -- ----------------------------------------
 -- 根据参数创建动画帧图结构 , 无方向
+-- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
 -- 这种模式下会附带一个影子属性 shadow
 -- ----------------------------------------
 -- scale = 缩放比例 , 原图比例为 1.0
@@ -556,43 +557,41 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 	SIGen.Data.animation =
 	{
 		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName , SIGen.Data.type ) ,
-		width = size.width * graphicSetting.width ,
-		height = size.height * graphicSetting.height ,
+		width = size.width * graphicSetting.width + graphicSetting.addenWidth ,
+		height = size.height * graphicSetting.height + graphicSetting.addenHeight ,
 		scale = scale or 1.0 ,
 		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
 		priority = SIFlags.priorities.high ,
 		line_length = graphicSetting.widthCount or 1 ,
-		frame_count = graphicSetting.widthCount and graphicSetting.heightCount and graphicSetting.widthCount * graphicSetting.heightCount or 1 ,
+		frame_count = graphicSetting.frameCount or 1 ,
 		animation_speed = graphicSetting.animSpeed or nil ,
-		draw_as_glow = isGlow and true or nil ,
-		hr_version = hasHr and
-		{
-			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-hr" , SIGen.Data.type ) ,
-			width = size.width * graphicSetting.width * SINumbers.graphicHrSizeScale ,
-			height = size.height * graphicSetting.height * SINumbers.graphicHrSizeScale ,
-			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
-			shift = shift and util.by_pixel( shift.x*SINumbers.graphicHrSizeScale , shift.y*SINumbers.graphicHrSizeScale ) or util.by_pixel( 0.0 , 0.0 ) ,
-			priority = SIFlags.priorities.high ,
-			line_length = graphicSetting.widthCount or 1 ,
-			frame_count = graphicSetting.widthCount and graphicSetting.heightCount and graphicSetting.widthCount * graphicSetting.heightCount or 1 ,
-			animation_speed = graphicSetting.animSpeed or nil ,
-			draw_as_glow = isGlow and true or nil
-		} or nil
+		draw_as_glow = isGlow and true or nil
 	}
-	SIGen.Data.shadow = util.deepcopy( SIGen.Data.animation )
-	SIGen.Data.shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow" , SIGen.Data.type )
-	SIGen.Data.shadow.draw_as_glow = nil
-	SIGen.Data.shadow.draw_as_shadow = true
 	if hasHr then
-		SIGen.Data.shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow-hr" , SIGen.Data.type )
-		SIGen.Data.shadow.hr_version.draw_as_glow = nil
-		SIGen.Data.shadow.hr_version.draw_as_shadow = true
+		local hr = util.deepcopy( SIGen.Data.animation )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-hr" , SIGen.Data.type )
+		hr.width = hr.width * SINumbers.graphicHrSizeScale
+		hr.height = hr.height * SINumbers.graphicHrSizeScale
+		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
+		hr.shift = util.by_pixel( hr.shift.x*SINumbers.graphicHrSizeScale , hr.shift.y*SINumbers.graphicHrSizeScale )
+		SIGen.Data.animation.hr_version = hr
 	end
+	local shadow = util.deepcopy( SIGen.Data.animation )
+	shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow" , SIGen.Data.type )
+	shadow.draw_as_glow = nil
+	shadow.draw_as_shadow = true
+	if hasHr then
+		shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow-hr" , SIGen.Data.type )
+		shadow.hr_version.draw_as_glow = nil
+		shadow.hr_version.draw_as_shadow = true
+	end
+	SIGen.Data.shadow = shadow
 	return SIGen
 end
 
 -- ----------------------------------------
 -- 根据参数创建动画帧图结构 , 四个方向
+-- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
 -- 这种模式下没有影子属性
 -- ----------------------------------------
 -- scale = 缩放比例 , 原图比例为 1.0
@@ -606,18 +605,89 @@ function SIGen.SetAnimation4Way( scale , shift , hasHr )
 	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
 	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	local horizontally = util.deepcopy( graphicSetting )
-	horizontally.width = size.width * graphicSetting.width
-	horizontally.height = size.height * graphicSetting.height
+	horizontally.width = size.width * graphicSetting.width + graphicSetting.addenWidth
+	horizontally.height = size.height * graphicSetting.height + graphicSetting.addenHeight
 	local vertically = util.deepcopy( graphicSetting )
 	vertically.width = horizontally.height
 	vertically.height = horizontally.width
 	SIGen.Data.animation
 	{
-		north = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.north ) ,
-		east = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.east ) ,
-		south = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.south ) ,
-		west = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.west )
+		north = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.north , graphicSetting ) ,
+		east = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.east , graphicSetting ) ,
+		south = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.south , graphicSetting ) ,
+		west = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.west , graphicSetting )
 	}
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 根据参数创建动画阶段图结构 , 无方向
+-- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
+-- ----------------------------------------
+-- scale = 缩放比例 , 原图比例为 1.0
+-- shift = 偏移位置 , 默认 { 0.0 , 0.0 }
+-- hasHr = 是否创建高清图部分 , 默认否
+-- addGlow = 是否添加发光层 , 默认否
+-- ----------------------------------------
+function SIGen.SetStages( scale , shift , hasHr , addGlow )
+	if Check() then return SIGen end
+	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
+	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
+	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
+	SIGen.Data.stages =
+	{
+		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName , SIGen.Data.type ) ,
+		width = size.width * graphicSetting.width + graphicSetting.addenWidth ,
+		height = size.height * graphicSetting.height + graphicSetting.addenHeight ,
+		scale = scale or 1.0 ,
+		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
+		priority = SIFlags.priorities.high ,
+		frame_count = graphicSetting.frameCount or 1 ,
+		variation_count = graphicSetting.variationCount or 1
+	}
+	if hasHr then
+		local hr = util.deepcopy( SIGen.Data.stages )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-hr" , SIGen.Data.type )
+		hr.width = hr.width * SINumbers.graphicHrSizeScale
+		hr.height = hr.height * SINumbers.graphicHrSizeScale
+		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
+		hr.shift = util.by_pixel( hr.shift.x*SINumbers.graphicHrSizeScale , hr.shift.y*SINumbers.graphicHrSizeScale )
+		SIGen.Data.stages.hr_version = hr
+	end
+	if addGlow then
+		local effect = util.deepcopy( SIGen.Data.stages )
+		effect.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-glow" , SIGen.Data.type )
+		effect.blend_mode = SIFlags.blendModes.additive
+		if hasHr then
+			effect.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-glow-hr" , SIGen.Data.type )
+			effect.hr_version.blend_mode = SIFlags.blendModes.additive
+		end
+		SIGen.Data.stages_effect = effect
+	end
+	return SIGen
+end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 自动填充 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+-- ----------------------------------------
+-- 根据实体的最大生命值 , 面积来确定到底需要挖多久才能挖下来
+-- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
+-- 需要实体已经设置好 minable 属性
+-- 挖掘时间 = 最大生命值 / SINumber.healthToMiningTime * 面积 / SINumber.sizeToMiningTime * multiplier
+-- 挖掘时间最少 0.1
+-- ----------------------------------------
+-- multiplier = 挖掘时间倍率 , 默认 1
+-- ----------------------------------------
+function SIGen.AutoMiningTime( multiplier )
+	if Check() then return SIGen end
+	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
+	multiplier = multiplier or 1
+	if SIGen.Data.max_health and SIGen.Data.minable then
+		local time = SIGen.Data.max_health * size.width * size.height / SINumber.healthToMiningTime / SINumber.sizeToMiningTime * multiplier
+		SIGen.Data.minable.mining_time = math.max( time , 0.1 )
+	end
 	return SIGen
 end
 
@@ -659,8 +729,8 @@ end
 -- --------- 构建数据包 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local function CreateLayer4Way( size , scale , shift , hasHr , directionName )
-	return
+local function CreateLayer4Way( size , scale , shift , hasHr , directionName , graphicSetting )
+	local layer =
 	{
 		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction , SIGen.Data.type ) ,
 		width = size.width ,
@@ -668,13 +738,11 @@ local function CreateLayer4Way( size , scale , shift , hasHr , directionName )
 		scale = scale or 1.0 ,
 		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
 		priority = SIFlags.priorities.high ,
-		line_length = size.widthCount or 1 ,
-		frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
-		animation_speed = graphicSetting.animSpeed or nil ,
-		draw_as_glow = isGlow and true or nil ,
-		hr_version = hasHr and
+		line_length = graphicSetting.widthCount or 1 ,
+		frame_count = graphicSetting.frameCount or 1 ,
+		animation_speed = graphicSetting.animSpeed or nil
 		{
-			filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction.."-hr" , SIGen.Data.type ) ,
+			 ,
 			width = size.width * SINumbers.graphicHrSizeScale ,
 			height = size.height * SINumbers.graphicHrSizeScale ,
 			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
@@ -682,10 +750,19 @@ local function CreateLayer4Way( size , scale , shift , hasHr , directionName )
 			priority = SIFlags.priorities.high ,
 			line_length = size.widthCount or 1 ,
 			frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
-			animation_speed = size.animSpeed or nil ,
-			draw_as_glow = isGlow and true or nil
+			animation_speed = size.animSpeed or nil
 		} or nil
 	}
+	if hasHr then
+		local hr = util.deepcopy( layer )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction.."-hr" , SIGen.Data.type )
+		hr.width = hr.width * SINumbers.graphicHrSizeScale
+		hr.height = hr.height * SINumbers.graphicHrSizeScale
+		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
+		hr.shift = util.by_pixel( hr.shift.x*SINumbers.graphicHrSizeScale , hr.shift.y*SINumbers.graphicHrSizeScale )
+		layer.hr_version = hr
+	end
+	return layer
 end
 
 -- ------------------------------------------------------------------------------------------------
