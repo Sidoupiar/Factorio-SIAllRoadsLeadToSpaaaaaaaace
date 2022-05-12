@@ -230,6 +230,14 @@ function SIEventBus.ClearNth( count )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 把函数注册进 script.on_event
+-- 可以注册多个函数
+-- ----------------------------------------
+-- eventId = defines.events 中枚举的事件 id 或自定义的事件 id , 不能为空
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 默认是一个递增的数字
+-- ----------------------------------------
 function SIEventBus.Add( eventId , func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能添加空的事件方法" )
@@ -263,6 +271,14 @@ function SIEventBus.Add( eventId , func , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 函数注册进 script.on_event 后通过 id 替换函数
+-- 可以注册多个函数
+-- ----------------------------------------
+-- eventId = defines.events 中枚举的事件 id 或自定义的事件 id , 不能为空
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 不能为空
+-- ----------------------------------------
 function SIEventBus.Set( eventId , func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能设置空的事件方法" )
@@ -296,6 +312,12 @@ function SIEventBus.Set( eventId , func , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 通过 id 移除注册进 script.on_event 的函数
+-- ----------------------------------------
+-- eventId = defines.events 中枚举的事件 id 或自定义的事件 id , 不能为空
+-- id = 函数的 id , 不能为空
+-- ----------------------------------------
 function SIEventBus.Remove( eventId , id )
 	if not id then
 		e( "事件总线[SIEventBus] : 移除事件方法时必须使用明确的 id" )
@@ -332,6 +354,11 @@ function SIEventBus.Remove( eventId , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 移除注册进 script.on_event 的函数
+-- ----------------------------------------
+-- eventId = defines.events 中枚举的事件 id 或自定义的事件 id , 不能为空
+-- ----------------------------------------
 function SIEventBus.Clear( eventId )
 	local data = SIEventBus.list[eventId]
 	if data then SIEventBus.list[eventId] = nil end
