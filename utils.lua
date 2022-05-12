@@ -353,7 +353,8 @@ function SIInit.AutoLoad( stateCode )
 		need( "define.generator.sidatakeys" , true )
 		need( "define.generator.sigen" , true )
 	else if SIInit.State == SIInit.StateDefine.Control then
-		need( "define.runtime.load" , true )
+		need( "define.runtime.sievent_bus" , true )
+		need( "define.runtime.siglobal" , true )
 	end
 	if SIInit.State == SIInit.StateDefine.Settings or SIInit.State == SIInit.StateDefine.Data or SIInit.State == SIInit.StateDefine.Control then
 		local constantsDataList = {}
