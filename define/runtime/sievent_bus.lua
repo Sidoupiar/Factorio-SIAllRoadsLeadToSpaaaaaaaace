@@ -2,12 +2,6 @@
 -- ---------- 基础数据 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
--- list 内的元素结构
--- eventId =
--- {
---   isSet = bool ,
---   funcs = { { id = idString , func = function } }
--- }
 SIEventBus =
 {
 	order = 1 ,
@@ -29,11 +23,24 @@ SIEventBus =
 	nth = {} ,
 	list = {}
 }
+-- list 内的元素结构
+-- eventId =
+-- {
+--   isSet = bool ,
+--   funcs = { { id = idString , func = function } }
+-- }
 
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 事件操作 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+-- ----------------------------------------
+-- 把函数注册进 script.on_init 和 script.on_configuration_changed
+-- 可以注册多个函数
+-- ----------------------------------------
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 默认是一个递增的数字
+-- ----------------------------------------
 function SIEventBus.Init( func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能添加空的初始化方法" )
@@ -55,6 +62,13 @@ function SIEventBus.Init( func , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 把函数注册进 script.on_load
+-- 可以注册多个函数
+-- ----------------------------------------
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 默认是一个递增的数字
+-- ----------------------------------------
 function SIEventBus.Load( func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能添加空的载入存档方法" )
@@ -74,7 +88,15 @@ function SIEventBus.Load( func , id )
 	return SIEventBus
 end
 
-function SIEventBus.AddWaitFunction( id , func )
+-- ----------------------------------------
+-- 把函数注册为当玩家加入游戏时执行的函数
+-- 可以注册多个函数
+-- 每个函数每个玩家执行一次
+-- ----------------------------------------
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 默认是一个递增的数字
+-- ----------------------------------------
+function SIEventBus.AddWaitFunction( func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能添加空的缓执行方法" )
 		return SIEventBus
@@ -88,6 +110,14 @@ function SIEventBus.AddWaitFunction( id , func )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 把函数注册进 script.on_nth_tick
+-- 每个间隔都可以注册多个函数
+-- ----------------------------------------
+-- count = 执行间隔 , 不能为空
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 默认是一个递增的数字
+-- ----------------------------------------
 function SIEventBus.AddNth( count , func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能添加空的事件方法" )
@@ -115,6 +145,13 @@ function SIEventBus.AddNth( count , func , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 函数注册进 script.on_nth_tick 后通过 id 替换函数
+-- ----------------------------------------
+-- count = 执行间隔 , 不能为空
+-- func = 函数 , 不能为空
+-- id = 函数的 id , 不能为空
+-- ----------------------------------------
 function SIEventBus.SetNth( count , func , id )
 	if not func then
 		e( "事件总线[SIEventBus] : 不能设置空的事件方法" )
@@ -144,6 +181,12 @@ function SIEventBus.SetNth( count , func , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 通过 id 移除注册进 script.on_nth_tick 的函数
+-- ----------------------------------------
+-- count = 执行间隔 , 不能为空
+-- id = 函数的 id , 不能为空
+-- ----------------------------------------
 function SIEventBus.RemoveNth( count , id )
 	if not id then
 		e( "事件总线[SIEventBus] : 移除事件方法时必须使用明确的 id" )
@@ -175,6 +218,11 @@ function SIEventBus.RemoveNth( count , id )
 	return SIEventBus
 end
 
+-- ----------------------------------------
+-- 移除注册进 script.on_nth_tick 的函数
+-- ----------------------------------------
+-- count = 执行间隔 , 不能为空
+-- ----------------------------------------
 function SIEventBus.ClearNth( count )
 	local data = SIEventBus.nth[count]
 	if data then SIEventBus.nth[count] = nil end
