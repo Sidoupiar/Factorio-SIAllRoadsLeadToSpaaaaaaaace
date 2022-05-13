@@ -15,7 +15,8 @@ SIMods = require( "define/simods" )
 -- ---------- 定义数据 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local CoreName = "__SIAllRoadsLeadToSpaaaaaaace__"
+local CoreBaseName = "SIAllRoadsLeadToSpaaaaaaace"
+local CoreName = "__" .. CoreBaseName .. "__"
 local packageList =
 {
 	"0000_core" ,
@@ -289,12 +290,6 @@ function needList( basePath , ... )
 end
 
 -- ------------------------------------------------------------------------------------------------
--- ---------- 输出信息 ----------------------------------------------------------------------------
--- ------------------------------------------------------------------------------------------------
-
-
-
--- ------------------------------------------------------------------------------------------------
 -- ---------- 基础数据 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
@@ -343,9 +338,9 @@ function SIInit.AutoLoad( stateCode )
 			if not fileList or SITools.IsNotTable( fileList ) or #fileList < 1 then
 				fileList = {}
 				if index == 1 then table.insert( fileList , "1_data" )
-				else if index == 2 then table.insert( fileList , "2_data-updates" )
-				else if index == 3 then table.insert( fileList , "3_data-final-fixes" )
-				else if index == 4 then table.insert( fileList , "4_control" ) end
+				elseif index == 2 then table.insert( fileList , "2_data-updates" )
+				elseif index == 3 then table.insert( fileList , "3_data-final-fixes" )
+				elseif index == 4 then table.insert( fileList , "4_control" ) end
 			end
 			registerData[index] = fileList
 		end
@@ -354,7 +349,7 @@ function SIInit.AutoLoad( stateCode )
 	if SIInit.State == SIInit.StateDefine.Data then
 		need( "define.generator.sidatakeys" , true )
 		need( "define.generator.sigen" , true )
-	else if SIInit.State == SIInit.StateDefine.Control then
+	elseif SIInit.State == SIInit.StateDefine.Control then
 		need( "define.runtime.sievent_bus" , true )
 		need( "define.runtime.siglobal" , true )
 	end
@@ -402,8 +397,8 @@ function SIInit.AutoLoad( stateCode )
 							type = settingValue[1] .. "-setting" ,
 							setting_type = settingValue[2] ,
 							name = settingName ,
-							localised_name = settingValue[8] or nil ,
-							localised_description = settingValue[9] or nil ,
+							localised_name = settingValue[8] or { "SISetting-name."..settingName } ,
+							localised_description = settingValue[9] or { "SI-common.description" , constantsData.showName , { "SISetting-description."..settingName } } ,
 							default_value = settingValue[3] ,
 							allowed_values = settingValue[6] ,
 							allow_blank = settingValue[7] or false ,
@@ -570,11 +565,70 @@ function SIInit.AutoLoad( stateCode )
 			if table.Size( list ) > 0 then data:extend( list ) end
 		end
 	end
-	if SIInit.State == SIInit.StateDefine.Control and remote then
+	if SIInit.State == SIInit.StateDefine.Data then
+		for constantsName , list in pairs( SIAPI ) do
+			for name , func in pairs( list ) do SIPrint.Debug( "SIAPI."..constantsName.."."..name ) end
+		end
+	elseif SIInit.State == SIInit.StateDefine.Control and remote then
 		for constantsName , list in pairs( SIAPI ) do
 			local functionList = {}
-			for name , func in pairs( list ) do functionList[name] = func end
-			if table.Size( functionList ) > 0 then remote.add_interface( "SIAPI_"+constantsName , functionList ) end
+			for name , func in pairs( list ) do
+				functionList[name] = func
+				SIPrint.Debug( "remote -> SIAPI_"..constantsName.."."..name )
+			end
+			if table.Size( functionList ) > 0 then remote.add_interface( "SIAPI_"..constantsName , functionList ) end
 		end
 	end
 end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 输出信息 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+SIPrint =
+{
+	IsPatreonEnabled = function()
+		return settings.startup["SIALTS-showPatreon"].value
+	end ,
+	IsDebugEnabled = function()
+		return settings.startup["SIALTS-debug"].value
+	end ,
+	Log = function( message )
+		log( CoreBaseName.." : "..message )
+	end ,
+	Debug = function( message )
+		if isDebugEnabled() then
+			log( CoreBaseName.." : "..message )
+			if game then game.print( { "SI-common.debug" , message } , SIColors.printColor.blue ) end
+		end
+	end ,
+	Print = function( message )
+		if SIInit.State == SIInit.StateDefine.Control then
+			if game then game.print( { "SI-common.message" , message } , SIColors.printColor.green )
+			else SIPrint.Log( message ) end
+		else SIPrint.Log( message ) end
+	end ,
+	Message = function( playerOrIndex , customMessage )
+		if SIInit.State == SIInit.StateDefine.Control then
+			if not playerOrIndex then playerOrIndex = game
+			elseif SITools.IsNumber( playerOrIndex ) or not playerOrIndex.is_player then playerOrIndex = game.players[playerOrIndex] end
+			playerOrIndex.print( { "SI-common.message" , customMessage } , SIColors.printColor.green )
+		else SIPrint.Log( customMessage ) end
+	end ,
+	Warning = function( playerOrIndex , customMessage )
+		if SIInit.State == SIInit.StateDefine.Control then
+			if not playerOrIndex then playerOrIndex = game
+			elseif SITools.IsNumber( playerOrIndex ) or not playerOrIndex.is_player then playerOrIndex = game.players[playerOrIndex] end
+			playerOrIndex.print( { "SI-common.warning" , customMessage } , SIColors.printColor.orange )
+		else SIPrint.Log( customMessage ) end
+	end ,
+	Alert = function( playerOrIndex , customMessage )
+		if SIInit.State == SIInit.StateDefine.Control then
+			if not playerOrIndex then playerOrIndex = game
+			elseif SITools.IsNumber( playerOrIndex ) or not playerOrIndex.is_player then playerOrIndex = game.players[playerOrIndex] end
+			playerOrIndex.print( { "SI-common.alert" , customMessage } , SIColors.printColor.red )
+		else SIPrint.Log( customMessage ) end
+	end ,
+	Error = e ,
+	ErrorExpand = ee
+}

@@ -34,7 +34,7 @@ local function Init( type , name , customData , needOverwrite , callback )
 		type = type ,
 		name = realName ,
 		localised_name = { "SI-name."..realName } ,
-		localised_description = { "SI-base.description" , SIInit.CurrentConstants.showName , { "SI-description."..realName:RemoveLastAndAfter( "_" ) } } ,
+		localised_description = { "SI-common.description" , SIInit.CurrentConstants.showName , { "SI-description."..realName:RemoveLastAndAfter( "_" ) } } ,
 		icon = SIInit.CurrentConstants.GetPicturePath( name , type ) ,
 		group = GroupSettings.groupName ,
 		subgroup = GroupSettings.subGroupName ,
@@ -177,8 +177,8 @@ function SIGen.Group( groupName , subGroupName )
 		{
 			type = SITypes.group ,
 			name = name ,
-			localised_name = { "item-group-name."..name } ,
-			localised_description = { "item-group-description."..name }
+			localised_name = { "SIGroup-name."..name } ,
+			localised_description = { "SIGroup-description."..name }
 			icon = CORE.GetPicturePath( name , SITypes.group ) ,
 			icon_size = SINumbers.icon.sizeGroup ,
 			order = CORE.AutoOrder()
@@ -407,8 +407,8 @@ end
 function SIGen.ValueSet( key , value )
 	if Check() then return SIGen end
 	if key == "type" then return SIGen.SetType( value )
-	else if key == "name" then return SIGen.SetName( value )
-	else if key:find( "." ) then
+	elseif key == "name" then return SIGen.SetName( value )
+	elseif key:find( "." ) then
 		local curData = SIGen.Data
 		local keys = key:Split( "." )
 		local keyLength = #keys
@@ -443,7 +443,7 @@ function SIGen.ValueRemove( key )
 				if index == keyLength then
 					local number = tonumber( curKey )
 					if number then table.remove( curData , number )
-					else if curKey == "" then table.remove( curData )
+					elseif curKey == "" then table.remove( curData )
 					else curData[curKey] = nil end
 				else curData = curData[curKey] end
 			end
