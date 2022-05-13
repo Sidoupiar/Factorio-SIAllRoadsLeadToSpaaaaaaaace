@@ -6,7 +6,7 @@ data:extend
 		name = "SIALTS-showPatreon" ,
 		localised_name = { "SISetting-name.SIALTS-showPatreon" } ,
 		localised_description = { "SI-common.description" , "总体设置" , { "SISetting-description.SIALTS-showPatreon" } } ,
-		default_value = false ,
+		default_value = true ,
 		order = 1
 	} ,
 	{
