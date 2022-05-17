@@ -42,21 +42,23 @@ local constants =
 			{
 				-- 矿山石
 				stoneCore = "矿山石" ,
-				stoneCoreBubble = "多孔的矿山石" ,
-				stoneCoretough = "韧性矿山石" ,
+				stoneCoreTough = "韧性矿山石" ,
 				stoneCoreHard = "刚性矿山石" ,
-				stoneCoreBrittle = "脆性矿山石" ,
-				stoneCoreMagic = "魔性矿山石" ,
-				stoneCoreSplit = "碎裂的矿山石" ,
 				stoneCorePowder = "矿山石的粉末" ,
+				stoneCoreBubble = "多孔的矿山石" ,
+				stoneCoreBrittle = "脆性矿山石" ,
+				stoneCoreShake = "颤性矿山石" ,
+				stoneCoreSplit = "碎裂的矿山石" ,
+				stoneCoreMagic = "魔化矿山石" ,
+				stoneCorePolluted = "被污染的矿山石的粉末" ,
 				-- 矿石壳
 				shellWhole = "矿石壳" ,
-				shellSplit = "矿石壳屑" ,
 				shellHalf = "半矿石壳" ,
+				shellSplit = "矿石壳屑" ,
 				-- 矿石脉
 				veinWhole = "矿石脉" ,
-				veinSplit = "矿石脉屑" ,
 				veinHalf = "断裂的矿石脉"
+				veinSplit = "矿石脉屑" ,
 			}
 		}
 	}

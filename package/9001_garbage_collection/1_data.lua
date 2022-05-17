@@ -1,5 +1,5 @@
 -- ------------------------------------------------------------------------------------------------
--- --------- 默认值定义 ---------------------------------------------------------------------------
+-- --------- 定义默认值 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 local commonThrowAction =
@@ -86,12 +86,6 @@ local commonThrowData
 	}
 }
 
-local resultThrowAction = util.deepcopy( commonThrowAction )
-local blockThrowAction = util.deepcopy( commonThrowAction )
-local machineThrowAction = util.deepcopy( commonThrowAction )
-local ashThrowAction = util.deepcopy( commonThrowAction )
-local bookThrowAction = util.deepcopy( commonThrowAction )
-
 local resultThrowData = util.deepcopy( commonThrowData )
 local blockThrowData = util.deepcopy( commonThrowData )
 local machineThrowData = util.deepcopy( commonThrowData )
@@ -104,19 +98,19 @@ SIGen.Group( SIConstants_Core.group.other , "垃圾回收" )
 -- -------- 固有物品定义 --------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-.NewProjectile( "扔出去的燃烧灰烬" , resultThrowAction , true , function( projectile )
+.NewProjectile( "扔出去的燃烧灰烬" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	resultThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewProjectile( "扔出去的废料" , blockThrowAction , true , function( projectile )
+.NewProjectile( "扔出去的废料" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	blockThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 23.0 ) }
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewProjectile( "扔出去的垃圾焚烧炉" , machineThrowAction , true , function( projectile )
+.NewProjectile( "扔出去的垃圾焚烧炉" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	machineThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 42.0 ) }
 end )
@@ -415,7 +409,7 @@ end )
 -- -------- 灰烬系列定义 --------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-.NewProjectile( "扔出去的灰烬" , ashThrowAction , true , function( projectile )
+.NewProjectile( "扔出去的灰烬" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	ashThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
 end )
@@ -436,7 +430,7 @@ end )
 -- ------- 认证书系列定义 -------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-.NewProjectile( "扔出去的认证书" , bookThrowAction , true , function( projectile )
+.NewProjectile( "扔出去的认证书" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	bookThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 3.0 ) }
 end )

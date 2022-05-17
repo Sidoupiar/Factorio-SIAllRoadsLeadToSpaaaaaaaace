@@ -537,6 +537,33 @@ function SIGen.SetStackSize( stackSize )
 end
 
 -- ----------------------------------------
+-- 设置实体在地图上的颜色
+-- ----------------------------------------
+-- color = 地图颜色
+-- friendlyColor = 友方的地图颜色 , 默认地图颜色
+-- enemyColor = 敌方的地图颜色 , 默认地图颜色
+-- ----------------------------------------
+function SIGen.SetMapColor( color , friendlyColor , enemyColor )
+	if Check() then return SIGen end
+	SIGen.Data.map_color = color
+	SIGen.Data.friendly_map_color = friendlyColor or color
+	SIGen.Data.enemy_map_color = enemyColor or color
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 设置实体的自动放置规则
+-- ----------------------------------------
+-- settings = 自动放置设置
+-- ----------------------------------------
+-- settings 参数 :
+-- ----------------------------------------
+function SIGen.SetAutoPlace( settings )
+	if Check() then return SIGen end
+	return SIGen
+end
+
+-- ----------------------------------------
 -- 根据给定的大小创建选择区域和碰撞区域
 -- ----------------------------------------
 -- width = 区域宽度
@@ -682,6 +709,28 @@ function SIGen.SetStages( scale , shift , hasHr , addGlow )
 	return SIGen
 end
 
+function SIGen.AddFlag( flags )
+	if Check() then return SIGen end
+	if not SIGen.Data.flags then SIGen.Data.flags = flags
+	else
+		for index , flag in pairs( flags ) do
+			if not table.Has( SIGen.Data.flags , flag ) then table.insert( SIGen.Data.flags , flag ) end
+		end
+	end
+	return SIGen
+end
+
+function SIGen.AddCollisionMask( masks )
+	if Check() then return SIGen end
+	if not SIGen.Data.collision_mask then SIGen.Data.collision_mask = masks
+	else
+		for index , mask in pairs( masks ) do
+			if not table.Has( SIGen.Data.collision_mask , mask ) then table.insert( SIGen.Data.collision_mask , mask ) end
+		end
+	end
+	return SIGen
+end
+
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 自动填充 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
@@ -697,12 +746,13 @@ end
 -- ----------------------------------------
 function SIGen.AutoMiningTime( multiplier )
 	if Check() then return SIGen end
+	if not SIGen.Data.minable then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
 	multiplier = multiplier or 1
-	if SIGen.Data.max_health and SIGen.Data.minable then
-		local time = SIGen.Data.max_health * size.width * size.height / SINumber.healthToMiningTime / SINumber.sizeToMiningTime * multiplier
-		SIGen.Data.minable.mining_time = math.max( time , 0.1 )
-	end
+	local time = 1
+	if SIGen.Data.max_health then time = SIGen.Data.max_health * size.width * size.height / SINumber.healthToMiningTime / SINumber.sizeToMiningTime * multiplier
+	else time = size.width * size.height / SINumber.sizeToMiningTime * multiplier end
+	SIGen.Data.minable.mining_time = math.max( time , 0.1 )
 	return SIGen
 end
 
