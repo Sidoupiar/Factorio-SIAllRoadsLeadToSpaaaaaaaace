@@ -319,7 +319,7 @@ SIInit =
 	} ,
 	State = nil ,
 	PackageName = nil ,
-	OrderCode = 10000 ,
+	OrderCode = 1000000 ,
 	CurrentConstantsData = {} ,
 	ConstantsData = {} ,
 	CoreName = CoreName ,

@@ -28,7 +28,7 @@ local GroupSettings =
 	groupName = nil ,
 	subGroupName = nil
 }
-local GenIndex = 100000
+local GenIndex = 1000000
 local AutoFillData = {}
 local Raw = {}
 local CORE = nil
