@@ -4,7 +4,7 @@ local constants =
 	name = "经济贸易" ,
 	raw =
 	{
-		coin =
+		money =
 		{
 			type = SITypes.item.capsule ,
 			list =

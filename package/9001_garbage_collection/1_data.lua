@@ -98,7 +98,7 @@ local machineThrowData = util.deepcopy( commonThrowData )
 local ashThrowData = util.deepcopy( commonThrowData )
 local bookThrowData = util.deepcopy( commonThrowData )
 
-SIGen.Group( SIConstants_Core.group )
+SIGen.Group( SIConstants_Core.group.other , "垃圾回收" )
 
 -- ------------------------------------------------------------------------------------------------
 -- -------- 固有物品定义 --------------------------------------------------------------------------

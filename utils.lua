@@ -32,7 +32,7 @@ local packageList =
 	"0030_technology" ,
 	"0101_metal_smelting" ,
 	"0102_metal_forging" ,
-	"9997_garbage_collection" ,
+	"9001_garbage_collection" ,
 	"9998_detail_improvement" ,
 	"9999_debug"
 }
