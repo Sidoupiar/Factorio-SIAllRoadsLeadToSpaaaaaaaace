@@ -904,8 +904,19 @@ local AutoFillSource =
 			close_sound = SITools.Sounds( "__base__/sound/machine-close.ogg" , 0.5 ) -- 关闭的声音
 		}
 	} ,
+	healthEntity =
+	{
+		super = "entity" ,
+		defaultValues =
+		{
+			alert_when_damaged = true , -- 受伤时是否给玩家发出警报
+			hide_resistances = false , -- 是否隐藏实体的抗性属性
+			create_ghost_on_death = true -- 是否在被摧毁后在原地放置蓝图虚像
+		}
+	} ,
 	resource =
 	{
+		types = { SITypes.entity.resource } ,
 		super = "entity" ,
 		defaultValues =
 		{
@@ -921,16 +932,17 @@ local AutoFillSource =
 			walk_sound = SITools.SoundList_Base( "walking/resources/ore" , 10 , 0.7 ) -- 行走在上面的声音
 		}
 	} ,
-	healthEntity =
+	simpleEntity =
 	{
-		super = "entity" ,
+		types = { SITypes.entity.simpleEntity } ,
+		super = "healthEntity" ,
 		defaultValues =
 		{
-			alert_when_damaged = true , -- 受伤时是否给玩家发出警报
-			hide_resistances = false , -- 是否隐藏实体的抗性属性
-			create_ghost_on_death = true -- 是否在被摧毁后在原地放置蓝图虚像
+			alert_when_damaged = false , -- 受伤时是否给玩家发出警报
+			hide_resistances = true , -- 是否隐藏实体的抗性属性
+			create_ghost_on_death = false -- 是否在被摧毁后在原地放置蓝图虚像
 		}
-	}
+	} ,
 	machine =
 	{
 		types = { SITypes.entity.machine , SITypes.entity.furnace } ,

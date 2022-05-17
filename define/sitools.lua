@@ -66,6 +66,14 @@ local SITools =
 			damage = { type = damageType , amount = amount }
 		}
 	end ,
+	Resistance = function( damageType , decrease , percent )
+		return
+		{
+			type = damageType ,
+			decrease = decrease or 0 ,
+			percent = percent or 0
+		}
+	end ,
 
 	BoundBox = function( width , height )
 		height = height or width

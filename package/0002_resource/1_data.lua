@@ -14,7 +14,17 @@ local shineOreData =
 local stoneData =
 {
 	max_health = 510000 ,
-	
+	resistances =
+	{
+		SITools.Resistance( SIConstants_Core.damage.physical , 35 , 0.95 ) ,
+		SITools.Resistance( SIConstants_Core.damage.impact , 55 , 0.78 ) ,
+		SITools.Resistance( SIConstants_Core.damage.poison , 15 , 0.99 ) ,
+		SITools.Resistance( SIConstants_Core.damage.explosion , 5 , 0.1 ) ,
+		SITools.Resistance( SIConstants_Core.damage.fire , 200 , 0.99 ) ,
+		SITools.Resistance( SIConstants_Core.damage.laser , 5 , 0.15 ) ,
+		SITools.Resistance( SIConstants_Core.damage.acid , 12 , 0.88 ) ,
+		SITools.Resistance( SIConstants_Core.damage.electric , 25 , 0.64 )
+	}
 }
 local oreThrowAction =
 {
