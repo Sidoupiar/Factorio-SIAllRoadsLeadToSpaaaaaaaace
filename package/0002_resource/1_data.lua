@@ -13,7 +13,7 @@ local shineOreData =
 }
 local stoneData =
 {
-	max_health = 510000 ,
+	max_health = 511000 ,
 	resistances =
 	{
 		SITools.Resistance( SIConstants_Core.damage.physical , 35 , 0.95 ) ,
