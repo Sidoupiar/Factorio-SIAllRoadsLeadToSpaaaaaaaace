@@ -30,6 +30,7 @@ local packageList =
 	"0008_event" ,
 	"0020_tool_item" ,
 	"0030_technology" ,
+	"0100_ore_processing" ,
 	"0101_metal_smelting" ,
 	"0102_metal_forging" ,
 	"9001_garbage_collection" ,

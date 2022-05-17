@@ -7,28 +7,25 @@ local SIFlags =
 	} ,
 	entityFlags =
 	{
-		zk = "zkable" ,
-		zw = "zwable" ,
-		
-		hidden               = "hidden" ,
+		hidden               = "hidden" , -- 隐藏
 		noGapFill            = "no-gap-fill-while-building" ,
-		notOnMap             = "not-on-map" ,
-		notFlammable         = "not-flammable" ,
-		notRotatable         = "not-rotatable" ,
-		notRepairable        = "not-repairable" ,
-		notBlueprintable     = "not-blueprintable" ,
-		notDeconstructable   = "not-deconstructable" ,
-		placeableEnemy       = "placeable-enemy" ,
-		placeablePlayer      = "placeable-player" ,
-		placeableNeutral     = "placeable-neutral" ,
-		placeableOffGrid     = "placeable-off-grid" ,
-		hideAltInfo          = "hide-alt-info" ,
-		hideFromBonus        = "hide-from-bonus-gui" ,
+		notOnMap             = "not-on-map" , -- 不在地图上显示
+		notFlammable         = "not-flammable" , -- 不可燃烧
+		notRotatable         = "not-rotatable" , -- 不可旋转
+		notRepairable        = "not-repairable" , -- 不可维修
+		notBlueprintable     = "not-blueprintable" , -- 不能使用蓝图圈选
+		notDeconstructable   = "not-deconstructable" , -- 不能使用红图圈选
+		placeableEnemy       = "placeable-enemy" , -- 自动放置-[敌对]阵营
+		placeablePlayer      = "placeable-player" , -- 自动放置-[玩家]阵营
+		placeableNeutral     = "placeable-neutral" , -- 自动放置-[自然]阵营
+		placeableOffGrid     = "placeable-off-grid" , -- 放置时不需要对齐地图网格
+		hideAltInfo          = "hide-alt-info" , -- 隐藏详细信息
+		hideFromBonus        = "hide-from-bonus-gui" , -- 从加成统计面板中隐藏
 		fastReplaceableBuild = "fast-replaceable-no-build-while-moving" ,
 		fastReplaceableCross = "fast-replaceable-no-cross-type-while-moving" ,
-		building8Way         = "building-direction-8-way" ,
-		breathsAir           = "breaths-air" ,
-		playerCreation       = "player-creation" ,
+		building8Way         = "building-direction-8-way" , -- 是否可以旋转 8 次 , 就像铁路那样
+		breathsAir           = "breaths-air" , -- 是否呼吸空气
+		playerCreation       = "player-creation" , -- 是否由玩家创建
 		filterDirections     = "filter-directions"
 	} ,
 	directions =

@@ -790,8 +790,8 @@ local AutoFillSource =
 	{
 		defaultValues =
 		{
-			icon_size = SINumbers.icon.sizeNormal ,
-			icon_mipmaps = SINumbers.icon.mipMaps
+			icon_size = SINumbers.icon.sizeNormal , -- 图标大小
+			icon_mipmaps = SINumbers.icon.mipMaps -- 图标层级
 		} ,
 		callback = function( data )
 			data.icons = { SITools.Icon( SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-icon" , data.type ) ) }
@@ -803,8 +803,8 @@ local AutoFillSource =
 		super = "item" ,
 		defaultValues =
 		{
-			stack_size = 100 ,
-			stackable = true
+			stack_size = SINumber.stackSize.materialNormal , -- 堆叠数量
+			stackable = true -- 是否允许堆叠
 		}
 	} ,
 	item3 =
@@ -813,8 +813,8 @@ local AutoFillSource =
 		super = "item" ,
 		defaultValues =
 		{
-			stack_size = 1 ,
-			stackable = false
+			stack_size = SINumber.stackSize.cannotStack , -- 堆叠数量
+			stackable = false -- 是否允许堆叠
 		}
 	} ,
 	recipe =
@@ -845,13 +845,30 @@ local AutoFillSource =
 		super = "item" ,
 		defaultValues =
 		{
-			allow_copy_paste = true ,
-			selectable_in_game = true ,
-			selection_priority = 50 ,
-			remove_decoratives = "automatic" ,
-			vehicle_impact_sound = SITools.SoundList_Base( "car-metal-impact" , 5 , 0.5 , 2 ) ,
-			open_sound = SITools.Sounds( "__base__/sound/machine-open.ogg" , 0.5 ) ,
-			close_sound = SITools.Sounds( "__base__/sound/machine-close.ogg" , 0.5 )
+			allow_copy_paste = true , -- 是否允许复制粘贴
+			selectable_in_game = true , -- 是否可以被玩家选择
+			selection_priority = 50 , -- 选择的权重
+			remove_decoratives = "automatic" , -- 是否在建设时移除地面装饰
+			vehicle_impact_sound = SITools.SoundList_Base( "car-metal-impact" , 5 , 0.5 , 2 ) , -- 撞击声音
+			open_sound = SITools.Sounds( "__base__/sound/machine-open.ogg" , 0.5 ) , -- 打开的声音
+			close_sound = SITools.Sounds( "__base__/sound/machine-close.ogg" , 0.5 ) -- 关闭的声音
+		}
+	} ,
+	resource =
+	{
+		super = "entity" ,
+		defaultValues =
+		{
+			flags = -- 实体标识
+			{
+				SIFlags.entityFlags.placeableNeutral ,
+				SIFlags.entityFlags.notOnMap ,
+				SIFlags.entityFlags.hidden
+			} ,
+			tree_removal_probability = 0.1 , -- 移除树木的概率
+			tree_removal_max_distance = 256 , -- 移除树木的范围
+			stage_counts = { 3906250 , 781250 , 156250 , 31250 , 6250 , 1250 , 250 , 50 } , -- 图片阶段对应的数量
+			walk_sound = SITools.SoundList_Base( "walking/resources/ore" , 10 , 0.7 ) -- 行走在上面的声音
 		}
 	} ,
 	healthEntity =
@@ -859,9 +876,9 @@ local AutoFillSource =
 		super = "entity" ,
 		defaultValues =
 		{
-			alert_when_damaged = true ,
-			hide_resistances = true ,
-			create_ghost_on_death = true
+			alert_when_damaged = true , -- 受伤时是否给玩家发出警报
+			hide_resistances = false , -- 是否隐藏实体的抗性属性
+			create_ghost_on_death = true -- 是否在被摧毁后在原地放置蓝图虚像
 		}
 	}
 	machine =
@@ -870,11 +887,11 @@ local AutoFillSource =
 		super = "healthEntity" ,
 		defaultValues =
 		{
-			crafting_speed = 1.0 ,
-			scale_entity_info_icon = false ,
-			show_recipe_icon = true ,
-			return_ingredients_on_change = true ,
-			always_draw_idle_animation = false
+			crafting_speed = 1.0 , -- 组装速度
+			scale_entity_info_icon = false , -- 是否缩放详情模式下的图标
+			show_recipe_icon = true , -- 是否显示配方图标
+			return_ingredients_on_change = false , -- 在修改配方时是否返还正在制作的配方的原料
+			always_draw_idle_animation = false -- 是否总是运行动画 , 即使机器已经停工
 		}
 	}
 }

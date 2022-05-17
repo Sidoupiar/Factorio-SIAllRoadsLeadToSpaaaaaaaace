@@ -22,6 +22,7 @@ local SINumbers =
 		container         = 16 ,    -- 这里指成箱的物资 , 打包的
 		machine           = 16 ,    -- 生产设备 , 建筑物
 		plant             = 32 ,    -- 植物 , 可以摆出来的那种
+		cannotStack       = 1 ,     -- 禁止堆叠的物资
 
 		turret            = 6 ,     -- 炮塔 , 攻击设备
 		weapon            = 3 ,     -- 武器
