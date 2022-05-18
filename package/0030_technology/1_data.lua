@@ -1,5 +1,5 @@
 -- ------------------------------------------------------------------------------------------------
--- --------- 定义默认值 ---------------------------------------------------------------------------
+-- --------- 创建默认值 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 local sciencePackData =
@@ -96,9 +96,8 @@ local sciencePackThrowData
 -- ------------------------------------------------------------------------------------------------
 
 SIGen.Group( SIConstants_Core.group.misc , "科研" )
-for name , itemName in pairs( SIConstants_Technology.item ) do
-	SIGen
-	.NewTool( itemName , sciencePackData , true ).SetStackSize( SINumber.stackSize.sciencePack )
+.ListIndicator( SIConstants_Technology.item , function( name , itemName , index )
+	SIGen.NewTool( itemName , sciencePackData , true ).SetStackSize( SINumber.stackSize.sciencePack )
 	.NewProjectile( "投掷物-"..itemName , util.deepcopy( sciencePackThrowAction ) , true , function( projectile )
 		sciencePackThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 		projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 4.5 ) }
@@ -111,4 +110,4 @@ for name , itemName in pairs( SIConstants_Technology.item ) do
 		recipe.results = { SITools.ProductItem( SIGen.LastDataName ) }
 		recipe.main_product = SIGen.LastDataName
 	end )
-end
+end )

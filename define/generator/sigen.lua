@@ -133,8 +133,9 @@ end
 -- callback = 回调函数 , 每找到一个原型就会调用一次
 -- ----------------------------------------
 -- callback 参数 :
--- [1] = 当前是第几个原型 , 从 1 开始
+-- [1] = 当前的原型类型
 -- [2] = 找到的原型本体
+-- [3] = 当前是第几个原型 , 从 1 开始
 -- ----------------------------------------
 function SIGen.TypeIndicator( typeOrList , callback )
 	if not callback then return SIGen end
@@ -145,7 +146,7 @@ function SIGen.TypeIndicator( typeOrList , callback )
 				for name , prototype in pairs( list ) do
 					if prototype then
 						index = index + 1
-						callback( index , prototype )
+						callback( typeName , prototype , index )
 					end
 				end
 			end

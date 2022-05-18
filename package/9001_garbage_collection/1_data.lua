@@ -1,5 +1,5 @@
 -- ------------------------------------------------------------------------------------------------
--- --------- 定义默认值 ---------------------------------------------------------------------------
+-- --------- 创建默认值 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 local commonThrowAction =
@@ -92,12 +92,11 @@ local machineThrowData = util.deepcopy( commonThrowData )
 local ashThrowData = util.deepcopy( commonThrowData )
 local bookThrowData = util.deepcopy( commonThrowData )
 
-SIGen.Group( SIConstants_Core.group.other , "垃圾回收" )
-
 -- ------------------------------------------------------------------------------------------------
 -- -------- 固有物品定义 --------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+SIGen.Group( SIConstants_Core.group.other , "垃圾回收" )
 .NewProjectile( "扔出去的燃烧灰烬" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	resultThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
@@ -409,6 +408,7 @@ end )
 -- -------- 灰烬系列定义 --------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+.Group( SIConstants_Core.group.other , "垃圾回收-灰烬" )
 .NewProjectile( "扔出去的灰烬" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	ashThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
@@ -430,6 +430,7 @@ end )
 -- ------- 认证书系列定义 -------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
+.Group( SIConstants_Core.group.other , "垃圾回收-认证书" )
 .NewProjectile( "扔出去的认证书" , util.deepcopy( commonThrowAction ) , true , function( projectile )
 	bookThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 3.0 ) }

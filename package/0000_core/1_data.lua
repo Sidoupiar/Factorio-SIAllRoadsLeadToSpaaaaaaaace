@@ -1,5 +1,5 @@
 -- ------------------------------------------------------------------------------------------------
--- ---------- 原型定义 ----------------------------------------------------------------------------
+-- --------- 创建默认值 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 for name , groupName in pairs( SIConstants_Core.group ) do SIGen.Group( groupName , "基础" ) end
@@ -49,7 +49,20 @@ local throwData
 		}
 	}
 }
-SIGen.Group( SIConstants_Core.group.mics , "徽章" )
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 创建分组 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+SIGen.ListIndicator( SIConstants_Core.group , function( name , groupName , index )
+	SIGen.Group( groupName , "基础" )
+end )
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 创建徽章 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+.Group( SIConstants_Core.group.mics , "徽章" )
 .NewProjectile( "扔出去的徽章" , nil , false , function( projectile )
 	throwData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.acceleration = 0
@@ -92,5 +105,6 @@ SIGen.Group( SIConstants_Core.group.mics , "徽章" )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-
-for name , itemName in pairs( SIConstants_Core.item ) do SIGen.NewCapsule( itemName , throwData , true ).SetStackSize( SINumbers.stackSize.badge ) end
+.ListIndicator( SIConstants_Core.item , function( name , itemName , index )
+	SIGen.NewCapsule( itemName , throwData , true ).SetStackSize( SINumbers.stackSize.badge )
+end )

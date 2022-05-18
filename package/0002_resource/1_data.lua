@@ -1029,8 +1029,7 @@ end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
 .NewCapsule( SIConstants_Resource.other.stoneCorePolluted , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.powder )
-
-for index , entityName in pairs{ "rock-big" , "rock-huge" , "sand-rock-big" } do
+.ListIndicator( { "rock-big" , "rock-huge" , "sand-rock-big" } , function( index , entityName , count )
 	local subStoneData = util.deepcopy( stoneData )
 	subStoneData.name = "矿山石-" .. index
 	SIGen.CopySimpleEntity( entityName , subStoneData , true , function( entity )
@@ -1064,13 +1063,13 @@ for index , entityName in pairs{ "rock-big" , "rock-huge" , "sand-rock-big" } do
 		SIFlags.collisionMasks.player ,
 		SIFlags.collisionMasks.notCollidingWithItself
 	}
-end
+end )
 
 -- ------------------------------------------------------------------------------------------------
 -- --------- 创建矿石壳 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-SIGen.Group( SICConstants_Core.group.material , "矿石壳" )
+.Group( SICConstants_Core.group.material , "矿石壳" )
 .NewProjectile( "扔出去的矿石壳" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name

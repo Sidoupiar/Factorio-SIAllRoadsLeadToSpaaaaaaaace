@@ -1,9 +1,15 @@
 -- ------------------------------------------------------------------------------------------------
+-- --------- 创建默认值 ---------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+local fuelCategory = SIConstants_Garbage.categoryList[SITypes.category.fuel].garbage
+
+-- ------------------------------------------------------------------------------------------------
 -- -- 给焚烧炉添加多种燃料类别 --------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 local fuelTypes = {}
-SIGen.TypeIndicator( SITypes.category.fuel , function( index , category )
+SIGen.TypeIndicator( SITypes.category.fuel , function( type , category , index )
 	if category and category.name then table.insert( fuelTypes , category.name ) end
 end )
 .LoadAssemblingMachine( "垃圾焚烧炉" , nil , false , function( entity )
@@ -14,8 +20,8 @@ end )
 -- ----- 给物品添加燃料属性 -----------------------------------------------------------------------
 -- ------- 和火箭发射产物 -------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
-local fuelCategory = SIConstants_Garbage.categoryList[SITypes.category.fuel].garbage
-SIGen.TypeIndicator( SITypes.item , function( index , item )
+
+.TypeIndicator( SITypes.item , function( type , item , index )
 	if not item.burnt_result then
 		local data = SIConstants_Garbage.settingsFuel[item.sourceName or item.name]
 		if not data or not data.pass then
