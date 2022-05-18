@@ -15,6 +15,14 @@ local constants =
 				innew = "因纽" ,
 				charp = "叉普"
 			}
+		} ,
+		check =
+		{
+			type = SITypes.item.capsule ,
+			list =
+			{
+				x1 = "1x兑换券"
+			}
 		}
 	}
 }
