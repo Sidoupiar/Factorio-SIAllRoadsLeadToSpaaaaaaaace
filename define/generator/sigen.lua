@@ -19,6 +19,7 @@
 
 SIGen =
 {
+	LastDataType = nil ,
 	LastDataName = nil ,
 	Data = nil
 }
@@ -318,6 +319,7 @@ function SIGen.Load( type , name , customData , needOverwrite , callback )
 	else
 		curData.SIGenSourceName = curData.name
 		curData.SIGenForm = false
+		SIGen.LastDataType = SIGen.Data.type
 		SIGen.LastDataName = SIGen.Data.name
 		SIGen.Data = curData
 		if callback then callback( curData ) end
@@ -681,7 +683,7 @@ function SIGen.SetGraphicSetting( graphicSetting )
 end
 
 -- ----------------------------------------
--- 根据参数创建动画帧图结构 , 无方向
+-- 根据参数给当前编辑的原型创建动画帧图结构 , 无方向
 -- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
 -- 这种模式下会附带一个影子属性 shadow
 -- ----------------------------------------
@@ -710,7 +712,7 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 	}
 	if hasHr then
 		local hr = util.deepcopy( SIGen.Data.animation )
-		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-hr" , SIGen.Data.type )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-高清" , SIGen.Data.type )
 		hr.width = hr.width * SINumbers.graphicHrSizeScale
 		hr.height = hr.height * SINumbers.graphicHrSizeScale
 		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
@@ -718,11 +720,11 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 		SIGen.Data.animation.hr_version = hr
 	end
 	local shadow = util.deepcopy( SIGen.Data.animation )
-	shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow" , SIGen.Data.type )
+	shadow.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-阴影" , SIGen.Data.type )
 	shadow.draw_as_glow = nil
 	shadow.draw_as_shadow = true
 	if hasHr then
-		shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-shadow-hr" , SIGen.Data.type )
+		shadow.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-阴影-高清" , SIGen.Data.type )
 		shadow.hr_version.draw_as_glow = nil
 		shadow.hr_version.draw_as_shadow = true
 	end
@@ -731,7 +733,7 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 end
 
 -- ----------------------------------------
--- 根据参数创建动画帧图结构 , 四个方向
+-- 根据参数给当前编辑的原型创建动画帧图结构 , 四个方向
 -- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
 -- 这种模式下没有影子属性
 -- ----------------------------------------
@@ -753,16 +755,16 @@ function SIGen.SetAnimation4Way( scale , shift , hasHr )
 	vertically.height = horizontally.width
 	SIGen.Data.animation
 	{
-		north = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.north , graphicSetting ) ,
-		east = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.east , graphicSetting ) ,
-		south = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directions.south , graphicSetting ) ,
-		west = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directions.west , graphicSetting )
+		north = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directionCodes.north , graphicSetting ) ,
+		east = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directionCodes.east , graphicSetting ) ,
+		south = CreateLayer4Way( horizontally , scale , shift , hasHr , SIFlags.directionCodes.south , graphicSetting ) ,
+		west = CreateLayer4Way( vertically , scale , shift , hasHr , SIFlags.directionCodes.west , graphicSetting )
 	}
 	return SIGen
 end
 
 -- ----------------------------------------
--- 根据参数创建动画阶段图结构 , 无方向
+-- 根据参数给当前编辑的原型创建动画阶段图结构 , 无方向
 -- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
 -- ----------------------------------------
 -- scale = 缩放比例 , 原图比例为 1.0
@@ -788,7 +790,7 @@ function SIGen.SetStages( scale , shift , hasHr , addGlow )
 	}
 	if hasHr then
 		local hr = util.deepcopy( SIGen.Data.stages )
-		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-hr" , SIGen.Data.type )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-高清" , SIGen.Data.type )
 		hr.width = hr.width * SINumbers.graphicHrSizeScale
 		hr.height = hr.height * SINumbers.graphicHrSizeScale
 		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
@@ -797,13 +799,28 @@ function SIGen.SetStages( scale , shift , hasHr , addGlow )
 	end
 	if addGlow then
 		local effect = util.deepcopy( SIGen.Data.stages )
-		effect.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-glow" , SIGen.Data.type )
+		effect.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-光效" , SIGen.Data.type )
 		effect.blend_mode = SIFlags.blendModes.additive
 		if hasHr then
-			effect.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-glow-hr" , SIGen.Data.type )
+			effect.hr_version.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-光效-高清" , SIGen.Data.type )
 			effect.hr_version.blend_mode = SIFlags.blendModes.additive
 		end
 		SIGen.Data.stages_effect = effect
+	end
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 给当前编辑的原型添加 recipe 类型的 effect
+-- 通常科技类型才会使用这个函数
+-- ----------------------------------------
+-- recipeList = 配方名称列表
+-- ----------------------------------------
+function SIGen.AddEffect_Recipes( recipeList )
+	if Check() then return SIGen end
+	if not SIGen.Data.effects then SIGen.Data.effects = {} end
+	for index , recipeName in pairs( recipeList ) do
+		table.insert( SIGen.Data.effects , { type = SITypes.modifier.unlockRecipe , recipe = recipeName } )
 	end
 	return SIGen
 end
@@ -829,6 +846,35 @@ function SIGen.AutoMiningTime( multiplier )
 	if SIGen.Data.max_health then time = SIGen.Data.max_health * size.width * size.height / SINumber.healthToMiningTime / SINumber.sizeToMiningTime * multiplier
 	else time = size.width * size.height / SINumber.sizeToMiningTime * multiplier end
 	SIGen.Data.minable.mining_time = math.max( time , 0.1 )
+	return SIGen
+end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 交叉引用 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+-- ----------------------------------------
+-- 把当前编辑的原型作为开采产物添加进目标原型中
+-- 不会切换当前编辑的原型
+-- ----------------------------------------
+-- targetName = 目标原型的名称
+-- amountOrProbability = 产出数量或产出的概率
+-- minAmount = 产出最小值
+-- maxAmount = 产出最大值
+-- catalystAmount = 产物中作为催化剂的数量
+-- ----------------------------------------
+function SIGen.AddTo_MiningResult( targetName , amountOrProbability , minAmount , maxAmount , catalystAmount )
+	if Check() then return SIGen end
+	SIGen.FindData( SIGen.LastDataType , targetName , function( targetData )
+		if not targetData.minable then targetData.minable = {} end
+		if not targetData.minable.results then targetData.minable.results = {} end
+		if targetData.minable.result then
+			table.insert( targetData.minable.results , SITools.ProductItem( targetData.minable.result , targetData.minable.count ) )
+		end
+		targetData.minable.result = nil
+		targetData.minable.count = nil
+		table.insert( targetData.minable.results , SITools.ProductItem( SIGen.Data.name , amountOrProbability , minAmount , maxAmount , catalystAmount ) )
+	end )
 	return SIGen
 end
 
@@ -919,7 +965,7 @@ local function CreateLayer4Way( size , scale , shift , hasHr , directionName , g
 	}
 	if hasHr then
 		local hr = util.deepcopy( layer )
-		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction.."-hr" , SIGen.Data.type )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction.."-高清" , SIGen.Data.type )
 		hr.width = hr.width * SINumbers.graphicHrSizeScale
 		hr.height = hr.height * SINumbers.graphicHrSizeScale
 		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
@@ -943,7 +989,7 @@ local AutoFillSource =
 			icon_mipmaps = SINumbers.icon.mipMaps -- 图标层级
 		} ,
 		callback = function( data )
-			data.icons = { SITools.Icon( SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-icon" , data.type ) ) }
+			data.icons = { SITools.Icon( SIInit.CurrentConstants.GetPicturePath( data.SIGenSourceName.."-图标" , data.type ) ) }
 		end
 	} ,
 	item2 =

@@ -39,7 +39,6 @@ local commonThrowAction =
 		}
 	}
 }
-
 local commonThrowData
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,

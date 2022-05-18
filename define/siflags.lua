@@ -35,6 +35,13 @@ local SIFlags =
 		south = "south" ,
 		west  = "west"
 	} ,
+	directionCodes =
+	{
+		north = "朝北" ,
+		east  = "朝东" ,
+		south = "朝南" ,
+		west  = "朝西"
+	} ,
 	collisionMasks =
 	{
 		ground        = "ground-tile" ,
