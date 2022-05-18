@@ -1,5 +1,5 @@
 -- ------------------------------------------------------------------------------------------------
--- --------- 定义默认值 ---------------------------------------------------------------------------
+-- --------- 创建默认值 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 local moneyThrowAction =
@@ -90,13 +90,12 @@ local moneyThrowData
 -- ------------------------------------------------------------------------------------------------
 
 SIGen.Group( SIConstants_Core.group.misc , "货币" )
-for name , itemName in pairs( SIConstants_Trade.money ) do
-	SIGen
-	.NewProjectile( "投掷物-"..itemName , util.deepcopy( moneyThrowAction ) , true , function( projectile )
+.ListIndicator( SIConstants_Trade.money , function( name , itemName , index )
+	SIGen.NewProjectile( "投掷物-"..itemName , util.deepcopy( moneyThrowAction ) , true , function( projectile )
 		moneyThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 		projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 1.0 ) }
 	end )
 	.SetSize( 1 )
 	.SetAnimation( 0.5 )
 	.NewCapsule( itemName , util.deepcopy( moneyThrowData ) , true ).SetStackSize( SINumber.stackSize.physicalMoney )
-end
+end )

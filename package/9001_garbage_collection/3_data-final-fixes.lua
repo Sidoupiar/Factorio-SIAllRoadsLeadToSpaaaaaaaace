@@ -12,7 +12,7 @@ local fuelTypes = {}
 SIGen.TypeIndicator( SITypes.category.fuel , function( type , category , index )
 	if category and category.name then table.insert( fuelTypes , category.name ) end
 end )
-.LoadAssemblingMachine( "垃圾焚烧炉" , nil , false , function( entity )
+.LoadMachine( "垃圾焚烧炉" , nil , false , function( entity )
 	entity.energy_source.fuel_categories = fuelTypes
 end )
 

@@ -63,7 +63,7 @@ end )
 -- ------------------------------------------------------------------------------------------------
 
 .Group( SIConstants_Core.group.mics , "徽章" )
-.NewProjectile( "扔出去的徽章" , nil , false , function( projectile )
+.NewProjectile( "扔出去的徽章" , function( projectile )
 	throwData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.acceleration = 0
 	projectile.action =

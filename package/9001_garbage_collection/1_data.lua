@@ -117,7 +117,7 @@ end )
 .SetAnimation( 0.5 )
 .NewCapsule( SIConstants_Garbage.item.fuelResult , resultThrowData , true ).SetStackSize( SINumbers.stackSize.powder )
 .NewCapsule( SIConstants_Garbage.item.brokenMachine , blockThrowData , true ).SetStackSize( SINumbers.stackSize.misc )
-.NewRecipe( "垃圾焚烧" , nil , false , function( recipe )
+.NewRecipe( "垃圾焚烧" , function( recipe )
 	recipe.enabled = true
 	recipe.hidden = true
 	recipe.hide_from_player_crafting = true
@@ -148,7 +148,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.ash.ashFilter
 end )
-.NewAssemblingMachine( "垃圾焚烧炉" , nil ,false , function( entity )
+.NewMachine( "垃圾焚烧炉" , function( entity )
 	entity.minable =
 	{
 		results =
@@ -192,7 +192,7 @@ end )
 	item.place_result = SIGen.LastDataName
 end )
 .SetStackSize( SINumbers.stackSize.machine )
-.NewRecipe( "组装垃圾焚烧炉_1" , nil , false , function( recipe )
+.NewRecipe( "组装垃圾焚烧炉_1" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -202,7 +202,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
-.NewRecipe( "组装垃圾焚烧炉_2" , nil , false , function( recipe )
+.NewRecipe( "组装垃圾焚烧炉_2" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -212,7 +212,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
-.NewRecipe( "组装垃圾焚烧炉_3" , nil , false , function( recipe )
+.NewRecipe( "组装垃圾焚烧炉_3" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -222,7 +222,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.burntMachine
 end )
-.NewAssemblingMachine( "吹灰机" , nil ,false , function( entity )
+.NewMachine( "吹灰机" , function( entity )
 	entity.minable =
 	{
 		results =
@@ -252,7 +252,7 @@ end )
 	item.place_result = SIGen.LastDataName
 end )
 .SetStackSize( SINumbers.stackSize.machine )
-.NewRecipe( "组装吹灰机_1" , nil , false , function( recipe )
+.NewRecipe( "组装吹灰机_1" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -262,7 +262,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashBlower
 end )
-.NewRecipe( "组装吹灰机_2" , nil , false , function( recipe )
+.NewRecipe( "组装吹灰机_2" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -272,7 +272,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashBlower
 end )
-.NewRecipe( "组装吹灰机_3" , nil , false , function( recipe )
+.NewRecipe( "组装吹灰机_3" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -282,7 +282,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashBlower
 end )
-.NewAssemblingMachine( "调灰机" , nil ,false , function( entity )
+.NewMachine( "调灰机" , function( entity )
 	entity.minable =
 	{
 		results =
@@ -312,7 +312,7 @@ end )
 	item.place_result = SIGen.LastDataName
 end )
 .SetStackSize( SINumbers.stackSize.machine )
-.NewRecipe( "组装调灰机_1" , nil , false , function( recipe )
+.NewRecipe( "组装调灰机_1" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -322,7 +322,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashMixer
 end )
-.NewRecipe( "组装调灰机_2" , nil , false , function( recipe )
+.NewRecipe( "组装调灰机_2" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -332,7 +332,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashMixer
 end )
-.NewRecipe( "组装调灰机_3" , nil , false , function( recipe )
+.NewRecipe( "组装调灰机_3" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -342,7 +342,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashMixer
 end )
-.NewAssemblingMachine( "喷灰机" , nil ,false , function( entity )
+.NewMachine( "喷灰机" , function( entity )
 	entity.minable =
 	{
 		mining_time = 1.9 ,
@@ -373,7 +373,7 @@ end )
 	item.place_result = SIGen.LastDataName
 end )
 .SetStackSize( SINumbers.stackSize.machine )
-.NewRecipe( "组装喷灰机_1" , nil , false , function( recipe )
+.NewRecipe( "组装喷灰机_1" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -383,7 +383,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashShower
 end )
-.NewRecipe( "组装喷灰机_2" , nil , false , function( recipe )
+.NewRecipe( "组装喷灰机_2" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =
@@ -393,7 +393,7 @@ end )
 	}
 	recipe.main_product = SIConstants_Garbage.item.ashShower
 end )
-.NewRecipe( "组装喷灰机_3" , nil , false , function( recipe )
+.NewRecipe( "组装喷灰机_3" , function( recipe )
 	recipe.ingredients =
 	{}
 	recipe.results =

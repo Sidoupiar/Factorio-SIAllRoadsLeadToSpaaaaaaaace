@@ -44,6 +44,12 @@ local SITools =
 	IsNotNumber = function( data )
 		return type( data ) ~= "number"
 	end ,
+	IsFunction = function( data )
+		return type( data ) == "function"
+	end ,
+	IsNotFunction = function( data )
+		return type( data ) ~= "function"
+	end ,
 
 	Icon = function( iconPath , tint , scale , shift , mipmaps , size )
 		local icon = {}

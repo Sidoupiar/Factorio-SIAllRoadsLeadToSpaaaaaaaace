@@ -255,6 +255,8 @@ end
 -- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
 -- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
 -- ----------------------------------------
+-- 当 callback 为 nil 时 , 可以把 customData 传递为函数来代替 callback
+-- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
 -- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
@@ -263,6 +265,10 @@ function SIGen.New( type , name , customData , needOverwrite , callback )
 	if not type or not name then
 		e( "创建原型时 type 和 name 均不能为空 , 当前 type 为["..type.."] , name 为["..name.."]" )
 		return SIGen
+	end
+	if SITools.isFunction( customData ) then
+		if not callback then callback = customData end
+		customData = nil
 	end
 	return Init( type , name , customData , needOverwrite , callback )
 end
@@ -279,6 +285,8 @@ end
 -- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
 -- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
 -- ----------------------------------------
+-- 当 callback 为 nil 时 , 可以把 customData 传递为函数来代替 callback
+-- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
 -- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
@@ -289,9 +297,16 @@ function SIGen.Load( type , name , customData , needOverwrite , callback )
 		return SIGen
 	end
 	local curData = SIGen.FindData( type , name )
-	if not curData then e( "找不到 type 为["..type.."] , name 为["..name.."]的原型" ) end
+	if not curData then
+		e( "找不到 type 为["..type.."] , name 为["..name.."]的原型" )
+		return SIGen
+	end
+	if SITools.isFunction( customData ) then
+		if not callback then callback = customData end
+		customData = nil
+	end
 	SITools.CopyData( curData , customData , needOverwrite )
-	if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
+	if customData and ( customData.type and type ~= customData.type or customData.name and name ~= customData.name ) then
 		if curData.SIGenForm then Raw[type][name] = nil
 		else data.raw[type][name] = nil end
 		if customData.name then
@@ -323,6 +338,8 @@ end
 -- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
 -- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
 -- ----------------------------------------
+-- 当 callback 为 nil 时 , 可以把 customData 传递为函数来代替 callback
+-- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
 -- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
@@ -333,21 +350,25 @@ function SIGen.Copy( type , name , customData , needOverwrite , callback )
 		return SIGen
 	end
 	local curData = SIGen.FindData( type , name )
+	if SITools.isFunction( customData ) then
+		if not callback then callback = customData end
+		customData = nil
+	end
 	if curData then
-		if customData.name then
+		if customData and customData.name then
 			curData.SIGenSourceName = customData.name
 			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
 		else curData.SIGenSourceName = curData.name end
 		curData.SIGenForm = true
-		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData ) , needOverwrite ) , callback )
-	else return Init( type , name , util.deepcopy( customData ) , needOverwrite , callback ) end
+		return Append( SITools.CopyData( util.deepcopy( curData ) , util.deepcopy( customData or {} ) , needOverwrite ) , callback )
+	else return Init( type , name , util.deepcopy( customData or {} ) , needOverwrite , callback ) end
 end
 
 -- ----------------------------------------
 -- 按类别创建/加载/复制原型
 -- 这个原型会被设置为当前编辑的原型
--- 命名规则为 SITypes 的原型类型对应的键首字母大写+New/Load/Copy 前缀
--- 比如创建一个物品 , 物品原型类型在 SITypes 中的键为 item , 则函数为 NewItem
+-- 命名规则为 New/Load/Copy 前缀 + SITypes 的原型类型对应的键首字母大写
+-- 比如创建一个物品 , 物品原型类型在 SITypes 中的键 item , 则函数为 NewItem
 -- 创建的原型无法在 data.raw 中找到 , 需要通 SIGen.FindData 函数才能找到
 -- CopyXXXX 中若无法找到原始原型 , 则适用 SIGen.NewXXXX 的逻辑
 -- ----------------------------------------
@@ -356,12 +377,14 @@ end
 -- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
 -- callback = 回调函数 , 创建完毕时会调用 , 用处基本为语法糖
 -- ----------------------------------------
+-- 当 callback 为 nil 时 , 可以把 customData 传递为函数来代替 callback
+-- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
 -- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
 -- ----------------------------------------
-for index , typeName in pairs( SITypes.all ) do
-	local functionName = typeName:ToFunctionName()
+for key , typeName in pairs( SITypes.all ) do
+	local functionName = key:ToFunctionName()
 	SIGen["New"..functionName] = function( name , customData , needOverwrite , callback )
 		return SIGen.New( typeName , name , customData , needOverwrite , callback )
 	end
@@ -384,7 +407,7 @@ end
 -- needOverride = 控制自定义数据表中的数据是否覆盖原型中已存在的值 , 包括默认值
 -- ----------------------------------------
 function SIGen.SetCustomData( customData , needOverwrite )
-	if Check() then return SIGen end
+	if Check() or not customData then return SIGen end
 	local type = SIGen.Data.type
 	local name = SIGen.Data.name
 	if customData.name then customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or type ) end
@@ -774,8 +797,7 @@ end
 -- multiplier = 挖掘时间倍率 , 默认 1
 -- ----------------------------------------
 function SIGen.AutoMiningTime( multiplier )
-	if Check() then return SIGen end
-	if not SIGen.Data.minable then return SIGen end
+	if Check() or not SIGen.Data.minable then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
 	multiplier = multiplier or 1
 	local time = 1

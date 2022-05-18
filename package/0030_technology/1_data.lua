@@ -105,7 +105,7 @@ SIGen.Group( SIConstants_Core.group.misc , "科研" )
 	.SetSize( 1 )
 	.SetAnimation( 0.5 )
 	.NewCapsule( "投掷-"..itemName , util.deepcopy( sciencePackThrowData ) , true ).SetStackSize( SINumber.stackSize.sciencePack )
-	.NewRecipe( "捆绑-"..itemName , nil , false , function( recipe )
+	.NewRecipe( "捆绑-"..itemName , function( recipe )
 		recipe.ingredients = { SITools.IngredientItem( itemName , 2 ) }
 		recipe.results = { SITools.ProductItem( SIGen.LastDataName ) }
 		recipe.main_product = SIGen.LastDataName
