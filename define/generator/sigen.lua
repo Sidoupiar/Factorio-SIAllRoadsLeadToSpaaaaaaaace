@@ -68,7 +68,7 @@ local function Init( type , name , customData , needOverwrite , callback )
 end
 
 local function Append( curData , callback )
-	SIGen.LastDataName = SIGen.Data.name
+	SIGen.LastDataName = SIGen.Data and SIGen.Data.name or nil
 	SIGen.Data = curData
 	local list = Raw[curData.type]
 	if not list then
@@ -78,9 +78,7 @@ local function Append( curData , callback )
 	list[curData.SIGenSourceName] = curData
 	if callback then
 		local package = callback( curData )
-		if SITools.IsTable( package ) then
-			for k , v in pairs( package ) do curData[k] = v end
-		end
+		SITools.CopyData( curData , package , true )
 	end
 	return SIGen
 end
@@ -135,22 +133,48 @@ end
 -- callback = 回调函数 , 每找到一个原型就会调用一次
 -- ----------------------------------------
 -- callback 参数 :
--- [1] = 当前是第几个原型
+-- [1] = 当前是第几个原型 , 从 1 开始
 -- [2] = 找到的原型本体
 -- ----------------------------------------
 function SIGen.TypeIndicator( typeOrList , callback )
 	if not callback then return SIGen end
-	local prototypeList = {}
+	local index = 0
 	for _ , typeName in pairs( SITools.IsTable( typeOrList ) and typeOrList or { typeOrList } ) do
 		for _ , list in pairs{ data.raw[typeName] , Raw[typeName] } do
 			if list then
 				for name , prototype in pairs( list ) do
-					if prototype then table.insert( prototypeList , prototype ) end
+					if prototype then
+						index = index + 1
+						callback( index , prototype )
+					end
 				end
 			end
 		end
 	end
-	for index , prototype in pairs( prototypeList ) do callback( index , prototype ) end
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 遍历一个表 , 并取得每一个对应的键和值
+-- 使用 callback 来处理这些数据
+-- 每个数据会调用一次 callback
+-- 和原型无关 , 这只是一个语法糖 , 为了使代码更整齐
+-- ----------------------------------------
+-- anyList = 数据列表 , 数组表或字典表都可以
+-- callback = 回调函数 , 每个数据会调用一次
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 键
+-- [2] = 值
+-- [3] = 当前是第几个数据 , 从 1 开始
+-- ----------------------------------------
+function SIGen.ListIndicator( anyList , callback )
+	if not callback then return SIGen end
+	local index = 0
+	for key , value in pairs( anyList ) do
+		index = index + 1
+		callback( key , value , index )
+	end
 	return SIGen
 end
 
@@ -232,6 +256,7 @@ end
 -- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
+-- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
 -- ----------------------------------------
 function SIGen.New( type , name , customData , needOverwrite , callback )
 	if not type or not name then
@@ -255,6 +280,7 @@ end
 -- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
+-- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
 -- ----------------------------------------
 function SIGen.Load( type , name , customData , needOverwrite , callback )
 	if not type or not name then
@@ -298,6 +324,7 @@ end
 -- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
+-- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
 -- ----------------------------------------
 function SIGen.Copy( type , name , customData , needOverwrite , callback )
 	if not type or not name then
@@ -330,6 +357,7 @@ end
 -- ----------------------------------------
 -- callback 参数 :
 -- [1] = 创建完毕的原型本体
+-- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
 -- ----------------------------------------
 for index , typeName in pairs( SITypes.all ) do
 	local functionName = typeName:ToFunctionName()
@@ -753,6 +781,29 @@ function SIGen.AutoMiningTime( multiplier )
 	if SIGen.Data.max_health then time = SIGen.Data.max_health * size.width * size.height / SINumber.healthToMiningTime / SINumber.sizeToMiningTime * multiplier
 	else time = size.width * size.height / SINumber.sizeToMiningTime * multiplier end
 	SIGen.Data.minable.mining_time = math.max( time , 0.1 )
+	return SIGen
+end
+
+-- ------------------------------------------------------------------------------------------------
+-- ---------- 其他函数 ----------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+-- ----------------------------------------
+-- 当场执行一个函数
+-- 没什么特殊的含义 , 主要作为语法糖
+-- 当然也可以用作在创建原型的最后阶段插入一段代码的解决方案
+-- ----------------------------------------
+-- callback = 回调函数 , 传入后会直接调用 , 用处基本为语法糖
+-- ----------------------------------------
+-- callback 参数 :
+-- [1] = 当前的原型本体 , 如果有的话
+-- [2] = 上一个原型的名称 , 如果有的话
+-- 返回值 = 如果有返回值且是表的话 , 则它的键值对会被添加进当前编辑的原型中
+-- ----------------------------------------
+function SIGen.Callback( callback )
+	if not callback then return SIGen end
+	local package = callback( SIGen.Data , SIGen.LastDataName )
+	if SIGen.Data then SITools.CopyData( SIGen.Data , package , true ) end
 	return SIGen
 end
 
