@@ -570,12 +570,46 @@ function SIGen.ListRemove( key , index )
 	return SIGen.ValueRemove( key.."."..( index and index or "" ) )
 end
 
+-- ----------------------------------------
+-- 给当前编辑的原型添加标识
+-- 如果实体已经包含了列表中的某个标识 , 则这个标识不会被重复添加
+-- ----------------------------------------
+-- flags = 标识列表
+-- ----------------------------------------
+function SIGen.AddFlag( flags )
+	if Check() then return SIGen end
+	if not SIGen.Data.flags then SIGen.Data.flags = flags
+	else
+		for index , flag in pairs( flags ) do
+			if not table.Has( SIGen.Data.flags , flag ) then table.insert( SIGen.Data.flags , flag ) end
+		end
+	end
+	return SIGen
+end
+
+-- ----------------------------------------
+-- 给当前编辑的原型添加碰撞标识
+-- 如果实体已经包含了列表中的某个碰撞标识 , 则这个碰撞标识不会被重复添加
+-- ----------------------------------------
+-- masks = 碰撞标识列表
+-- ----------------------------------------
+function SIGen.AddCollisionMask( masks )
+	if Check() then return SIGen end
+	if not SIGen.Data.collision_mask then SIGen.Data.collision_mask = masks
+	else
+		for index , mask in pairs( masks ) do
+			if not table.Has( SIGen.Data.collision_mask , mask ) then table.insert( SIGen.Data.collision_mask , mask ) end
+		end
+	end
+	return SIGen
+end
+
 -- ------------------------------------------------------------------------------------------------
 -- -------- 修改具体属性 --------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
 -- ----------------------------------------
--- 修改物品的堆叠数量
+-- 修改当前编辑的原型的物品堆叠数量
 -- ----------------------------------------
 -- stackSize = 堆叠数量
 -- ----------------------------------------
@@ -589,7 +623,7 @@ function SIGen.SetStackSize( stackSize )
 end
 
 -- ----------------------------------------
--- 设置实体在地图上的颜色
+-- 设置当前编辑的原型在地图上的颜色
 -- ----------------------------------------
 -- color = 地图颜色
 -- friendlyColor = 友方的地图颜色 , 默认地图颜色
@@ -604,7 +638,7 @@ function SIGen.SetMapColor( color , friendlyColor , enemyColor )
 end
 
 -- ----------------------------------------
--- 设置实体的自动放置规则
+-- 设置当前编辑的原型的自动放置规则
 -- ----------------------------------------
 -- settings = 自动放置设置
 -- ----------------------------------------
@@ -616,7 +650,7 @@ function SIGen.SetAutoPlace( settings )
 end
 
 -- ----------------------------------------
--- 根据给定的大小创建选择区域和碰撞区域
+-- 根据给定的大小给当前编辑的原型创建选择区域和碰撞区域
 -- ----------------------------------------
 -- width = 区域宽度
 -- height = 区域高度 , 不填写是使用宽度的数值
@@ -634,6 +668,19 @@ function SIGen.SetSize( width , height )
 end
 
 -- ----------------------------------------
+-- 给当前编辑的原型设置图形默认值
+-- 图形可用参数和默认值请参考 SINumbers.graphicSetting_Default
+-- ----------------------------------------
+-- graphicSetting = 图形默认值设置
+-- ----------------------------------------
+function SIGen.SetGraphicSetting( graphicSetting )
+	if Check() then return SIGen end
+	local curGraphicSetting = SITools.CopyData( graphicSetting , util.deepcopy( SINumbers.graphicSetting_Default ) , false )
+	SIGen.Data.SIGenGraphicSetting = curGraphicSetting
+	return SIGen
+end
+
+-- ----------------------------------------
 -- 根据参数创建动画帧图结构 , 无方向
 -- 需要先通过 SIGen.SetSize 来设置宽高 , 默认宽高均为 1
 -- 这种模式下会附带一个影子属性 shadow
@@ -647,7 +694,7 @@ function SIGen.SetAnimation( scale , shift , hasHr , isGlow )
 	if Check() then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
 	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
-	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
+	local graphicSetting = SIGen.Data.SIGenGraphicSetting or SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	SIGen.Data.animation =
 	{
 		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName , SIGen.Data.type ) ,
@@ -697,7 +744,7 @@ function SIGen.SetAnimation4Way( scale , shift , hasHr )
 	if Check() then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
 	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
-	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
+	local graphicSetting = SIGen.Data.SIGenGraphicSetting or SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	local horizontally = util.deepcopy( graphicSetting )
 	horizontally.width = size.width * graphicSetting.width + graphicSetting.addenWidth
 	horizontally.height = size.height * graphicSetting.height + graphicSetting.addenHeight
@@ -727,7 +774,7 @@ function SIGen.SetStages( scale , shift , hasHr , addGlow )
 	if Check() then return SIGen end
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
 	size = { width = math.ceil( size.width ) , height = math.ceil( size.height ) }
-	local graphicSetting = SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
+	local graphicSetting = SIGen.Data.SIGenGraphicSetting or SINumbers.graphicSettings[SIGen.Data.type] or SINumbers.graphicSetting_Default
 	SIGen.Data.stages =
 	{
 		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName , SIGen.Data.type ) ,
@@ -757,28 +804,6 @@ function SIGen.SetStages( scale , shift , hasHr , addGlow )
 			effect.hr_version.blend_mode = SIFlags.blendModes.additive
 		end
 		SIGen.Data.stages_effect = effect
-	end
-	return SIGen
-end
-
-function SIGen.AddFlag( flags )
-	if Check() then return SIGen end
-	if not SIGen.Data.flags then SIGen.Data.flags = flags
-	else
-		for index , flag in pairs( flags ) do
-			if not table.Has( SIGen.Data.flags , flag ) then table.insert( SIGen.Data.flags , flag ) end
-		end
-	end
-	return SIGen
-end
-
-function SIGen.AddCollisionMask( masks )
-	if Check() then return SIGen end
-	if not SIGen.Data.collision_mask then SIGen.Data.collision_mask = masks
-	else
-		for index , mask in pairs( masks ) do
-			if not table.Has( SIGen.Data.collision_mask , mask ) then table.insert( SIGen.Data.collision_mask , mask ) end
-		end
 	end
 	return SIGen
 end

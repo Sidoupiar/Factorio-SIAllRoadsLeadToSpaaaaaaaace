@@ -28,6 +28,7 @@ local packageList =
 	"0006_trade" ,
 	"0007_mission" ,
 	"0008_event" ,
+	"0009_base_improvement" ,
 	"0020_tool_item" ,
 	"0030_technology" ,
 	"0100_ore_processing" ,
