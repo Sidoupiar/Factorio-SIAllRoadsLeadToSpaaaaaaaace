@@ -381,8 +381,8 @@ function SIInit.AutoLoad( stateCode )
 			SIInit.CurrentConstants = constantsData
 			-- 添加基础数据
 			local realClass = "SI" .. constantsData.id:upper():gsub( "_" , "-" ) .. "-"
-			constants.showName = constantsData.name:gsub( "_" , "-" )
-			local realName = "SI" .. constants.showName .. "-"
+			constantsData.showName = constantsData.name:gsub( "_" , "-" )
+			local realName = "SI" .. constantsData.showName .. "-"
 			constantsData.class = class
 			constantsData.realClass = realClass
 			constantsData.realName = realName
@@ -426,9 +426,9 @@ function SIInit.AutoLoad( stateCode )
 					local perPlayerList = {}
 					for settingName , settingValue in pairs( constantsData.settings ) do
 						local key = realName .. settingName:gsub( "_" , "-" )
-						if v[2] == "startup" then startupList[settingName] = function() return settings.startup[key].value end
-						elseif v[2] == "runtime-global" then runtimeList[settingName] = function() return settings.global[key].value end
-						elseif v[2] == "runtime-per-user" then perPlayerList[settingName] = function( playerOrIndex )
+						if settingValue[2] == "startup" then startupList[settingName] = function() return settings.startup[key].value end
+						elseif settingValue[2] == "runtime-global" then runtimeList[settingName] = function() return settings.global[key].value end
+						elseif settingValue[2] == "runtime-per-user" then perPlayerList[settingName] = function( playerOrIndex )
 								if SITools.IsNumber( playerOrIndex ) or not playerOrIndex.is_player then playerOrIndex = game.players[playerOrIndex] end
 								return playerOrIndex.mod_settings[key]
 							end
@@ -465,7 +465,6 @@ function SIInit.AutoLoad( stateCode )
 					constantsData.soundSource = string.sub( constantsData.soundSource , 1 , 2 ) == "__" and constantsData.soundSource or SIInit.CoreName
 					constantsData.soundPath = constantsData.soundSource .. "/package/" .. name .. "/sound/"
 				else constantsData.soundPath = constantsData.base .. "/package/" .. name .. "/sound/" end
-				if #prototypeList > 0 then data:extend( prototypeList ) end
 				-- 添加函数
 				constantsData.HasAutoName = function( sourceName , typeName )
 					if typeName then typeName = SITypes.autoName[typeName] end
@@ -538,10 +537,10 @@ function SIInit.AutoLoad( stateCode )
 					for name , list in pairs( constantsData.raw ) do
 						if list.type and list.list then
 							local rawCode = list.name or name
-							local output = constants[rawCode]
+							local output = constantsData[rawCode]
 							if not output then
 								output = {}
-								constants[rawCode] = output
+								constantsData[rawCode] = output
 							end
 							local typeName = list.type
 							for key , name in pairs( list.list ) do
@@ -603,7 +602,7 @@ SIPrint =
 		log( CoreBaseName.." : "..message )
 	end ,
 	Debug = function( message )
-		if isDebugEnabled() then
+		if SIPrint.IsDebugEnabled() then
 			log( CoreBaseName.." : "..message )
 			if game then game.print( { "SI-common.debug" , message } , SIColors.printColor.blue ) end
 		end

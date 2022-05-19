@@ -500,7 +500,7 @@ for type , real in pairs
 	equipment        = "模块"
 } do
 	if SITools.IsTable( SITypes[type] ) then
-		for key , value in piars( SITypes[type] ) do
+		for key , value in pairs( SITypes[type] ) do
 			SITypes.all[key] = value
 			SITypes.autoName[value] = real
 			SITypes.rawCode[value] = type

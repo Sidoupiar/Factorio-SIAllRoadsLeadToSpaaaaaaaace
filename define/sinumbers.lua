@@ -73,7 +73,7 @@ local SINumbers =
 		height = 32 ,
 		addenWidth = 0 ,
 		addenHeight = 0 ,
-		widthCount = 8
+		widthCount = 8 ,
 		heightCount = 8 ,
 		animSpeed = 0.25 ,
 		variation_count = 1
@@ -104,10 +104,10 @@ for typeName , setting in pairs( SINumbers.graphicSettings ) do
 	SINumbers.graphicSettings[typeName] = newSetting
 end
 
-local innerNumberList = table.deepcopy( SINumbers )
+local innerNumberList = util.deepcopy( SINumbers )
 
 function SINumbers.RestoreDefault()
-	for key , value in pairs( table.deepcopy( innerNumberList ) ) do
+	for key , value in pairs( util.deepcopy( innerNumberList ) ) do
 		SINumbers[key] = value
 	end
 end

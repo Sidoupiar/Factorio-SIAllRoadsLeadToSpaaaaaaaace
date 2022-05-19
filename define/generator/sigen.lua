@@ -31,12 +31,97 @@ local GroupSettings =
 }
 local GenIndex = 1000000
 local AutoFillData = {}
+local AutoFillSource = {}
 local Raw = {}
 local CORE = nil
 
 -- ------------------------------------------------------------------------------------------------
+-- --------- 构建数据包 ---------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------------------
+
+-- 创建带有朝向的 layer
+local function CreateLayer4Way( size , scale , shift , hasHr , directionName , graphicSetting )
+	local layer =
+	{
+		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..directionName , SIGen.Data.type ) ,
+		width = size.width ,
+		height = size.height ,
+		scale = scale or 1.0 ,
+		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
+		priority = SIFlags.priorities.high ,
+		line_length = graphicSetting.widthCount or 1 ,
+		frame_count = graphicSetting.frameCount or 1 ,
+		animation_speed = graphicSetting.animSpeed or nil
+	}
+	if hasHr then
+		local hr = util.deepcopy( layer )
+		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..directionName.."-高清" , SIGen.Data.type )
+		hr.width = hr.width * SINumbers.graphicHrSizeScale
+		hr.height = hr.height * SINumbers.graphicHrSizeScale
+		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
+		hr.shift = util.by_pixel( hr.shift.x*SINumbers.graphicHrSizeScale , hr.shift.y*SINumbers.graphicHrSizeScale )
+		layer.hr_version = hr
+	end
+	return layer
+end
+
+-- 初始化默认值数据包 AutoFillData
+local function TransAutoFillData( autoFillData , autoFillSource )
+	for type , data in pairs( autoFillSource ) do
+		if not data.defaultValues then data.defaultValues = {} end
+		if data.parent then
+			local function PutParentAutoFillData( data , parentType )
+				if autoFillSource[parentType] then
+					local parent = autoFillSource[parentType]
+					if parent.defaultValues then
+						for key , value in pairs( parent.defaultValues ) do
+							if not data.defaultValues[key] then data.defaultValues[key] = value end
+						end
+					end
+					if not data.callback and parent.callback then data.callback = parent.callback end
+					if parent.parent then PutParentAutoFillData( data , parent.parent ) end
+				end
+			end
+			PutParentAutoFillData( data , data.parent )
+		end
+		local newData =
+		{
+			defaultValues = data.defaultValues ,
+			callback = data.callback
+		}
+		if data.types then
+			for index , typeName in pairs( data.types ) do
+				local realData = autoFillData[typeName]
+				local curData = util.deepcopy( newData )
+				if realData then
+					if not realData.defaultValues then realData.defaultValues = {} end
+					for k , v in pairs( curData.defaultValues ) do realData.defaultValues[k] = v end
+					realData.callback = curData.callback
+				else realData = curData end
+			end
+		end
+	end
+end
+
+-- ------------------------------------------------------------------------------------------------
 -- ---------- 内部函数 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
+
+local function Append( curData , callback )
+	SIGen.LastDataName = SIGen.Data and SIGen.Data.name or nil
+	SIGen.Data = curData
+	local list = Raw[curData.type]
+	if not list then
+		list = {}
+		Raw[curData.type] = list
+	end
+	list[curData.SIGenSourceName] = curData
+	if callback then
+		local package = callback( curData )
+		SITools.CopyData( curData , package , true )
+	end
+	return SIGen
+end
 
 local function Init( type , name , customData , needOverwrite , callback )
 	if not GroupSettings.currentGroupData then
@@ -66,22 +151,6 @@ local function Init( type , name , customData , needOverwrite , callback )
 	end
 	SITools.CopyData( curData , customData , needOverwrite )
 	return Append( curData , callback )
-end
-
-local function Append( curData , callback )
-	SIGen.LastDataName = SIGen.Data and SIGen.Data.name or nil
-	SIGen.Data = curData
-	local list = Raw[curData.type]
-	if not list then
-		list = {}
-		Raw[curData.type] = list
-	end
-	list[curData.SIGenSourceName] = curData
-	if callback then
-		local package = callback( curData )
-		SITools.CopyData( curData , package , true )
-	end
-	return SIGen
 end
 
 local function Check()
@@ -219,7 +288,7 @@ function SIGen.Group( groupName , subGroupName )
 			type = SITypes.group ,
 			name = name ,
 			localised_name = { "SIGroup-name."..name } ,
-			localised_description = { "SIGroup-description."..name }
+			localised_description = { "SIGroup-description."..name } ,
 			icon = CORE.GetPicturePath( name , SITypes.group ) ,
 			icon_size = SINumbers.icon.sizeGroup ,
 			order = CORE.AutoOrder()
@@ -307,24 +376,25 @@ function SIGen.Load( type , name , customData , needOverwrite , callback )
 		customData = nil
 	end
 	SITools.CopyData( curData , customData , needOverwrite )
-	if customData and ( customData.type and type ~= customData.type or customData.name and name ~= customData.name ) then
-		if curData.SIGenForm then Raw[type][name] = nil
-		else data.raw[type][name] = nil end
-		if customData.name then
-			curData.SIGenSourceName = customData.name
-			customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
-		else curData.SIGenSourceName = curData.name end
-		curData.SIGenForm = true
-		return Append( curData , callback )
-	else
-		curData.SIGenSourceName = curData.name
-		curData.SIGenForm = false
-		SIGen.LastDataType = SIGen.Data.type
-		SIGen.LastDataName = SIGen.Data.name
-		SIGen.Data = curData
-		if callback then callback( curData ) end
-		return SIGen
+	if customData then
+		if customData.type and type ~= customData.type or customData.name and name ~= customData.name then
+			if curData.SIGenForm then Raw[type][name] = nil
+			else data.raw[type][name] = nil end
+			if customData.name then
+				curData.SIGenSourceName = customData.name
+				customData.name = SIInit.CurrentConstants.AutoName( customData.name , customData.type or curData.type )
+			else curData.SIGenSourceName = curData.name end
+			curData.SIGenForm = true
+			return Append( curData , callback )
+		end
 	end
+	curData.SIGenSourceName = curData.name
+	curData.SIGenForm = false
+	SIGen.LastDataType = SIGen.Data.type
+	SIGen.LastDataName = SIGen.Data.name
+	SIGen.Data = curData
+	if callback then callback( curData ) end
+	return SIGen
 end
 
 -- ----------------------------------------
@@ -536,8 +606,7 @@ function SIGen.ListAdd( key , value , index )
 		local curData = SIGen.Data
 		if key:find( "." ) then
 			local keys = key:Split( "." )
-			local keyLength = #keys
-			for index = 1 , keyLength , 1 do curData = curData[curKey] end
+			for code = 1 , #keys , 1 do curData = curData[keys[code]] end
 		end
 		if index then table.insert( curData[key] , index , value )
 		else table.insert( curData[key] , value ) end
@@ -936,50 +1005,10 @@ function SIGen.GetRaw()
 end
 
 -- ------------------------------------------------------------------------------------------------
--- --------- 构建数据包 ---------------------------------------------------------------------------
--- ------------------------------------------------------------------------------------------------
-
-local function CreateLayer4Way( size , scale , shift , hasHr , directionName , graphicSetting )
-	local layer =
-	{
-		filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction , SIGen.Data.type ) ,
-		width = size.width ,
-		height = size.height ,
-		scale = scale or 1.0 ,
-		shift = shift and util.by_pixel( shift.x , shift.y ) or util.by_pixel( 0.0 , 0.0 ) ,
-		priority = SIFlags.priorities.high ,
-		line_length = graphicSetting.widthCount or 1 ,
-		frame_count = graphicSetting.frameCount or 1 ,
-		animation_speed = graphicSetting.animSpeed or nil
-		{
-			 ,
-			width = size.width * SINumbers.graphicHrSizeScale ,
-			height = size.height * SINumbers.graphicHrSizeScale ,
-			scale = ( scale or 1.0 ) * SINumbers.graphicHrScaleDown ,
-			shift = shift and util.by_pixel( shift.x*SINumbers.graphicHrSizeScale , shift.y*SINumbers.graphicHrSizeScale ) or util.by_pixel( 0.0 , 0.0 ) ,
-			priority = SIFlags.priorities.high ,
-			line_length = size.widthCount or 1 ,
-			frame_count = size.widthCount and size.heightCount and size.widthCount * size.heightCount or 1 ,
-			animation_speed = size.animSpeed or nil
-		} or nil
-	}
-	if hasHr then
-		local hr = util.deepcopy( layer )
-		hr.filename = SIInit.CurrentConstants.GetPicturePath( SIGen.Data.SIGenSourceName.."-"..direction.."-高清" , SIGen.Data.type )
-		hr.width = hr.width * SINumbers.graphicHrSizeScale
-		hr.height = hr.height * SINumbers.graphicHrSizeScale
-		hr.scale = hr.scale * SINumbers.graphicHrScaleDown
-		hr.shift = util.by_pixel( hr.shift.x*SINumbers.graphicHrSizeScale , hr.shift.y*SINumbers.graphicHrSizeScale )
-		layer.hr_version = hr
-	end
-	return layer
-end
-
--- ------------------------------------------------------------------------------------------------
 -- ---------- 自动填充 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-local AutoFillSource =
+AutoFillSource =
 {
 	item =
 	{
@@ -1102,42 +1131,6 @@ local AutoFillSource =
 		}
 	}
 }
-
-local function TransAutoFillData( autoFillData , autoFillSource )
-for type , data in pairs( autoFillSource ) do
-	if not data.defaultValues then data.defaultValues = {} end
-	if data.parent then
-		local function PutParentAutoFillData( data , parentType )
-			if autoFillSource[parentType] then
-				local parent = autoFillSource[parentType]
-				if parent.defaultValues then
-					for key , value in pairs( parent.defaultValues ) do
-						if not data.defaultValues[key] then data.defaultValues[key] = value end
-					end
-				end
-				if not data.callback and parent.callback then data.callback = parent.callback end
-				if parent.parent then PutParentAutoFillData( data , parent.parent ) end
-			end
-		end
-		PutParentAutoFillData( data , data.parent )
-	end
-	local newData =
-	{
-		defaultValues = data.defaultValues ,
-		callback = data.callback
-	}
-	if data.types then
-		for index , typeName in pairs( data.types ) do
-			local realData = autoFillData[typeName]
-			local curData = util.deepcopy( newData )
-			if realData then
-				if not realData.defaultValues then realData.defaultValues = {} end
-				for k , v in pairs( curData.defaultValues ) do realData.defaultValues[k] = v end
-				realData.callback = curData.callback
-			else realData = curData
-		end
-	end
-end
 
 TransAutoFillData( AutoFillData , AutoFillSource )
 AutoFillSource = AutoFillData

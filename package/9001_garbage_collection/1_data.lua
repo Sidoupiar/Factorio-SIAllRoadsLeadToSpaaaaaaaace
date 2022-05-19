@@ -39,7 +39,7 @@ local commonThrowAction =
 		}
 	}
 }
-local commonThrowData
+local commonThrowData =
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
 	capsule_action =
@@ -486,7 +486,7 @@ function SIConstants_Garbage.api.AddFuelSetting( name , result , fuelValue , emi
 			emissionsMultiplier = emissionsMultiplier ,
 			pass = false
 		}
-	else SIConstants_Garbage.settingsFuel[name] = { pass = true }
+	else SIConstants_Garbage.settingsFuel[name] = { pass = true } end
 end
 
 function SIConstants_Garbage.api.AddRocketLaunchSetting( name , result )

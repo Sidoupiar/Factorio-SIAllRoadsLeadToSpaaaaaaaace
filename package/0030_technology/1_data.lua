@@ -45,7 +45,7 @@ local sciencePackThrowAction =
 		}
 	}
 }
-local sciencePackThrowData
+local sciencePackThrowData =
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
 	capsule_action =

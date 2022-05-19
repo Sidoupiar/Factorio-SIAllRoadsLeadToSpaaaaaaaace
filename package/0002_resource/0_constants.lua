@@ -57,8 +57,8 @@ local constants =
 				shellSplit = "矿石壳屑" ,
 				-- 矿石脉
 				veinWhole = "矿石脉" ,
-				veinHalf = "断裂的矿石脉"
-				veinSplit = "矿石脉屑" ,
+				veinHalf = "断裂的矿石脉" ,
+				veinSplit = "矿石脉屑"
 			}
 		}
 	}

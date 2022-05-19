@@ -4,7 +4,7 @@
 
 for name , groupName in pairs( SIConstants_Core.group ) do SIGen.Group( groupName , "基础" ) end
 
-local throwData
+local throwData =
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
 	capsule_action =

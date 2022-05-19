@@ -155,7 +155,7 @@ local SITools =
 	end ,
 
 	Sound = function( file , volume , minSpeed , maxSpeed )
-		local sound = { filename = file , volume = volume or SISounds.baseVolume }
+		local sound = { filename = file , volume = volume or 1 }
 		if minSpeed then sound.min_speed = minSpeed end
 		if maxSpeed then sound.max_speed = maxSpeed end
 		return sound
@@ -163,12 +163,12 @@ local SITools =
 	Sounds = function( fileOrList , volume , minSpeed , maxSpeed )
 		if SITools.IsTable( fileOrList ) then
 			local sounds = {}
-			for i , v in pairs( fileOrList ) do table.insert( sounds , SISounds.Sound( v , volume , minSpeed , maxSpeed ) ) end
+			for i , v in pairs( fileOrList ) do table.insert( sounds , SITools.Sound( v , volume , minSpeed , maxSpeed ) ) end
 			return sounds
-		else return { SISounds.Sound( fileOrList , volume , minSpeed , maxSpeed ) } end
+		else return { SITools.Sound( fileOrList , volume , minSpeed , maxSpeed ) } end
 	end ,
 	SoundList_Base = function( soundName , count , volume , startIndex )
-		volume = volume or SISounds.baseVolume
+		volume = volume or 1
 		startIndex = startIndex or 1
 		local length = count + startIndex - 1
 		local countLength = SITools.NumberLength( length )

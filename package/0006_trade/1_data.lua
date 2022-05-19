@@ -39,7 +39,7 @@ local moneyThrowAction =
 		}
 	}
 }
-local moneyThrowData
+local moneyThrowData =
 {
 	radius_color = SIColors.Color256( 242 , 242 , 242 , 55 ) ,
 	capsule_action =
