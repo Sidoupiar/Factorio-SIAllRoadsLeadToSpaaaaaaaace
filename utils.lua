@@ -38,6 +38,10 @@ local packageList =
 	"9998_detail_improvement" ,
 	"9999_debug"
 }
+local classList =
+{
+	"SIClass_PowerNumber"
+}
 
 if defines and defines.events then
 	SIEvents = {}
@@ -338,24 +342,26 @@ function SIInit.AutoLoad( stateCode )
 		SIInit.packageName = name
 		local registerData = need( "package."..name..".0_auto_load" , true )
 		if not registerData or SITools.IsNotTable( registerData ) then registerData = {} end
-		for index = 1 , 4 , 1 do
-			local fileList = registerData[index]
+		for code = 1 , 4 , 1 do
+			local fileList = registerData[code]
 			if fileList and SITools.IsString( fileList ) then fileList = { fileList } end
 			if not fileList or SITools.IsNotTable( fileList ) or #fileList < 1 then
 				fileList = {}
-				if index == 1 then table.insert( fileList , "1_data" )
-				elseif index == 2 then table.insert( fileList , "2_data-updates" )
-				elseif index == 3 then table.insert( fileList , "3_data-final-fixes" )
-				elseif index == 4 then table.insert( fileList , "4_control" ) end
+				if code == 1 then table.insert( fileList , "1_data" )
+				elseif code == 2 then table.insert( fileList , "2_data-updates" )
+				elseif code == 3 then table.insert( fileList , "3_data-final-fixes" )
+				elseif code == 4 then table.insert( fileList , "4_control" ) end
 			end
-			registerData[index] = fileList
+			registerData[code] = fileList
 		end
 		SIInit.AutoLoadDataList[SIInit.packageName] = registerData
 	end
 	if SIInit.State == SIInit.StateDefine.Data then
+		for index , name in pairs( classList ) do need( "define.class."..name ) end
 		need( "define.generator.sidatakeys" , true )
 		need( "define.generator.sigen" , true )
 	elseif SIInit.State == SIInit.StateDefine.Control then
+		for index , name in pairs( classList ) do need( "define.class."..name ) end
 		need( "define.runtime.sievent_bus" , true )
 		need( "define.runtime.siglobal" , true )
 	end

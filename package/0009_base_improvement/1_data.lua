@@ -10,110 +10,63 @@ local nameList =
 }
 local solarData =
 {
-    flags = {"placeable-neutral", "player-creation"},
-    minable = {mining_time = 0.1, result = "solar-panel"},
-    max_health = 200,
-    corpse = "solar-panel-remnants",
-    dying_explosion = "solar-panel-explosion",
-    collision_box = {{-1.4, -1.4}, {1.4, 1.4}},
-    selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
-    damaged_trigger_effect = hit_effects.entity(),
-    energy_source =
-    {
-      type = "electric",
-      usage_priority = "solar"
-    },
-    picture =
-    {
-      layers =
-      {
-        {
-          filename = "__base__/graphics/entity/solar-panel/solar-panel.png",
-          priority = "high",
-          width = 116,
-          height = 112,
-          shift = util.by_pixel(-3, 3),
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/solar-panel/hr-solar-panel.png",
-            priority = "high",
-            width = 230,
-            height = 224,
-            shift = util.by_pixel(-3, 3.5),
-            scale = 0.5
-          }
-        },
-        {
-          filename = "__base__/graphics/entity/solar-panel/solar-panel-shadow.png",
-          priority = "high",
-          width = 112,
-          height = 90,
-          shift = util.by_pixel(10, 6),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/solar-panel/hr-solar-panel-shadow.png",
-            priority = "high",
-            width = 220,
-            height = 180,
-            shift = util.by_pixel(9.5, 6),
-            draw_as_shadow = true,
-            scale = 0.5
-          }
-        }
-      }
-    },
-    overlay =
-    {
-      layers =
-      {
-        {
-          filename = "__base__/graphics/entity/solar-panel/solar-panel-shadow-overlay.png",
-          priority = "high",
-          width = 108,
-          height = 90,
-          shift = util.by_pixel(11, 6),
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/solar-panel/hr-solar-panel-shadow-overlay.png",
-            priority = "high",
-            width = 214,
-            height = 180,
-            shift = util.by_pixel(10.5, 6),
-            scale = 0.5
-          }
-        }
-      }
-    },
-    vehicle_impact_sound = sounds.generic_impact,
-    production = "60kW"
+	flags = { SIFlags.entityFlags.placeableNeutral , SIFlags.entityFlags.playerCreation } ,
+	minable = { mining_time = 0.1 } ,
+	max_health = 200 ,
+	corpse = "solar-panel-remnants" ,
+	dying_explosion = "solar-panel-explosion" ,
+	damaged_trigger_effect = hit_effects.entity() ,
+	energy_source =
+	{
+		type = "electric" ,
+		usage_priority = "solar"
+	} ,
+	picture =
+	{
+		layers =
+		{
+			{
+				filename = "__base__/graphics/entity/solar-panel/solar-panel.png" ,
+				priority = "high" ,
+				width = 64 ,
+				height = 64
+			}
+		}
+	} ,
+	overlay =
+	{
+		layers =
+		{
+			{
+				filename = "__base__/graphics/entity/solar-panel/solar-panel-shadow-overlay.png" ,
+				priority = "high" ,
+				width = 64 ,
+				height = 64
+			}
+		}
+	}
 }
 local accData =
 {
-	flags = { "placeable-neutral" , "player-creation" } ,
-	max_health = 150 ,
+	flags = { SIFlags.entityFlags.placeableNeutral , SIFlags.entityFlags.playerCreation } ,
+	minable = { mining_time = 0.1 } ,
+	max_health = 200 ,
 	corpse = "accumulator-remnants" ,
 	dying_explosion = "accumulator-explosion" ,
-    damaged_trigger_effect = hit_effects.entity(),
-    drawing_box = {{-1, -1.5}, {1, 1}},
-    energy_source =
-    {
-      type = "electric",
-      buffer_capacity = "5MJ",
-      usage_priority = "tertiary",
-      input_flow_limit = "300kW",
-      output_flow_limit = "300kW"
-    },
-    picture = accumulator_picture(),
-    charge_animation = accumulator_charge(),
-    water_reflection = accumulator_reflection(),
-    charge_cooldown = 30,
-    charge_light = {intensity = 0.3, size = 7, color = {r = 1.0, g = 1.0, b = 1.0}},
-    discharge_animation = accumulator_discharge(),
-    discharge_cooldown = 60,
-    discharge_light = {intensity = 0.7, size = 7, color = {r = 1.0, g = 1.0, b = 1.0}},
-
-
+	damaged_trigger_effect = hit_effects.entity() ,
+	energy_source =
+	{
+		type = "electric" ,
+		usage_priority = "tertiary"
+	} ,
+	picture = accumulator_picture() ,
+	water_reflection = accumulator_reflection() ,
+	charge_animation = accumulator_charge() ,
+	charge_cooldown = 30 ,
+	charge_light = { intensity = 0.3 , size = 7 , color = SIColors.Color256( 255 , 255 , 255 ) } ,
+	discharge_animation = accumulator_discharge() ,
+	discharge_cooldown = 60 ,
+	discharge_light = { intensity = 0.7 , size = 7 , color = SIColors.Color256( 255 , 255 , 255 ) } ,
 	working_sound =
 	{
 		sound =
@@ -140,6 +93,7 @@ local lastSolar = "solar-panel"
 local lastAcc = "accumulator"
 local solarList = {}
 local accList = {}
+local power = SIClass_PowerNumber.New( "60K" )
 
 -- ------------------------------------------------------------------------------------------------
 -- ------ 创建多阶太阳能板 ------------------------------------------------------------------------
@@ -149,10 +103,11 @@ SIGen.Group( "energy" )
 .ListIndicator( nameList , function( name , entityName , index )
 	local solarName = entityName .. "型太阳能电池板"
 	local accName = entityName .. "型蓄电器"
+	power:Multiply( 2 )
 	SIGen.NewSolar( solarName , solarData , true , function( entity )
-
+		entity.production = power:Get( "W" )
 	end )
-	.SetSize( 2 , 2 )
+	.SetSize( 2 )
 	.NewItem( solarName , function( item )
 		item.place_result = SIGen.LastDataName
 	end )
@@ -172,9 +127,12 @@ SIGen.Group( "energy" )
 		table.insert( solarList , recipe.name )
 	end )
 	.NewAccumulator( accName , accData , true , function( entity )
-
+		local subPower = power:Copy():Multiply( 6 )
+		entity.energy_source.input_flow_limit = subPower:Get( "W" )
+		entity.energy_source.output_flow_limit = subPower:Get( "W" )
+		entity.energy_source.buffer_capacity = subPower:Multiply( 36 ):Get( "J" )
 	end )
-	.SetSize( 2 , 2 )
+	.SetSize( 2 )
 	.NewItem( accName , function( item )
 		item.place_result = SIGen.LastDataName
 	end )
