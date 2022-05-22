@@ -1,6 +1,6 @@
 SIClass_PowerNumber =
 {
-	UnitList = { "" , "K" , "M" , "G" , "T" , "P" , "E" , "X" , "Y" }
+	UnitList = { "" , "K" , "M" , "G" , "T" , "P" , "E" , "Z" , "Y" }
 }
 
 function SIClass_PowerNumber.New( number )
