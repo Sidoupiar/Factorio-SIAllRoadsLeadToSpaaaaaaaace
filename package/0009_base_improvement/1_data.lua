@@ -6,11 +6,15 @@ if not SIMods.base.loaded then return end
 
 local nameList =
 {
-	improve = { name = "改良" } ,
-	advance = { name = "进阶" } ,
-	connect = { name = "联合" } ,
-	condens = { name = "凝聚" } ,
-	transce = { name = "超越" }
+	base     = { name = "基础" } ,
+	normal   = { name = "普通" } ,
+	improve  = { name = "改良" } ,
+	advance  = { name = "进阶" } ,
+	connect  = { name = "联合" } ,
+	condens  = { name = "凝聚" } ,
+	breach   = { name = "突破" } ,
+	strength = { name = "强化" } ,
+	transce  = { name = "超越" }
 }
 local solarData =
 {
