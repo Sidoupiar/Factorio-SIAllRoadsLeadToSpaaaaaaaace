@@ -912,8 +912,8 @@ function SIGen.AutoMiningTime( multiplier )
 	local size = SIGen.Data.SIGenSize or { width = 1 , height = 1 }
 	multiplier = multiplier or 1
 	local time = 1
-	if SIGen.Data.max_health then time = SIGen.Data.max_health * size.width * size.height / SINumber.healthToMiningTime / SINumber.sizeToMiningTime * multiplier
-	else time = size.width * size.height / SINumber.sizeToMiningTime * multiplier end
+	if SIGen.Data.max_health then time = SIGen.Data.max_health * size.width * size.height / SINumbers.healthToMiningTime / SINumbers.sizeToMiningTime * multiplier
+	else time = size.width * size.height / SINumbers.sizeToMiningTime * multiplier end
 	SIGen.Data.minable.mining_time = math.max( time , 0.1 )
 	return SIGen
 end
@@ -1027,7 +1027,7 @@ AutoFillSource =
 		super = "item" ,
 		defaultValues =
 		{
-			stack_size = SINumber.stackSize.materialNormal , -- 堆叠数量
+			stack_size = SINumbers.stackSize.materialNormal , -- 堆叠数量
 			stackable = true -- 是否允许堆叠
 		}
 	} ,
@@ -1037,7 +1037,7 @@ AutoFillSource =
 		super = "item" ,
 		defaultValues =
 		{
-			stack_size = SINumber.stackSize.cannotStack , -- 堆叠数量
+			stack_size = SINumbers.stackSize.cannotStack , -- 堆叠数量
 			stackable = false -- 是否允许堆叠
 		}
 	} ,

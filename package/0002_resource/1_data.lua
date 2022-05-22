@@ -112,7 +112,7 @@ local oreThrowData =
 -- ---------- 创建矿物 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-SIGen.Group( SICConstants_Core.group.material , "矿物" )
+SIGen.Group( SIConstants_Core.group.material , "矿物" )
 -- 岩心石
 .NewResource( "蛋白矿" , normalOreData , true , function( resource )
 	resource.minable =
@@ -126,7 +126,7 @@ SIGen.Group( SICConstants_Core.group.material , "矿物" )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -150,7 +150,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneOpal , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneOpal , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "方刚矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -163,7 +163,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -187,7 +187,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneHard , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneHard , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "绵滑矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -200,7 +200,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -224,7 +224,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneSlide , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneSlide , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "沧溟矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -237,7 +237,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -261,7 +261,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneSea , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneSea , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "苔芜矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -274,7 +274,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -298,7 +298,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneGrass , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneGrass , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "韧铠矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -311,7 +311,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -335,7 +335,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneArmor , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneArmor , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "影山矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -348,7 +348,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -372,7 +372,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneShadow , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneShadow , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "灿光矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -385,7 +385,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -409,7 +409,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.stoneBright , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.stoneBright , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 -- 变相石
 .NewResource( "灼热矿" , normalOreData , true , function( resource )
 	resource.minable =
@@ -423,7 +423,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -447,7 +447,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeHeat , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeHeat , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "沉沦矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -460,7 +460,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -484,7 +484,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeDrown , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeDrown , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "血肉矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -497,7 +497,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -521,7 +521,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeMeat , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeMeat , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "浊风矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -534,7 +534,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -558,7 +558,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeWind , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeWind , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "阴森矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -571,7 +571,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -595,7 +595,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeGloomy , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeGloomy , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "冰凌矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -608,7 +608,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -632,7 +632,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeCold , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeCold , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "绯红矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -645,7 +645,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -669,7 +669,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeRed , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeRed , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "黑晶矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
@@ -682,7 +682,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -706,7 +706,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.changeBlack , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.changeBlack , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 -- 夹层石
 .NewResource( "清水矿" , shineOreData , true , function( resource )
 	resource.minable =
@@ -724,7 +724,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -748,7 +748,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.waterClear , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.waterClear , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "火苗矿" , shineOreData , true , function( resource )
 	resource.minable =
 	{
@@ -765,7 +765,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -789,7 +789,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.waterFire , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.waterFire , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "悠远矿" , shineOreData , true , function( resource )
 	resource.minable =
 	{
@@ -806,7 +806,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -830,7 +830,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.waterTime , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.waterTime , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "宁寂矿" , shineOreData , true , function( resource )
 	resource.minable =
 	{
@@ -847,7 +847,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -871,7 +871,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.waterQuiet , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.waterQuiet , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 .NewResource( "凄辉矿" , shineOreData , true , function( resource )
 	resource.minable =
 	{
@@ -888,7 +888,7 @@ end )
 	}
 	resource.category = ""
 end )
-.SetMapColor( SIColor.Color256( 127 , 127 , 127 ) )
+.SetMapColor( SIColors.Color256( 127 , 127 , 127 ) )
 .SetSize( 1 )
 .SetStages()
 .AutoMiningTime( 2 )
@@ -912,13 +912,13 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.ore.waterBright , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.ore )
+.NewCapsule( SIConstants_Resource.ore.waterBright , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 
 -- ------------------------------------------------------------------------------------------------
 -- --------- 创建矿山石 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-.Group( SICConstants_Core.group.material , "矿山石" )
+.Group( SIConstants_Core.group.material , "矿山石" )
 .NewProjectile( "扔出去的矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -929,7 +929,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCore , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCore , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的韧性矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -940,7 +940,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreTough , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCoreTough , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的刚性矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -951,7 +951,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreHard , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCoreHard , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的矿山石的粉末" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -962,7 +962,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCorePowder , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.powder )
+.NewCapsule( SIConstants_Resource.other.stoneCorePowder , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.powder )
 .NewProjectile( "扔出去的多孔的矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -973,7 +973,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreBubble , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCoreBubble , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的脆性矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -984,7 +984,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreBrittle , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCoreBrittle , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的颤性矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -995,7 +995,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreShake , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCoreShake , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的碎裂的矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1006,7 +1006,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreSplit , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.powder )
+.NewCapsule( SIConstants_Resource.other.stoneCoreSplit , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.powder )
 .NewProjectile( "扔出去的魔化矿山石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1017,7 +1017,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCoreMagic , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialBig )
+.NewCapsule( SIConstants_Resource.other.stoneCoreMagic , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialBig )
 .NewProjectile( "扔出去的被污染的矿山石的粉末" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1028,7 +1028,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.stoneCorePolluted , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.powder )
+.NewCapsule( SIConstants_Resource.other.stoneCorePolluted , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.powder )
 .ListIndicator( { "rock-big" , "rock-huge" , "sand-rock-big" } , function( index , entityName , count )
 	local subStoneData = util.deepcopy( stoneData )
 	subStoneData.name = "矿山石-" .. index
@@ -1069,7 +1069,7 @@ end )
 -- --------- 创建矿石壳 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-.Group( SICConstants_Core.group.material , "矿石壳" )
+.Group( SIConstants_Core.group.material , "矿石壳" )
 .NewProjectile( "扔出去的矿石壳" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1080,7 +1080,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.shellWhole , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialNormal )
+.NewCapsule( SIConstants_Resource.other.shellWhole , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialNormal )
 .NewProjectile( "扔出去的半矿石壳" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1091,7 +1091,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.shellHalf , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialNormal )
+.NewCapsule( SIConstants_Resource.other.shellHalf , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialNormal )
 .NewProjectile( "扔出去的矿石壳屑" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1102,13 +1102,13 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.shellSplit , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialTiny )
+.NewCapsule( SIConstants_Resource.other.shellSplit , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialTiny )
 
 -- ------------------------------------------------------------------------------------------------
 -- --------- 创建矿石脉 ---------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
 
-.Group( SICConstants_Core.group.material , "矿石脉" )
+.Group( SIConstants_Core.group.material , "矿石脉" )
 .NewProjectile( "扔出去的矿石脉" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1119,7 +1119,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.veinWhole , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialNormal )
+.NewCapsule( SIConstants_Resource.other.veinWhole , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialNormal )
 .NewProjectile( "扔出去的断裂的矿石脉" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1130,7 +1130,7 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.veinHalf , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialNormal )
+.NewCapsule( SIConstants_Resource.other.veinHalf , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialNormal )
 .NewProjectile( "扔出去的矿石脉屑" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
@@ -1141,4 +1141,4 @@ end )
 end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
-.NewCapsule( SIConstants_Resource.other.veinSplit , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumber.stackSize.materialTiny )
+.NewCapsule( SIConstants_Resource.other.veinSplit , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.materialTiny )

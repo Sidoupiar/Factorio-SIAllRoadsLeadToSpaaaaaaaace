@@ -97,14 +97,14 @@ local sciencePackThrowData =
 
 SIGen.Group( SIConstants_Core.group.misc , "科研" )
 .ListIndicator( SIConstants_Technology.item , function( name , itemName , index )
-	SIGen.NewTool( itemName , sciencePackData , true ).SetStackSize( SINumber.stackSize.sciencePack )
+	SIGen.NewTool( itemName , sciencePackData , true ).SetStackSize( SINumbers.stackSize.sciencePack )
 	.NewProjectile( "投掷物-"..itemName , util.deepcopy( sciencePackThrowAction ) , true , function( projectile )
 		sciencePackThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 		projectile.action[2].action_delivery.target_effects = { SITools.Attack_EffectDamage( SIConstants_Core.damage.physical , 4.5 ) }
 	end )
 	.SetSize( 1 )
 	.SetAnimation( 0.5 )
-	.NewCapsule( "投掷-"..itemName , util.deepcopy( sciencePackThrowData ) , true ).SetStackSize( SINumber.stackSize.sciencePack )
+	.NewCapsule( "投掷-"..itemName , util.deepcopy( sciencePackThrowData ) , true ).SetStackSize( SINumbers.stackSize.sciencePack )
 	.NewRecipe( "捆绑-"..itemName , function( recipe )
 		recipe.ingredients = { SITools.IngredientItem( itemName , 2 ) }
 		recipe.results = { SITools.ProductItem( SIGen.LastDataName ) }
