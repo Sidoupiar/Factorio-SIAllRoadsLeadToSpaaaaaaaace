@@ -22,7 +22,7 @@ end )
 -- ------------------------------------------------------------------------------------------------
 
 .TypeIndicator( SITypes.item , function( type , item , index )
-	if not item.burnt_result then
+	if not item.fuel_value then
 		local data = SIConstants_Garbage.settingsFuel[item.sourceName or item.name]
 		if not data or not data.pass then
 			item.fuel_category = fuelCategory
