@@ -31,6 +31,7 @@ local packageList =
 	"0009_base_improvement" ,
 	"0020_tool_item" ,
 	"0030_technology" ,
+	"0040_agriculture" ,
 	"0100_ore_processing" ,
 	"0101_metal_smelting" ,
 	"0102_metal_forging" ,
