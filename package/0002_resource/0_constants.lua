@@ -19,11 +19,11 @@ local constants =
 				stoneShadow = "影山石" ,
 				stoneBright = "灿光石" ,
 				-- 变相石
-				changeHeat = "灼热石" , -- 对应力量
+				changeHeat = "荧焰石" , -- 对应力量
 				changeDrown = "沉沦石" , -- 对应精神
 				changeMeat = "血肉石" , -- 对应献祭
 				changeWind = "浊风石" , -- 对应瘟疫
-				changeGloomy = "阴森石" , -- 对应恐惧
+				changeGloomy = "断魄石" , -- 对应恐惧
 				changeCold = "冰凌石" , -- 对应扭曲
 				changeRed = "绯红石" , -- 对应侵蚀
 				changeBlack = "黑晶石" , -- 对应虚空

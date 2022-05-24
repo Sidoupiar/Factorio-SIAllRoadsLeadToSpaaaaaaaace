@@ -411,7 +411,7 @@ end )
 .SetAnimation( 0.5 )
 .NewCapsule( SIConstants_Resource.ore.stoneBright , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
 -- 变相石
-.NewResource( "灼热矿" , normalOreData , true , function( resource )
+.NewResource( "荧焰矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
 		results =
@@ -437,7 +437,7 @@ end )
 	regular_rq_factor_multiplier = 1 ,
 	has_starting_area_placement = false
 }
-.NewProjectile( "扔出去的灼热石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
+.NewProjectile( "扔出去的荧焰石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects =
@@ -559,7 +559,7 @@ end )
 .SetSize( 1 )
 .SetAnimation( 0.5 )
 .NewCapsule( SIConstants_Resource.ore.changeWind , util.deepcopy( oreThrowData ) , true ).SetStackSize( SINumbers.stackSize.ore )
-.NewResource( "阴森矿" , normalOreData , true , function( resource )
+.NewResource( "断魄矿" , normalOreData , true , function( resource )
 	resource.minable =
 	{
 		results =
@@ -585,7 +585,7 @@ end )
 	regular_rq_factor_multiplier = 1 ,
 	has_starting_area_placement = false
 }
-.NewProjectile( "扔出去的阴森石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
+.NewProjectile( "扔出去的断魄石" , util.deepcopy( oreThrowAction ) , true , function( projectile )
 	oreThrowData.radius_color = SIColors.Color256( 242 , 242 , 242 , 55 )
 	oreThrowData.capsule_action.attack_parameters.ammo_type.action[1].action_delivery.projectile = projectile.name
 	projectile.action[2].action_delivery.target_effects =

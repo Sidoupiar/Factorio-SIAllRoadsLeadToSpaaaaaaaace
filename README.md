@@ -1,6 +1,6 @@
 # 殊途同归[[SIAllRoadsLeadToSpaaaaaaaace](https://github.com/Sidoupiar/Factorio-SIAllRoadsLeadToSpaaaaaaaace)]
 
-特点:
+特性:
 1. 总体来说就是各种能想到的孤儿配方在这里都会出现 , 具体请见[这里](https://www.sidoupiar.com/factorio/sidoupiar/2924/#article_index_4_1) , 这使得部分配方难度史诗级提升
 2. 配方不再由科技解锁 , 而是通过达成某些隐藏的条件来解锁配方 ; 配方解锁后不是永久的 , 当达成某些隐藏的条件后 , 配方还可能重新被锁定 ; 每种配方都至少有两个不同的解锁条件和一个重新锁定的条件 ; 配方仍然可以被事件解锁或锁定
 3. 原料并不都是通过采集或者制作得出 , 会有很多奇怪的获取方式 , 比如通过击杀 , 通过开发特殊物品 , 野外获得唯一存在 , 通过事件获得 , 通过任务获得等等 , 还会有一些难以想象的方式
