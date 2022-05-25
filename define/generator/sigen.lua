@@ -947,6 +947,12 @@ function SIGen.AddTo_MiningResult( targetName , amountOrProbability , minAmount 
 	return SIGen
 end
 
+function SIGen.Add_PlaceItem( name )
+	if Check() and SITypes.entityBack[SIGen.Data.type] == nil then return SIGen end
+	SIGen.NewCapsule( name , { place_result = SIGen.Data.name } , true ).SetStackSize( SINumbers.stackSize.machine )
+	return SIGen
+end
+
 -- ----------------------------------------
 -- 把当前编辑的原型作为投掷物添加投掷动作 , 并根据参数创建投射物实体
 -- 之后会把当前编辑的原型切换为创建的投射物实体
@@ -966,7 +972,7 @@ end
 --   -- list = 伤害列表 , 可以包含多种伤害 , 使用 SITools.Attack_EffectDamage 创建
 -- others = 其他投掷项目 , actionItemType
 -- ----------------------------------------
-function SIGen.AddThrowData( name , range , cooldown , radiusColor , effectList )
+function SIGen.Add_ThrowData( name , range , cooldown , radiusColor , effectList )
 	if Check() or SIGen.Data.type ~= SITypes.item.capsule then return SIGen end
 	local item = SIGen.Data
 	local projectileName = nil

@@ -476,7 +476,8 @@ local SITypes =
 
 	all = {} ,
 	autoName = {} ,
-	rawCode = {}
+	rawCode = {} ,
+	entityBack = {}
 }
 
 for type , real in pairs
@@ -511,5 +512,7 @@ for type , real in pairs
 		SITypes.rawCode[SITypes[type]] = type
 	end
 end
+
+for name , typeName in pairs( SITypes.entity ) do SITypes.entityBack[typeName] = name end
 
 return SITypes
