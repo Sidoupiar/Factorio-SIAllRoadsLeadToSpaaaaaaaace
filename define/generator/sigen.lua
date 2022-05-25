@@ -947,6 +947,118 @@ function SIGen.AddTo_MiningResult( targetName , amountOrProbability , minAmount 
 	return SIGen
 end
 
+-- ----------------------------------------
+-- 把当前编辑的原型作为投掷物添加投掷动作 , 并根据参数创建投射物实体
+-- 之后会把当前编辑的原型切换为创建的投射物实体
+-- ----------------------------------------
+-- name = 投射物实体的名称
+-- range = 投掷距离
+-- cooldown = 冷却时间 , ups
+-- radiusColor = 投掷区域颜色 , 可半透明
+-- effectList = 投射物投掷效果 , 表结构
+-- ----------------------------------------
+-- effectList 可用参数 :
+-- particle = 投射粒子参数
+--   -- name = 粒子名称
+--   -- repeatCount = 重复次数
+-- damage = 伤害参数
+--   -- range = 伤害范围 , 这是一个溅射伤害
+--   -- list = 伤害列表 , 可以包含多种伤害 , 使用 SITools.Attack_EffectDamage 创建
+-- others = 其他投掷项目 , actionItemType
+-- ----------------------------------------
+function SIGen.AddThrowData( name , range , cooldown , radiusColor , effectList )
+	if Check() or SIGen.Data.type ~= SITypes.item.capsule then return SIGen end
+	local item = SIGen.Data
+	local projectileName = nil
+	SIGen.NewProjectile( name , { acceleration = 0 } , true , function( projectile )
+		projectileName = projectile.name
+		local action = {}
+		if effectList.particle then
+			table.insert( action , {
+				type = "direct" ,
+				action_delivery =
+				{
+					type = "instant" ,
+					target_effects =
+					{
+						{
+							type = "create-particle" ,
+							particle_name = effectList.particle.name or "stone-particle" ,
+							repeat_count = effectList.particle.repeatCount or 3 ,
+							initial_height = 0.5 ,
+							initial_vertical_speed = 0.05 ,
+							initial_vertical_speed_deviation = 0.1 ,
+							speed_from_center = 0.05 ,
+							speed_from_center_deviation = 0.1 ,
+							offset_deviation = { { -0.8985 , -0.5 } , { 0.8985 , 0.5 } }
+						}
+					}
+				}
+			} )
+		end
+		if effectList.damage and SITools.IsTable( effectList.damage.list ) and #effectList.damage.list > 0 then
+			table.insert( action , {
+				type = "area" ,
+				radius = effectList.damage.range or 0.8 ,
+				action_delivery =
+				{
+					type = "instant" ,
+					target_effects = effectList.damage.list
+				}
+			} )
+		end
+		if SITools.IsTable( effectList.others ) and #effectList.others > 0 then
+			for _ , effect in pairs( effectList.others ) do table.insert( action , effect ) end
+		end
+		projectile.action = action
+	end )
+	.SetSize( 1 )
+	.SetAnimation( 0.5 )
+	item.radius_color = radiusColor or SIColors.Color256( 128 , 128 , 128 , 128 )
+	item.capsule_action =
+	{
+		type = "throw" ,
+		uses_stack = true ,
+		attack_parameters =
+		{
+			type = "projectile" ,
+			range = range or 16.5 ,
+			cooldown = cooldown or 35 ,
+			activation_type = "throw" ,
+			ammo_type =
+			{
+				category = CORE.categoryList[SITypes.category.ammo].peopleThrow ,
+				target_type = "position" ,
+				action =
+				{
+					{
+						type = "direct" ,
+						action_delivery =
+						{
+							type = "projectile" ,
+							projectile = projectileName ,
+							starting_speed = 0.25
+						}
+					} ,
+					{
+						type = "direct" ,
+						action_delivery =
+						{
+							type = "instant" ,
+							target_effects =
+							{
+								type = "play-sound" ,
+								sound = SITools.SoundList_Base( "fight/throw-projectile" , 6 , 0.4 )
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return SIGen
+end
+
 -- ------------------------------------------------------------------------------------------------
 -- ---------- 其他函数 ----------------------------------------------------------------------------
 -- ------------------------------------------------------------------------------------------------
